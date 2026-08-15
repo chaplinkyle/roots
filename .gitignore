@@ -1,0 +1,21 @@
+target/
+**/target/
+
+# Local tools and Roots runtime state
+.tooling/
+.roots/
+*.log
+
+# Editors
+.idea/
+.vscode/
+*.iml
+
+# Operating systems
+.DS_Store
+Thumbs.db
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example

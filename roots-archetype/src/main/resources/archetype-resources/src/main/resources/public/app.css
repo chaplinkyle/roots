@@ -1,0 +1,13 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; background: #f4f6fb; color: #17213a; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.shell { min-height: 100vh; }
+header { display: flex; justify-content: space-between; padding: 1rem 2rem; background: white; border-bottom: 1px solid #dce2ef; }
+nav { display: flex; gap: 1rem; }
+a { color: #3155cc; }
+main { max-width: 70rem; margin: 0 auto; padding: 5rem 2rem; }
+.hero h1 { max-width: 12ch; font-size: clamp(3rem, 8vw, 7rem); line-height: .92; letter-spacing: -.06em; }
+.counter { display: flex; align-items: center; gap: 1rem; margin-top: 3rem; }
+.counter strong { min-width: 3ch; font: 600 3rem/1 ui-monospace, monospace; }
+button { border: 0; border-radius: .35rem; padding: .8rem 1rem; color: white; background: #3155cc; font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid #e1a94b; outline-offset: 3px; }

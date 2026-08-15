@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "26"
+          cache: maven
+
+      - name: Verify and install reactor
+        run: ./mvnw --batch-mode --no-transfer-progress clean install
+
+      - name: Generate and verify an application
+        run: |
+          ./mvnw --batch-mode --no-transfer-progress archetype:generate \
+            -DarchetypeGroupId=dev.roots \
+            -DarchetypeArtifactId=roots-archetype \
+            -DarchetypeVersion=0.1.0-SNAPSHOT \
+            -DgroupId=dev.roots.smoke \
+            -DartifactId=generated-smoke-app \
+            -Dversion=1.0.0-SNAPSHOT \
+            -Dpackage=dev.roots.smoke \
+            -DrootsVersion=0.1.0-SNAPSHOT \
+            -DinteractiveMode=false \
+            -DarchetypeCatalog=local \
+            -DoutputDirectory=target/archetype-smoke
+          ./mvnw --batch-mode --no-transfer-progress \
+            -f target/archetype-smoke/generated-smoke-app/pom.xml verify
