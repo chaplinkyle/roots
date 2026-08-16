@@ -20,13 +20,15 @@
 }
 
 * { box-sizing: border-box; }
-html { min-width: 19rem; background: var(--paper); }
-body { min-height: 100vh; margin: 0; }
+html { min-width: 19rem; height: 100%; overflow: hidden; background: var(--paper); }
+body { height: 100%; min-height: 100%; margin: 0; overflow: hidden; }
+#roots { height: 100%; }
 button, input, textarea { font: inherit; }
 button, input, textarea { -webkit-tap-highlight-color: transparent; }
 
-.relay-frame { min-height: 100vh; display: flex; flex-direction: column; }
+.relay-frame { height: 100vh; height: 100dvh; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
 .relay-topbar {
+  flex: 0 0 auto;
   min-height: 4.5rem;
   padding: 0 clamp(1rem, 3vw, 2.5rem);
   display: flex;
@@ -72,13 +74,16 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   box-shadow: 0 0 0 .22rem rgba(20, 184, 166, .16);
 }
 
-.relay-workspace { flex: 1; min-width: 0; display: grid; grid-template-columns: 19rem minmax(0, 1fr); }
+.relay-workspace { flex: 1; min-width: 0; min-height: 0; display: grid; grid-template-columns: 19rem minmax(0, 1fr); overflow: hidden; }
 .room-rail {
   min-width: 0;
+  min-height: 0;
   padding: 2.4rem 1.4rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--surface-muted);
   border-right: 1px solid var(--line);
 }
@@ -116,8 +121,9 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 .test-card strong { font: 650 .78rem/1.2 Bahnschrift, sans-serif; letter-spacing: .01em; }
 .test-card p { margin: .45rem 0 0; color: #9eb0be; font-size: .69rem; line-height: 1.5; }
 
-.conversation { min-width: 0; display: flex; flex-direction: column; background: var(--surface); }
+.conversation { min-width: 0; min-height: 0; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
 .conversation-intro {
+  flex: 0 0 auto;
   min-height: 10.5rem;
   padding: 2.25rem clamp(1.25rem, 4vw, 3.5rem) 1.8rem;
   display: grid;
@@ -136,8 +142,9 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 }
 .conversation-intro > p { max-width: 40rem; margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.65; }
 
-.chat-panel { min-height: 32rem; flex: 1; display: flex; flex-direction: column; }
+.chat-panel { min-height: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 .channel-header {
+  flex: 0 0 auto;
   min-height: 3.55rem;
   padding: .7rem clamp(1.25rem, 3vw, 2.5rem);
   display: flex;
@@ -162,7 +169,11 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   --ledger-pad: clamp(1rem, 3vw, 2.5rem);
   position: relative;
   flex: 1;
+  min-height: 0;
   padding: 0 var(--ledger-pad);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--signal) var(--surface-muted);
   background:
     linear-gradient(90deg, rgba(11, 23, 38, .018) 1px, transparent 1px) 0 0 / 3rem 3rem,
     var(--surface);
@@ -204,7 +215,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 .message-body { max-width: 75ch; margin: .55rem 0 0; color: #465969; font-size: .86rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 .transcript-end { position: relative; height: 1px; }
 
-.composer { padding: 1.25rem clamp(1.25rem, 3vw, 2.5rem); background: var(--ink-raised); color: white; border-top: 3px solid var(--signal); }
+.composer { flex: 0 0 auto; padding: 1.25rem clamp(1.25rem, 3vw, 2.5rem); background: var(--ink-raised); color: white; border-top: 3px solid var(--signal); }
 .composer-fields { display: grid; grid-template-columns: minmax(9rem, .3fr) minmax(18rem, 1fr); gap: 1rem; }
 .composer label { display: grid; gap: .42rem; color: #9eb0bf; font: 650 .61rem/1.2 "Cascadia Code", Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
 .composer input, .composer textarea {
@@ -237,20 +248,6 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 .send-button:hover { background: var(--coral-dark); transform: translateY(-1px); }
 [data-roots-pending="true"] .send-button { opacity: .62; pointer-events: none; }
 
-.relay-footer {
-  min-height: 2.25rem;
-  padding: .55rem clamp(1rem, 3vw, 2.5rem);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  color: #7b8b98;
-  background: #dce6e9;
-  border-top: 1px solid var(--line);
-  font: 600 .58rem/1.3 "Cascadia Code", Consolas, monospace;
-  letter-spacing: .07em;
-}
-
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
 @keyframes relay-pulse {
@@ -268,14 +265,14 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 720px) {
   .relay-topbar { min-height: 4rem; }
   .relay-wordmark small, .protocol-chip { display: none; }
-  .relay-workspace { display: block; }
+  .relay-workspace { display: flex; flex-direction: column; }
   .room-rail { padding: 1rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(10rem, .65fr); gap: 1rem; border-right: 0; border-bottom: 1px solid var(--line); }
   .room-heading h1 { margin-block: .35rem; font-size: 1.55rem; }
   .room-heading p { font-size: .7rem; }
   .room-list { align-self: end; }
   .signal-card, .test-card { display: none; }
-  .conversation-intro { min-height: 0; padding-block: 1.7rem; }
-  .conversation-intro h2 { font-size: clamp(2rem, 11vw, 3.4rem); }
+  .conversation { flex: 1; }
+  .conversation-intro { display: none; }
   .channel-kicker { display: none; }
   .composer-fields { grid-template-columns: 1fr; }
 }
@@ -294,9 +291,13 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   .signal-index { padding-right: .55rem; }
   .message-content { padding-left: 1.1rem; }
   .message-meta { align-items: flex-start; flex-direction: column; gap: .35rem; }
-  .composer-actions { align-items: stretch; flex-direction: column; }
+  .composer { padding: .8rem 1rem; }
+  .composer-fields { gap: .65rem; }
+  .composer label { gap: .3rem; }
+  .composer textarea { min-height: 3.5rem; }
+  .composer-actions { margin-top: .65rem; align-items: stretch; flex-direction: column; gap: .65rem; }
+  .composer-actions p { display: none; }
   .send-button { width: 100%; }
-  .relay-footer span:last-child { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

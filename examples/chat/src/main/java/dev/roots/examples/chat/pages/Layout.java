@@ -4,7 +4,6 @@ import dev.roots.PageContext;
 import dev.roots.html.Node;
 
 import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.footer;
 import static dev.roots.html.Html.header;
 import static dev.roots.html.Html.small;
 import static dev.roots.html.Html.span;
@@ -27,11 +26,7 @@ public final class Layout implements dev.roots.Layout {
                                 span("JVM ONLINE").className("jvm-status")
                         ).className("protocol-status")
                 ).className("relay-topbar"),
-                children,
-                footer(
-                        span("ROOTS CHAT EXAMPLE"),
-                        span("Open a second tab to watch server-pushed patches arrive.")
-                ).className("relay-footer")
+                children
         ).className("relay-frame");
     }
 }
