@@ -33,6 +33,7 @@
         <module>roots-core</module>
         <module>roots-archetype</module>
         <module>examples/enterprise</module>
+        <module>examples/chat</module>
     </modules>
 
     <properties>

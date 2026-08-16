@@ -165,6 +165,21 @@ The example is intentionally an external-style consumer of `roots-core`:
 | [Health API](examples/enterprise/src/main/java/com/acme/api/health/Route.java) | convention-based API route |
 | [Integration test](examples/enterprise/src/test/java/com/acme/ApplicationIntegrationTest.java) | real HTTP, sessions, actions, forms, assets |
 
+## Run the live chat example
+
+Roots Relay is a shared chat room with no application-authored JavaScript. Build
+it, start the executable JAR, and open two tabs:
+
+```powershell
+.\mvnw.cmd -pl examples/chat -am package
+java -jar examples\chat\target\roots-chat-example-0.1.0-SNAPSHOT-app.jar
+```
+
+Messages submitted through `@ServerAction` mutate synchronized Java state and
+rerender every connected view through Roots' built-in SSE patch channel. See the
+[chat example guide](examples/chat/README.md) for its features and deliberate
+single-JVM boundaries.
+
 ## Generate a new application
 
 Until Roots artifacts are published to Maven Central, install this checkout once:
@@ -224,6 +239,7 @@ Roots is currently a strong fit for:
 - CRUD applications and data directories;
 - approval, review, and case-management workflows;
 - operations consoles and live monitoring dashboards;
+- small-team chat, activity feeds, and live collaboration rooms on one JVM;
 - form-heavy intranet tools and customer portals;
 - single-node SaaS prototypes and vertical product pilots.
 
@@ -283,6 +299,7 @@ This is a technical provenance statement, not a patent or trademark opinion.
 - `roots-core` — public component API, router, renderer, live runtime, and server.
 - `roots-archetype` — standalone Maven application generator.
 - `examples/enterprise` — polished example and end-to-end HTTP tests.
+- `examples/chat` — multi-view chat, server-pushed patches, and SSE integration tests.
 - `docs` — architecture, conventions, integrations, feature contract, and roadmap.
 
 ## Contributing

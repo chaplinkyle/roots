@@ -225,6 +225,8 @@ public final class RootsServer implements AutoCloseable {
             headers.set("X-Accel-Buffering", "no");
             exchange.sendResponseHeaders(200, 0);
             try (var output = exchange.getResponseBody()) {
+                output.write(": connected\n\n".getBytes(StandardCharsets.UTF_8));
+                output.flush();
                 while (views.get(viewId) == view) {
                     var snapshot = view.nextPatch(Duration.ofSeconds(20));
                     var message = snapshot == null
