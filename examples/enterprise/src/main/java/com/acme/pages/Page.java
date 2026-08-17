@@ -2,6 +2,7 @@ package com.acme.pages;
 
 import com.acme.components.ApprovalCounter;
 import com.acme.components.Metric;
+import com.acme.components.SupportOverlay;
 import dev.roots.PageContext;
 import dev.roots.annotation.PageMetadata;
 import dev.roots.html.Node;
@@ -20,13 +21,17 @@ import static dev.roots.html.Html.span;
 @PageMetadata(
         title = "Operations · Roots Control",
         description = "A live enterprise operations workspace rendered entirely from Java.",
-        stylesheets = "/app.css"
+        stylesheets = "/app.css",
+        openGraphType = "website",
+        openGraphImage = "/roots-control-preview.png",
+        openGraphImageAlt = "Roots Control operations workspace"
 )
 public final class Page implements dev.roots.Page {
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm:ss 'CT'")
             .withZone(ZoneId.of("America/Chicago"));
 
     private final ApprovalCounter approvals = new ApprovalCounter();
+    private final SupportOverlay supportOverlay = new SupportOverlay();
     private boolean visited;
 
     @Override
@@ -42,7 +47,8 @@ public final class Page implements dev.roots.Page {
                 section(
                         div(
                                 span("SATURDAY · AUG 15").className("eyebrow"),
-                                h1("The JVM is the full stack.")
+                                h1("The JVM is the full stack."),
+                                supportOverlay
                         ),
                         div(
                                 span("LAST RENDER").className("eyebrow"),

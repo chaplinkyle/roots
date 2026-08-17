@@ -12,7 +12,8 @@ import static dev.roots.html.Html.section;
 @PageMetadata(
         title = "${artifactId} · Roots",
         description = "A full-stack Java application built with Roots.",
-        stylesheets = "/app.css"
+        stylesheets = "/app.css",
+        openGraphType = "website"
 )
 public final class Page implements dev.roots.Page {
     private final Counter counter = new Counter();

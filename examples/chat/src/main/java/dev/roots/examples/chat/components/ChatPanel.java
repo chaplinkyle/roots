@@ -70,6 +70,8 @@ public final class ChatPanel implements Component {
                         messages.stream().map(this::message).toList(),
                         div().className("transcript-end").ref(transcriptEnd).aria("hidden", true)
                 ).className("message-ledger")
+                        .attr("role", "log")
+                        .attr("tabindex", 0)
                         .aria("live", "polite")
                         .aria("relevant", "additions text")
                         .aria("label", "General channel messages"),

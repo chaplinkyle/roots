@@ -1,0 +1,5 @@
+ROOTS_ROUTE_MANIFEST	3	dev.roots.manifestapp.Application	dev.roots.manifestapp.pages	dev.roots.manifestapp.api
+PAGE	/	dev.roots.manifestapp.pages.Page	dev.roots.manifestapp.pages.Layout
+API	/api/ping	dev.roots.manifestapp.api.ping.Route	
+NOT_FOUND	/	dev.roots.manifestapp.pages.NotFound	dev.roots.manifestapp.pages.Layout
+ERROR_PAGE	/	dev.roots.manifestapp.pages.ErrorPage	

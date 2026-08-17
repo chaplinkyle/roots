@@ -1,0 +1,6 @@
+#browser-fixture { color: rgb(20, 40, 60); }
+#browser-fixture button { min-height: 24px; }
+#browser-fixture a { display: inline-flex; align-items: center; min-height: 24px; }
+.portal-dialog { min-width: 20rem; }
+.portal-dialog::backdrop { background: rgba(0, 0, 0, .25); }
+.fragment-spacer { height: 1200px; }

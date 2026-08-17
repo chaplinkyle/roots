@@ -1,0 +1,1129 @@
+TYPE public abstract interface dev.roots.Action
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract void dev.roots.Action.handle(dev.roots.ActionEvent) throws java.lang.Exception
+  METHOD public default java.util.List<java.lang.String> dev.roots.Action.authorizationPolicies()
+END dev.roots.Action
+TYPE public final class dev.roots.ActionEvent
+  CONSTRUCTOR public dev.roots.ActionEvent(dev.roots.BrowserEvent,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache)
+  CONSTRUCTOR public dev.roots.ActionEvent(dev.roots.BrowserEvent,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>)
+  CONSTRUCTOR public dev.roots.ActionEvent(dev.roots.BrowserEvent,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext)
+  CONSTRUCTOR public dev.roots.ActionEvent(dev.roots.BrowserEvent,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String)
+  CONSTRUCTOR public dev.roots.ActionEvent(dev.roots.BrowserEvent,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String,dev.roots.ClientConnection)
+  CONSTRUCTOR public dev.roots.ActionEvent(dev.roots.BrowserEvent,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String,dev.roots.ClientConnection,java.util.Map<java.lang.String, java.lang.String>)
+  CONSTRUCTOR public dev.roots.ActionEvent(java.lang.String,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session)
+  CONSTRUCTOR public dev.roots.ActionEvent(java.lang.String,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session)
+  CONSTRUCTOR public dev.roots.ActionEvent(java.lang.String,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.Session,dev.roots.RootsCache)
+  METHOD public <T> T dev.roots.ActionEvent.bind(java.lang.Class<T>)
+  METHOD public dev.roots.BrowserEvent dev.roots.ActionEvent.browser()
+  METHOD public dev.roots.ClientConnection dev.roots.ActionEvent.connection()
+  METHOD public dev.roots.RootsCache dev.roots.ActionEvent.cache()
+  METHOD public dev.roots.Session dev.roots.ActionEvent.session()
+  METHOD public dev.roots.TraceContext dev.roots.ActionEvent.traceContext()
+  METHOD public java.lang.String dev.roots.ActionEvent.cookiePath()
+  METHOD public java.lang.String dev.roots.ActionEvent.mountPath()
+  METHOD public java.lang.String dev.roots.ActionEvent.required(java.lang.String)
+  METHOD public java.lang.String dev.roots.ActionEvent.type()
+  METHOD public java.lang.String dev.roots.ActionEvent.url(java.lang.String)
+  METHOD public java.util.List<dev.roots.ClientEffect> dev.roots.ActionEvent.effects()
+  METHOD public java.util.List<dev.roots.ResponseCookie> dev.roots.ActionEvent.responseCookies()
+  METHOD public java.util.List<dev.roots.UploadedFile> dev.roots.ActionEvent.files(java.lang.String)
+  METHOD public java.util.List<java.lang.String> dev.roots.ActionEvent.values(java.lang.String)
+  METHOD public java.util.Map<java.lang.String, java.lang.String> dev.roots.ActionEvent.cookies()
+  METHOD public java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>> dev.roots.ActionEvent.allFiles()
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.ActionEvent.allValues()
+  METHOD public java.util.Optional<dev.roots.AuthenticatedIdentity> dev.roots.ActionEvent.identity()
+  METHOD public java.util.Optional<dev.roots.UploadedFile> dev.roots.ActionEvent.file(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.ActionEvent.cookie(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.ActionEvent.redirect()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.ActionEvent.value(java.lang.String)
+  METHOD public void dev.roots.ActionEvent.announce(java.lang.String)
+  METHOD public void dev.roots.ActionEvent.announceAssertively(java.lang.String)
+  METHOD public void dev.roots.ActionEvent.blur(dev.roots.Ref)
+  METHOD public void dev.roots.ActionEvent.copyToClipboard(java.lang.String)
+  METHOD public void dev.roots.ActionEvent.deleteCookie(java.lang.String)
+  METHOD public void dev.roots.ActionEvent.focus(dev.roots.Ref)
+  METHOD public void dev.roots.ActionEvent.redirect(java.lang.String)
+  METHOD public void dev.roots.ActionEvent.scrollIntoView(dev.roots.Ref)
+  METHOD public void dev.roots.ActionEvent.selectText(dev.roots.Ref)
+  METHOD public void dev.roots.ActionEvent.setCookie(dev.roots.ResponseCookie)
+  METHOD public void dev.roots.ActionEvent.viewTransition()
+END dev.roots.ActionEvent
+TYPE public final class dev.roots.Actions
+  METHOD public static boolean dev.roots.Actions.sameBinding(dev.roots.Action,dev.roots.Action)
+  METHOD public static dev.roots.Actions.ActionDescription dev.roots.Actions.describe(dev.roots.Action)
+  METHOD public static dev.roots.Actions.BoundAction dev.roots.Actions.bind(java.lang.Object,java.lang.String)
+END dev.roots.Actions
+TYPE public static final record dev.roots.Actions.ActionDescription
+  CONSTRUCTOR public dev.roots.Actions.ActionDescription(java.lang.String,java.lang.String,java.util.List<java.lang.String>)
+  METHOD public final boolean dev.roots.Actions.ActionDescription.equals(java.lang.Object)
+  METHOD public final int dev.roots.Actions.ActionDescription.hashCode()
+  METHOD public final java.lang.String dev.roots.Actions.ActionDescription.toString()
+  METHOD public java.lang.String dev.roots.Actions.ActionDescription.method()
+  METHOD public java.lang.String dev.roots.Actions.ActionDescription.targetType()
+  METHOD public java.util.List<java.lang.String> dev.roots.Actions.ActionDescription.authorizationPolicies()
+END dev.roots.Actions$ActionDescription
+TYPE public static final record dev.roots.Actions.BoundAction
+  CONSTRUCTOR public dev.roots.Actions.BoundAction(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.Action dev.roots.Actions.BoundAction.action()
+  METHOD public final boolean dev.roots.Actions.BoundAction.equals(java.lang.Object)
+  METHOD public final int dev.roots.Actions.BoundAction.hashCode()
+  METHOD public final java.lang.String dev.roots.Actions.BoundAction.toString()
+  METHOD public java.lang.String dev.roots.Actions.BoundAction.name()
+END dev.roots.Actions$BoundAction
+TYPE public abstract interface dev.roots.ApiRoute
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.delete(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.get(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.handle(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.head(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.options(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.patch(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.post(dev.roots.Request) throws java.lang.Exception
+  METHOD public default dev.roots.Response dev.roots.ApiRoute.put(dev.roots.Request) throws java.lang.Exception
+END dev.roots.ApiRoute
+TYPE public final class dev.roots.AsyncComponent<T>
+  ANNOTATION @dev.roots.annotation.ViewComponent(value=async)
+  METHOD public dev.roots.AsyncComponent<T> dev.roots.AsyncComponent.onFailure(java.util.function.BiFunction<java.lang.Throwable, dev.roots.PageContext, ? extends dev.roots.html.Node>)
+  METHOD public dev.roots.html.Node dev.roots.AsyncComponent.render(dev.roots.PageContext)
+  METHOD public static <T> dev.roots.AsyncComponent<T> dev.roots.AsyncComponent.of(java.util.concurrent.Callable<? extends T>,java.util.function.Function<? super T, ? extends dev.roots.html.Node>,dev.roots.html.Node)
+  METHOD public void dev.roots.AsyncComponent.onUnmount(dev.roots.PageContext)
+END dev.roots.AsyncComponent
+TYPE public final record dev.roots.AuthenticatedIdentity
+  CONSTRUCTOR public dev.roots.AuthenticatedIdentity(java.lang.String,java.util.Set<java.lang.String>)
+  METHOD public boolean dev.roots.AuthenticatedIdentity.hasAuthority(java.lang.String)
+  METHOD public boolean dev.roots.AuthenticatedIdentity.hasRole(java.lang.String)
+  METHOD public final boolean dev.roots.AuthenticatedIdentity.equals(java.lang.Object)
+  METHOD public final int dev.roots.AuthenticatedIdentity.hashCode()
+  METHOD public final java.lang.String dev.roots.AuthenticatedIdentity.toString()
+  METHOD public java.lang.String dev.roots.AuthenticatedIdentity.name()
+  METHOD public java.util.Set<java.lang.String> dev.roots.AuthenticatedIdentity.authorities()
+  METHOD public static dev.roots.AuthenticatedIdentity dev.roots.AuthenticatedIdentity.named(java.lang.String)
+  METHOD public static dev.roots.AuthenticatedIdentity dev.roots.AuthenticatedIdentity.of(java.lang.String,java.util.Collection<java.lang.String>)
+END dev.roots.AuthenticatedIdentity
+TYPE public abstract interface dev.roots.AuthenticationProvider
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.Optional<dev.roots.AuthenticatedIdentity> dev.roots.AuthenticationProvider.authenticate(dev.roots.Request) throws java.lang.Exception
+  METHOD public static dev.roots.AuthenticationProvider dev.roots.AuthenticationProvider.bearer(dev.roots.AuthenticationProvider.BearerTokenAuthenticator)
+  METHOD public static dev.roots.AuthenticationProvider dev.roots.AuthenticationProvider.transportIdentity()
+END dev.roots.AuthenticationProvider
+TYPE public abstract static interface dev.roots.AuthenticationProvider.BearerTokenAuthenticator
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.Optional<dev.roots.AuthenticatedIdentity> dev.roots.AuthenticationProvider.BearerTokenAuthenticator.authenticate(java.lang.String) throws java.lang.Exception
+END dev.roots.AuthenticationProvider$BearerTokenAuthenticator
+TYPE public abstract interface dev.roots.AuthorizationPolicy
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.Optional<dev.roots.Response> dev.roots.AuthorizationPolicy.authorize(dev.roots.Request) throws java.lang.Exception
+  METHOD public static dev.roots.AuthorizationPolicy dev.roots.AuthorizationPolicy.authenticated(dev.roots.Response)
+  METHOD public static dev.roots.AuthorizationPolicy dev.roots.AuthorizationPolicy.authority(java.lang.String,dev.roots.Response)
+  METHOD public static dev.roots.AuthorizationPolicy dev.roots.AuthorizationPolicy.role(java.lang.String,dev.roots.Response)
+  METHOD public static java.util.Optional<dev.roots.Response> dev.roots.AuthorizationPolicy.allow()
+  METHOD public static java.util.Optional<dev.roots.Response> dev.roots.AuthorizationPolicy.deny(dev.roots.Response)
+END dev.roots.AuthorizationPolicy
+TYPE public abstract interface dev.roots.BinaryContent
+  METHOD public abstract boolean dev.roots.BinaryContent.inMemory()
+  METHOD public abstract java.io.InputStream dev.roots.BinaryContent.openStream() throws java.io.IOException
+  METHOD public abstract long dev.roots.BinaryContent.size()
+  METHOD public abstract void dev.roots.BinaryContent.close() throws java.io.IOException
+  METHOD public default byte[] dev.roots.BinaryContent.readAllBytes()
+  METHOD public static dev.roots.BinaryContent dev.roots.BinaryContent.of(byte[])
+END dev.roots.BinaryContent
+TYPE public final record dev.roots.BrowserEvent
+  CONSTRUCTOR public dev.roots.BrowserEvent(dev.roots.BrowserEvent.Type,java.util.Optional<java.lang.String>,java.util.Optional<java.lang.String>,boolean,boolean,boolean,boolean,java.util.OptionalInt,java.util.OptionalInt,java.util.OptionalInt)
+  METHOD public boolean dev.roots.BrowserEvent.altKey()
+  METHOD public boolean dev.roots.BrowserEvent.controlKey()
+  METHOD public boolean dev.roots.BrowserEvent.metaKey()
+  METHOD public boolean dev.roots.BrowserEvent.shiftKey()
+  METHOD public dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.type()
+  METHOD public final boolean dev.roots.BrowserEvent.equals(java.lang.Object)
+  METHOD public final int dev.roots.BrowserEvent.hashCode()
+  METHOD public final java.lang.String dev.roots.BrowserEvent.toString()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.BrowserEvent.code()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.BrowserEvent.key()
+  METHOD public java.util.OptionalInt dev.roots.BrowserEvent.button()
+  METHOD public java.util.OptionalInt dev.roots.BrowserEvent.clientX()
+  METHOD public java.util.OptionalInt dev.roots.BrowserEvent.clientY()
+  METHOD public static dev.roots.BrowserEvent dev.roots.BrowserEvent.empty(dev.roots.BrowserEvent.Type)
+END dev.roots.BrowserEvent
+TYPE public static final enum dev.roots.BrowserEvent.Type
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.BLUR
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.CHANGE
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.CLICK
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.DOUBLE_CLICK
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.FOCUS
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.INPUT
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.KEY_DOWN
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.KEY_UP
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.POINTER_DOWN
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.POINTER_UP
+  FIELD public static final dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.SUBMIT
+  METHOD public java.lang.String dev.roots.BrowserEvent.Type.wireName()
+  METHOD public static dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.fromWireName(java.lang.String)
+  METHOD public static dev.roots.BrowserEvent.Type dev.roots.BrowserEvent.Type.valueOf(java.lang.String)
+  METHOD public static dev.roots.BrowserEvent.Type[] dev.roots.BrowserEvent.Type.values()
+END dev.roots.BrowserEvent$Type
+TYPE public final record dev.roots.CachePolicy
+  CONSTRUCTOR public dev.roots.CachePolicy(java.time.Duration,java.util.Set<java.lang.String>)
+  METHOD public final boolean dev.roots.CachePolicy.equals(java.lang.Object)
+  METHOD public final int dev.roots.CachePolicy.hashCode()
+  METHOD public final java.lang.String dev.roots.CachePolicy.toString()
+  METHOD public java.time.Duration dev.roots.CachePolicy.timeToLive()
+  METHOD public java.util.Set<java.lang.String> dev.roots.CachePolicy.tags()
+  METHOD public static dev.roots.CachePolicy dev.roots.CachePolicy.forDuration(java.time.Duration)
+  METHOD public static dev.roots.CachePolicy dev.roots.CachePolicy.tagged(java.time.Duration,java.lang.String...)
+END dev.roots.CachePolicy
+TYPE public final record dev.roots.CacheSnapshot
+  CONSTRUCTOR public dev.roots.CacheSnapshot(boolean,int,int,long,long,long,long,long,long,long)
+  METHOD public boolean dev.roots.CacheSnapshot.enabled()
+  METHOD public final boolean dev.roots.CacheSnapshot.equals(java.lang.Object)
+  METHOD public final int dev.roots.CacheSnapshot.hashCode()
+  METHOD public final java.lang.String dev.roots.CacheSnapshot.toString()
+  METHOD public int dev.roots.CacheSnapshot.entries()
+  METHOD public int dev.roots.CacheSnapshot.maxEntries()
+  METHOD public long dev.roots.CacheSnapshot.coalescedLoads()
+  METHOD public long dev.roots.CacheSnapshot.evictions()
+  METHOD public long dev.roots.CacheSnapshot.expirations()
+  METHOD public long dev.roots.CacheSnapshot.hits()
+  METHOD public long dev.roots.CacheSnapshot.invalidations()
+  METHOD public long dev.roots.CacheSnapshot.loads()
+  METHOD public long dev.roots.CacheSnapshot.misses()
+END dev.roots.CacheSnapshot
+TYPE public final record dev.roots.ClientConnection
+  CONSTRUCTOR public dev.roots.ClientConnection(java.util.Optional<java.net.InetAddress>,java.lang.String,java.lang.String,boolean)
+  METHOD public boolean dev.roots.ClientConnection.forwarded()
+  METHOD public dev.roots.ClientConnection dev.roots.ClientConnection.forwarded(java.net.InetAddress,java.lang.String,java.lang.String)
+  METHOD public final boolean dev.roots.ClientConnection.equals(java.lang.Object)
+  METHOD public final int dev.roots.ClientConnection.hashCode()
+  METHOD public final java.lang.String dev.roots.ClientConnection.toString()
+  METHOD public java.lang.String dev.roots.ClientConnection.authority()
+  METHOD public java.lang.String dev.roots.ClientConnection.clientAddressText()
+  METHOD public java.lang.String dev.roots.ClientConnection.scheme()
+  METHOD public java.net.URI dev.roots.ClientConnection.origin()
+  METHOD public java.util.Optional<java.net.InetAddress> dev.roots.ClientConnection.clientAddress()
+  METHOD public static dev.roots.ClientConnection dev.roots.ClientConnection.direct(java.net.InetAddress,java.lang.String,java.lang.String)
+  METHOD public static dev.roots.ClientConnection dev.roots.ClientConnection.unknown(java.lang.String,java.lang.String)
+END dev.roots.ClientConnection
+TYPE public final record dev.roots.ClientEffect
+  CONSTRUCTOR public dev.roots.ClientEffect(dev.roots.ClientEffect.Type,java.lang.String,java.lang.String)
+  METHOD public dev.roots.ClientEffect.Type dev.roots.ClientEffect.type()
+  METHOD public final boolean dev.roots.ClientEffect.equals(java.lang.Object)
+  METHOD public final int dev.roots.ClientEffect.hashCode()
+  METHOD public final java.lang.String dev.roots.ClientEffect.toString()
+  METHOD public java.lang.String dev.roots.ClientEffect.target()
+  METHOD public java.lang.String dev.roots.ClientEffect.value()
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.announce(java.lang.String)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.announceAssertively(java.lang.String)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.blur(dev.roots.Ref)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.copyToClipboard(java.lang.String)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.focus(dev.roots.Ref)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.scrollIntoView(dev.roots.Ref)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.selectText(dev.roots.Ref)
+  METHOD public static dev.roots.ClientEffect dev.roots.ClientEffect.viewTransition()
+END dev.roots.ClientEffect
+TYPE public static final enum dev.roots.ClientEffect.Type
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.ANNOUNCE_ASSERTIVE
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.ANNOUNCE_POLITE
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.BLUR
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.COPY_TO_CLIPBOARD
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.FOCUS
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.SCROLL_INTO_VIEW
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.SELECT_TEXT
+  FIELD public static final dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.VIEW_TRANSITION
+  METHOD public static dev.roots.ClientEffect.Type dev.roots.ClientEffect.Type.valueOf(java.lang.String)
+  METHOD public static dev.roots.ClientEffect.Type[] dev.roots.ClientEffect.Type.values()
+END dev.roots.ClientEffect$Type
+TYPE public abstract interface dev.roots.Component
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract dev.roots.html.Node dev.roots.Component.render(dev.roots.PageContext)
+  METHOD public default void dev.roots.Component.onMount(dev.roots.PageContext)
+  METHOD public default void dev.roots.Component.onUnmount(dev.roots.PageContext)
+END dev.roots.Component
+TYPE public final class dev.roots.ContextKey<T>
+  METHOD public java.lang.String dev.roots.ContextKey.toString()
+  METHOD public static <T> dev.roots.ContextKey<T> dev.roots.ContextKey.of(java.lang.String,java.util.function.Supplier<? extends T>)
+  METHOD public static <T> dev.roots.ContextKey<T> dev.roots.ContextKey.required(java.lang.String)
+END dev.roots.ContextKey
+TYPE public final class dev.roots.ErrorBoundary
+  CONSTRUCTOR public dev.roots.ErrorBoundary(dev.roots.html.Node,java.util.function.BiFunction<java.lang.Throwable, dev.roots.PageContext, dev.roots.html.Node>)
+  METHOD public dev.roots.html.Node dev.roots.ErrorBoundary.children()
+  METHOD public dev.roots.html.Node dev.roots.ErrorBoundary.fallback(java.lang.Throwable,dev.roots.PageContext)
+END dev.roots.ErrorBoundary
+TYPE public abstract interface dev.roots.ExceptionMapper
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.Optional<dev.roots.Response> dev.roots.ExceptionMapper.map(dev.roots.Request,java.lang.Throwable)
+  METHOD public static <E extends java.lang.Throwable> dev.roots.ExceptionMapper dev.roots.ExceptionMapper.forType(java.lang.Class<E>,java.util.function.BiFunction<? super dev.roots.Request, ? super E, ? extends dev.roots.Response>)
+END dev.roots.ExceptionMapper
+TYPE public final record dev.roots.HeadMetadata
+  FIELD public static final dev.roots.HeadMetadata dev.roots.HeadMetadata.EMPTY
+  CONSTRUCTOR public dev.roots.HeadMetadata()
+  CONSTRUCTOR public dev.roots.HeadMetadata(java.lang.String,java.lang.String,java.lang.String,dev.roots.OpenGraphMetadata)
+  METHOD public dev.roots.HeadMetadata dev.roots.HeadMetadata.withCanonical(java.lang.String)
+  METHOD public dev.roots.HeadMetadata dev.roots.HeadMetadata.withOpenGraph(dev.roots.OpenGraphMetadata)
+  METHOD public dev.roots.HeadMetadata dev.roots.HeadMetadata.withRobots(java.lang.String)
+  METHOD public dev.roots.HeadMetadata dev.roots.HeadMetadata.withThemeColor(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.HeadMetadata.openGraph()
+  METHOD public final boolean dev.roots.HeadMetadata.equals(java.lang.Object)
+  METHOD public final int dev.roots.HeadMetadata.hashCode()
+  METHOD public final java.lang.String dev.roots.HeadMetadata.toString()
+  METHOD public java.lang.String dev.roots.HeadMetadata.canonical()
+  METHOD public java.lang.String dev.roots.HeadMetadata.robots()
+  METHOD public java.lang.String dev.roots.HeadMetadata.themeColor()
+END dev.roots.HeadMetadata
+TYPE public abstract interface dev.roots.InstanceFactory
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.lang.Object dev.roots.InstanceFactory.create(java.lang.Class<?>) throws java.lang.Exception
+  METHOD public default <T> T dev.roots.InstanceFactory.instantiate(java.lang.Class<? extends T>) throws java.lang.Exception
+  METHOD public default void dev.roots.InstanceFactory.destroy(java.lang.Object) throws java.lang.Exception
+  METHOD public static dev.roots.InstanceFactory dev.roots.InstanceFactory.reflection()
+END dev.roots.InstanceFactory
+TYPE public abstract interface dev.roots.Layout
+  METHOD public abstract dev.roots.html.Node dev.roots.Layout.render(dev.roots.PageContext,dev.roots.html.Node)
+  METHOD public default dev.roots.HeadMetadata dev.roots.Layout.headMetadata(dev.roots.PageContext)
+  METHOD public default void dev.roots.Layout.onMount(dev.roots.PageContext)
+  METHOD public default void dev.roots.Layout.onUnmount(dev.roots.PageContext)
+END dev.roots.Layout
+TYPE public final record dev.roots.LiveViewOwner
+  CONSTRUCTOR public dev.roots.LiveViewOwner(java.lang.String,java.lang.String,java.time.Instant)
+  METHOD public final boolean dev.roots.LiveViewOwner.equals(java.lang.Object)
+  METHOD public final int dev.roots.LiveViewOwner.hashCode()
+  METHOD public final java.lang.String dev.roots.LiveViewOwner.toString()
+  METHOD public java.lang.String dev.roots.LiveViewOwner.nodeId()
+  METHOD public java.lang.String dev.roots.LiveViewOwner.sessionId()
+  METHOD public java.time.Instant dev.roots.LiveViewOwner.expiresAt()
+END dev.roots.LiveViewOwner
+TYPE public abstract interface dev.roots.LiveViewOwnership
+  METHOD public abstract boolean dev.roots.LiveViewOwnership.claim(java.lang.String,java.lang.String,java.time.Instant,java.time.Instant)
+  METHOD public abstract boolean dev.roots.LiveViewOwnership.renew(java.lang.String,java.lang.String,java.time.Instant,java.time.Instant)
+  METHOD public abstract java.lang.String dev.roots.LiveViewOwnership.localNodeId()
+  METHOD public abstract java.util.Optional<dev.roots.LiveViewOwner> dev.roots.LiveViewOwnership.find(java.lang.String,java.time.Instant)
+  METHOD public abstract void dev.roots.LiveViewOwnership.deleteExpired(java.time.Instant)
+  METHOD public abstract void dev.roots.LiveViewOwnership.release(java.lang.String,java.lang.String)
+  METHOD public default void dev.roots.LiveViewOwnership.close()
+  METHOD public static dev.roots.LiveViewOwnership dev.roots.LiveViewOwnership.inMemory()
+  METHOD public static dev.roots.LiveViewOwnership dev.roots.LiveViewOwnership.inMemory(java.lang.String)
+END dev.roots.LiveViewOwnership
+TYPE public final class dev.roots.LiveViewOwnershipException
+  CONSTRUCTOR public dev.roots.LiveViewOwnershipException(java.lang.String)
+  CONSTRUCTOR public dev.roots.LiveViewOwnershipException(java.lang.String,java.lang.Throwable)
+END dev.roots.LiveViewOwnershipException
+TYPE public final class dev.roots.Memo<T>
+  CONSTRUCTOR public dev.roots.Memo()
+  METHOD public synchronized T dev.roots.Memo.compute(java.lang.Object,java.util.function.Supplier<? extends T>)
+  METHOD public synchronized void dev.roots.Memo.clear()
+END dev.roots.Memo
+TYPE public final record dev.roots.Metadata
+  FIELD public static final dev.roots.Metadata dev.roots.Metadata.DEFAULT
+  CONSTRUCTOR public dev.roots.Metadata(java.lang.String,java.lang.String,java.util.List<java.lang.String>)
+  CONSTRUCTOR public dev.roots.Metadata(java.lang.String,java.lang.String,java.util.List<java.lang.String>,java.util.List<dev.roots.WebFont>)
+  METHOD public dev.roots.Metadata dev.roots.Metadata.withFonts(dev.roots.WebFont...)
+  METHOD public final boolean dev.roots.Metadata.equals(java.lang.Object)
+  METHOD public final int dev.roots.Metadata.hashCode()
+  METHOD public final java.lang.String dev.roots.Metadata.toString()
+  METHOD public java.lang.String dev.roots.Metadata.description()
+  METHOD public java.lang.String dev.roots.Metadata.title()
+  METHOD public java.util.List<dev.roots.WebFont> dev.roots.Metadata.fonts()
+  METHOD public java.util.List<java.lang.String> dev.roots.Metadata.stylesheets()
+  METHOD public static dev.roots.Metadata dev.roots.Metadata.of(java.lang.String,java.lang.String,java.lang.String...)
+END dev.roots.Metadata
+TYPE public abstract interface dev.roots.Middleware
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract dev.roots.Response dev.roots.Middleware.handle(dev.roots.Request,dev.roots.Middleware.Chain) throws java.lang.Exception
+END dev.roots.Middleware
+TYPE public abstract static interface dev.roots.Middleware.Chain
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract dev.roots.Response dev.roots.Middleware.Chain.next() throws java.lang.Exception
+END dev.roots.Middleware$Chain
+TYPE public final record dev.roots.OpenGraphMetadata
+  FIELD public static final dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.EMPTY
+  CONSTRUCTOR public dev.roots.OpenGraphMetadata()
+  CONSTRUCTOR public dev.roots.OpenGraphMetadata(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+  METHOD public boolean dev.roots.OpenGraphMetadata.isEmpty()
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withDescription(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withImage(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withImageAlt(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withSiteName(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withTitle(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withType(java.lang.String)
+  METHOD public dev.roots.OpenGraphMetadata dev.roots.OpenGraphMetadata.withUrl(java.lang.String)
+  METHOD public final boolean dev.roots.OpenGraphMetadata.equals(java.lang.Object)
+  METHOD public final int dev.roots.OpenGraphMetadata.hashCode()
+  METHOD public final java.lang.String dev.roots.OpenGraphMetadata.toString()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.description()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.image()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.imageAlt()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.siteName()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.title()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.type()
+  METHOD public java.lang.String dev.roots.OpenGraphMetadata.url()
+END dev.roots.OpenGraphMetadata
+TYPE public final record dev.roots.OptimisticEffect
+  CONSTRUCTOR public dev.roots.OptimisticEffect(dev.roots.OptimisticEffect.Type,java.lang.String,java.lang.String)
+  METHOD public dev.roots.OptimisticEffect.Type dev.roots.OptimisticEffect.type()
+  METHOD public final boolean dev.roots.OptimisticEffect.equals(java.lang.Object)
+  METHOD public final int dev.roots.OptimisticEffect.hashCode()
+  METHOD public final java.lang.String dev.roots.OptimisticEffect.toString()
+  METHOD public java.lang.String dev.roots.OptimisticEffect.target()
+  METHOD public java.lang.String dev.roots.OptimisticEffect.value()
+  METHOD public static dev.roots.OptimisticEffect dev.roots.OptimisticEffect.disable(dev.roots.Ref)
+  METHOD public static dev.roots.OptimisticEffect dev.roots.OptimisticEffect.hide(dev.roots.Ref)
+  METHOD public static dev.roots.OptimisticEffect dev.roots.OptimisticEffect.text(dev.roots.Ref,java.lang.Object)
+  METHOD public static dev.roots.OptimisticEffect dev.roots.OptimisticEffect.value(dev.roots.Ref,java.lang.Object)
+END dev.roots.OptimisticEffect
+TYPE public static final enum dev.roots.OptimisticEffect.Type
+  FIELD public static final dev.roots.OptimisticEffect.Type dev.roots.OptimisticEffect.Type.DISABLE
+  FIELD public static final dev.roots.OptimisticEffect.Type dev.roots.OptimisticEffect.Type.HIDE
+  FIELD public static final dev.roots.OptimisticEffect.Type dev.roots.OptimisticEffect.Type.TEXT
+  FIELD public static final dev.roots.OptimisticEffect.Type dev.roots.OptimisticEffect.Type.VALUE
+  METHOD public static dev.roots.OptimisticEffect.Type dev.roots.OptimisticEffect.Type.valueOf(java.lang.String)
+  METHOD public static dev.roots.OptimisticEffect.Type[] dev.roots.OptimisticEffect.Type.values()
+END dev.roots.OptimisticEffect$Type
+TYPE public abstract interface dev.roots.Page
+  METHOD public default dev.roots.HeadMetadata dev.roots.Page.headMetadata(dev.roots.PageContext)
+  METHOD public default dev.roots.Metadata dev.roots.Page.metadata(dev.roots.PageContext)
+END dev.roots.Page
+TYPE public final class dev.roots.PageContext
+  CONSTRUCTOR public dev.roots.PageContext(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session)
+  CONSTRUCTOR public dev.roots.PageContext(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session,dev.roots.RootsCache)
+  CONSTRUCTOR public dev.roots.PageContext(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>)
+  CONSTRUCTOR public dev.roots.PageContext(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext)
+  CONSTRUCTOR public dev.roots.PageContext(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String)
+  CONSTRUCTOR public dev.roots.PageContext(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String,dev.roots.ClientConnection)
+  METHOD public <T> T dev.roots.PageContext.context(dev.roots.ContextKey<T>)
+  METHOD public <T> void dev.roots.PageContext.provide(dev.roots.ContextKey<T>,T)
+  METHOD public dev.roots.ClientConnection dev.roots.PageContext.connection()
+  METHOD public dev.roots.RootsCache dev.roots.PageContext.cache()
+  METHOD public dev.roots.Session dev.roots.PageContext.session()
+  METHOD public dev.roots.TraceContext dev.roots.PageContext.traceContext()
+  METHOD public java.lang.String dev.roots.PageContext.cookiePath()
+  METHOD public java.lang.String dev.roots.PageContext.mountPath()
+  METHOD public java.lang.String dev.roots.PageContext.parameter(java.lang.String)
+  METHOD public java.lang.String dev.roots.PageContext.path()
+  METHOD public java.lang.String dev.roots.PageContext.url(java.lang.String)
+  METHOD public java.util.List<java.lang.String> dev.roots.PageContext.queryValues(java.lang.String)
+  METHOD public java.util.Map<java.lang.String, java.lang.String> dev.roots.PageContext.cookies()
+  METHOD public java.util.Map<java.lang.String, java.lang.String> dev.roots.PageContext.parameters()
+  METHOD public java.util.Optional<dev.roots.AuthenticatedIdentity> dev.roots.PageContext.identity()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.PageContext.cookie(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.PageContext.query(java.lang.String)
+  METHOD public void dev.roots.PageContext.attachUpdater(java.util.function.Consumer<java.lang.Runnable>)
+  METHOD public void dev.roots.PageContext.update(java.lang.Runnable)
+  METHOD public void dev.roots.PageContext.updateConnection(dev.roots.ClientConnection)
+  METHOD public void dev.roots.PageContext.updateCookies(java.util.Map<java.lang.String, java.lang.String>)
+  METHOD public void dev.roots.PageContext.updateTraceContext(dev.roots.TraceContext)
+END dev.roots.PageContext
+TYPE public abstract interface dev.roots.PrerenderConfigFactory
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract dev.roots.RootsConfig dev.roots.PrerenderConfigFactory.create(java.lang.Class<?>)
+END dev.roots.PrerenderConfigFactory
+TYPE public final record dev.roots.PrerenderReport
+  CONSTRUCTOR public dev.roots.PrerenderReport(java.nio.file.Path,java.util.List<dev.roots.PrerenderedRoute>)
+  METHOD public final boolean dev.roots.PrerenderReport.equals(java.lang.Object)
+  METHOD public final int dev.roots.PrerenderReport.hashCode()
+  METHOD public final java.lang.String dev.roots.PrerenderReport.toString()
+  METHOD public java.nio.file.Path dev.roots.PrerenderReport.outputDirectory()
+  METHOD public java.util.List<dev.roots.PrerenderedRoute> dev.roots.PrerenderReport.routes()
+END dev.roots.PrerenderReport
+TYPE public final record dev.roots.PrerenderedRoute
+  CONSTRUCTOR public dev.roots.PrerenderedRoute(java.lang.String,java.lang.String,long)
+  METHOD public final boolean dev.roots.PrerenderedRoute.equals(java.lang.Object)
+  METHOD public final int dev.roots.PrerenderedRoute.hashCode()
+  METHOD public final java.lang.String dev.roots.PrerenderedRoute.toString()
+  METHOD public java.lang.String dev.roots.PrerenderedRoute.path()
+  METHOD public java.lang.String dev.roots.PrerenderedRoute.resource()
+  METHOD public long dev.roots.PrerenderedRoute.revalidateSeconds()
+END dev.roots.PrerenderedRoute
+TYPE public final class dev.roots.Prerenderer
+  METHOD public static dev.roots.PrerenderReport dev.roots.Prerenderer.generate(dev.roots.RootsConfig,java.nio.file.Path)
+END dev.roots.Prerenderer
+TYPE public abstract interface dev.roots.ProxyPolicy
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract dev.roots.ClientConnection dev.roots.ProxyPolicy.resolve(dev.roots.ClientConnection,java.util.Map<java.lang.String, java.util.List<java.lang.String>>)
+  METHOD public static dev.roots.ProxyPolicy dev.roots.ProxyPolicy.directOnly()
+  METHOD public static dev.roots.ProxyPolicy dev.roots.ProxyPolicy.trusted(java.lang.String...)
+  METHOD public static dev.roots.ProxyPolicy dev.roots.ProxyPolicy.trusted(java.util.List<java.lang.String>)
+END dev.roots.ProxyPolicy
+TYPE public final record dev.roots.RateLimitDecision
+  CONSTRUCTOR public dev.roots.RateLimitDecision(boolean,long,long,java.time.Duration)
+  METHOD public boolean dev.roots.RateLimitDecision.allowed()
+  METHOD public final boolean dev.roots.RateLimitDecision.equals(java.lang.Object)
+  METHOD public final int dev.roots.RateLimitDecision.hashCode()
+  METHOD public final java.lang.String dev.roots.RateLimitDecision.toString()
+  METHOD public java.time.Duration dev.roots.RateLimitDecision.resetAfter()
+  METHOD public long dev.roots.RateLimitDecision.limit()
+  METHOD public long dev.roots.RateLimitDecision.remaining()
+  METHOD public static dev.roots.RateLimitDecision dev.roots.RateLimitDecision.allow(long,long,java.time.Duration)
+  METHOD public static dev.roots.RateLimitDecision dev.roots.RateLimitDecision.reject(long,java.time.Duration)
+  METHOD public static dev.roots.RateLimitDecision dev.roots.RateLimitDecision.unlimited()
+END dev.roots.RateLimitDecision
+TYPE public final record dev.roots.RateLimitRequest
+  CONSTRUCTOR public dev.roots.RateLimitRequest(java.lang.String,java.lang.String,dev.roots.ClientConnection)
+  METHOD public dev.roots.ClientConnection dev.roots.RateLimitRequest.connection()
+  METHOD public final boolean dev.roots.RateLimitRequest.equals(java.lang.Object)
+  METHOD public final int dev.roots.RateLimitRequest.hashCode()
+  METHOD public final java.lang.String dev.roots.RateLimitRequest.toString()
+  METHOD public java.lang.String dev.roots.RateLimitRequest.method()
+  METHOD public java.lang.String dev.roots.RateLimitRequest.path()
+END dev.roots.RateLimitRequest
+TYPE public abstract interface dev.roots.RateLimiter
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract dev.roots.RateLimitDecision dev.roots.RateLimiter.acquire(dev.roots.RateLimitRequest)
+  METHOD public static dev.roots.RateLimiter dev.roots.RateLimiter.fixedWindow(int,java.time.Duration,int)
+  METHOD public static dev.roots.RateLimiter dev.roots.RateLimiter.unlimited()
+END dev.roots.RateLimiter
+TYPE public final class dev.roots.Ref
+  METHOD public java.lang.String dev.roots.Ref.id()
+  METHOD public static dev.roots.Ref dev.roots.Ref.create()
+END dev.roots.Ref
+TYPE public final class dev.roots.Request
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,byte[],dev.roots.Session)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,byte[],dev.roots.Session)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,byte[],dev.roots.Session,dev.roots.RootsCache)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,byte[],dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,byte[],dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,byte[],dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,byte[],dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String,dev.roots.ClientConnection)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,dev.roots.BinaryContent,dev.roots.Session,dev.roots.RootsCache,java.util.Optional<dev.roots.AuthenticatedIdentity>,dev.roots.TraceContext,java.lang.String,dev.roots.ClientConnection)
+  CONSTRUCTOR public dev.roots.Request(java.lang.String,java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,byte[],dev.roots.Session)
+  METHOD public <T> T dev.roots.Request.bind(java.lang.Class<T>)
+  METHOD public boolean dev.roots.Request.bodyInMemory()
+  METHOD public byte[] dev.roots.Request.body()
+  METHOD public dev.roots.ClientConnection dev.roots.Request.connection()
+  METHOD public dev.roots.Request dev.roots.Request.withIdentity(java.util.Optional<dev.roots.AuthenticatedIdentity>)
+  METHOD public dev.roots.Request dev.roots.Request.withLogicalPath(java.lang.String)
+  METHOD public dev.roots.Request dev.roots.Request.withLogicalRoute(java.lang.String,java.util.Map<java.lang.String, java.lang.String>,java.util.Map<java.lang.String, java.util.List<java.lang.String>>)
+  METHOD public dev.roots.Request dev.roots.Request.withParameters(java.util.Map<java.lang.String, java.lang.String>)
+  METHOD public dev.roots.RootsCache dev.roots.Request.cache()
+  METHOD public dev.roots.Session dev.roots.Request.session()
+  METHOD public dev.roots.TraceContext dev.roots.Request.traceContext()
+  METHOD public java.io.InputStream dev.roots.Request.bodyStream() throws java.io.IOException
+  METHOD public java.lang.String dev.roots.Request.bodyText()
+  METHOD public java.lang.String dev.roots.Request.method()
+  METHOD public java.lang.String dev.roots.Request.mountPath()
+  METHOD public java.lang.String dev.roots.Request.path()
+  METHOD public java.lang.String dev.roots.Request.transportPath()
+  METHOD public java.util.List<dev.roots.UploadedFile> dev.roots.Request.files(java.lang.String)
+  METHOD public java.util.List<java.lang.String> dev.roots.Request.formValues(java.lang.String)
+  METHOD public java.util.Map<java.lang.String, java.lang.String> dev.roots.Request.cookies()
+  METHOD public java.util.Map<java.lang.String, java.lang.String> dev.roots.Request.parameters()
+  METHOD public java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>> dev.roots.Request.allFiles()
+  METHOD public java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>> dev.roots.Request.files()
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.Request.allFormValues()
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.Request.form()
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.Request.headers()
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.Request.query()
+  METHOD public java.util.Optional<dev.roots.AuthenticatedIdentity> dev.roots.Request.identity()
+  METHOD public java.util.Optional<dev.roots.UploadedFile> dev.roots.Request.file(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.Request.cookie(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.Request.formValue(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.Request.header(java.lang.String)
+  METHOD public java.util.Optional<java.lang.String> dev.roots.Request.queryValue(java.lang.String)
+  METHOD public long dev.roots.Request.bodySize()
+  METHOD public void dev.roots.Request.close()
+END dev.roots.Request
+TYPE public final record dev.roots.RequestBodyPolicy
+  FIELD public static final int dev.roots.RequestBodyPolicy.DEFAULT_MAX_MULTIPART_TEXT_FIELD_BYTES
+  FIELD public static final int dev.roots.RequestBodyPolicy.DEFAULT_MEMORY_THRESHOLD
+  CONSTRUCTOR public dev.roots.RequestBodyPolicy(int,int,java.nio.file.Path)
+  METHOD public final boolean dev.roots.RequestBodyPolicy.equals(java.lang.Object)
+  METHOD public final int dev.roots.RequestBodyPolicy.hashCode()
+  METHOD public final java.lang.String dev.roots.RequestBodyPolicy.toString()
+  METHOD public int dev.roots.RequestBodyPolicy.maxMultipartTextFieldBytes()
+  METHOD public int dev.roots.RequestBodyPolicy.memoryThreshold()
+  METHOD public java.nio.file.Path dev.roots.RequestBodyPolicy.temporaryDirectory()
+  METHOD public static dev.roots.RequestBodyPolicy dev.roots.RequestBodyPolicy.defaults()
+END dev.roots.RequestBodyPolicy
+TYPE public final record dev.roots.RequestObservation
+  CONSTRUCTOR public dev.roots.RequestObservation(dev.roots.TraceContext,java.time.Instant,java.time.Duration,java.lang.String,java.lang.String,java.lang.String,int,long)
+  METHOD public dev.roots.RequestOutcome dev.roots.RequestObservation.outcome()
+  METHOD public dev.roots.TraceContext dev.roots.RequestObservation.traceContext()
+  METHOD public final boolean dev.roots.RequestObservation.equals(java.lang.Object)
+  METHOD public final int dev.roots.RequestObservation.hashCode()
+  METHOD public final java.lang.String dev.roots.RequestObservation.toString()
+  METHOD public int dev.roots.RequestObservation.status()
+  METHOD public java.lang.String dev.roots.RequestObservation.json()
+  METHOD public java.lang.String dev.roots.RequestObservation.method()
+  METHOD public java.lang.String dev.roots.RequestObservation.path()
+  METHOD public java.lang.String dev.roots.RequestObservation.transportPath()
+  METHOD public java.time.Duration dev.roots.RequestObservation.duration()
+  METHOD public java.time.Instant dev.roots.RequestObservation.startedAt()
+  METHOD public long dev.roots.RequestObservation.responseBytes()
+END dev.roots.RequestObservation
+TYPE public abstract interface dev.roots.RequestObserver
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract void dev.roots.RequestObserver.onComplete(dev.roots.RequestObservation)
+  METHOD public static dev.roots.RequestObserver dev.roots.RequestObserver.structured()
+  METHOD public static dev.roots.RequestObserver dev.roots.RequestObserver.structured(java.lang.System.Logger)
+END dev.roots.RequestObserver
+TYPE public final enum dev.roots.RequestOutcome
+  FIELD public static final dev.roots.RequestOutcome dev.roots.RequestOutcome.ABORTED
+  FIELD public static final dev.roots.RequestOutcome dev.roots.RequestOutcome.CLIENT_ERROR
+  FIELD public static final dev.roots.RequestOutcome dev.roots.RequestOutcome.REDIRECTION
+  FIELD public static final dev.roots.RequestOutcome dev.roots.RequestOutcome.SERVER_ERROR
+  FIELD public static final dev.roots.RequestOutcome dev.roots.RequestOutcome.SUCCESS
+  METHOD public static dev.roots.RequestOutcome dev.roots.RequestOutcome.fromStatus(int)
+  METHOD public static dev.roots.RequestOutcome dev.roots.RequestOutcome.valueOf(java.lang.String)
+  METHOD public static dev.roots.RequestOutcome[] dev.roots.RequestOutcome.values()
+END dev.roots.RequestOutcome
+TYPE public final class dev.roots.Response
+  CONSTRUCTOR public dev.roots.Response(int,java.util.Map<java.lang.String, java.util.List<java.lang.String>>,byte[])
+  METHOD public boolean dev.roots.Response.streaming()
+  METHOD public byte[] dev.roots.Response.body()
+  METHOD public dev.roots.Response dev.roots.Response.withAddedHeader(java.lang.String,java.lang.String)
+  METHOD public dev.roots.Response dev.roots.Response.withCookie(dev.roots.ResponseCookie)
+  METHOD public dev.roots.Response dev.roots.Response.withHeader(java.lang.String,java.lang.String)
+  METHOD public final boolean dev.roots.Response.equals(java.lang.Object)
+  METHOD public final int dev.roots.Response.hashCode()
+  METHOD public final java.lang.String dev.roots.Response.toString()
+  METHOD public int dev.roots.Response.status()
+  METHOD public java.lang.String dev.roots.Response.bodyText()
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.Response.headers()
+  METHOD public java.util.OptionalLong dev.roots.Response.contentLength()
+  METHOD public static dev.roots.Response dev.roots.Response.file(int,java.lang.String,java.nio.file.Path) throws java.io.IOException
+  METHOD public static dev.roots.Response dev.roots.Response.html(int,java.lang.String)
+  METHOD public static dev.roots.Response dev.roots.Response.json(int,java.lang.String)
+  METHOD public static dev.roots.Response dev.roots.Response.methodNotAllowed(java.lang.String)
+  METHOD public static dev.roots.Response dev.roots.Response.noContent()
+  METHOD public static dev.roots.Response dev.roots.Response.of(int,java.lang.String,java.lang.String)
+  METHOD public static dev.roots.Response dev.roots.Response.redirect(java.lang.String)
+  METHOD public static dev.roots.Response dev.roots.Response.stream(int,java.lang.String,dev.roots.ResponseBodyWriter)
+  METHOD public static dev.roots.Response dev.roots.Response.stream(int,java.lang.String,long,dev.roots.ResponseBodyWriter)
+  METHOD public static dev.roots.Response dev.roots.Response.text(int,java.lang.String)
+  METHOD public void dev.roots.Response.transferTo(java.io.OutputStream) throws java.io.IOException
+END dev.roots.Response
+TYPE public abstract interface dev.roots.ResponseBodyWriter
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract void dev.roots.ResponseBodyWriter.writeTo(java.io.OutputStream) throws java.io.IOException
+END dev.roots.ResponseBodyWriter
+TYPE public final class dev.roots.ResponseCookie
+  METHOD public boolean dev.roots.ResponseCookie.httpOnly()
+  METHOD public boolean dev.roots.ResponseCookie.partitioned()
+  METHOD public boolean dev.roots.ResponseCookie.secure()
+  METHOD public dev.roots.ResponseCookie.SameSite dev.roots.ResponseCookie.sameSite()
+  METHOD public java.lang.String dev.roots.ResponseCookie.headerValue()
+  METHOD public java.lang.String dev.roots.ResponseCookie.name()
+  METHOD public java.lang.String dev.roots.ResponseCookie.path()
+  METHOD public java.lang.String dev.roots.ResponseCookie.value()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.ResponseCookie.domain()
+  METHOD public java.util.Optional<java.time.Instant> dev.roots.ResponseCookie.expires()
+  METHOD public java.util.OptionalLong dev.roots.ResponseCookie.maxAgeSeconds()
+  METHOD public static dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.builder(java.lang.String,java.lang.String)
+  METHOD public static dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.expire(java.lang.String)
+END dev.roots.ResponseCookie
+TYPE public static final class dev.roots.ResponseCookie.Builder
+  METHOD public dev.roots.ResponseCookie dev.roots.ResponseCookie.Builder.build()
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.domain(java.lang.String)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.expires(java.time.Instant)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.httpOnly(boolean)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.maxAge(java.time.Duration)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.maxAgeSeconds(long)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.partitioned(boolean)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.path(java.lang.String)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.sameSite(dev.roots.ResponseCookie.SameSite)
+  METHOD public dev.roots.ResponseCookie.Builder dev.roots.ResponseCookie.Builder.secure(boolean)
+END dev.roots.ResponseCookie$Builder
+TYPE public static final enum dev.roots.ResponseCookie.SameSite
+  FIELD public static final dev.roots.ResponseCookie.SameSite dev.roots.ResponseCookie.SameSite.LAX
+  FIELD public static final dev.roots.ResponseCookie.SameSite dev.roots.ResponseCookie.SameSite.NONE
+  FIELD public static final dev.roots.ResponseCookie.SameSite dev.roots.ResponseCookie.SameSite.STRICT
+  METHOD public static dev.roots.ResponseCookie.SameSite dev.roots.ResponseCookie.SameSite.valueOf(java.lang.String)
+  METHOD public static dev.roots.ResponseCookie.SameSite[] dev.roots.ResponseCookie.SameSite.values()
+END dev.roots.ResponseCookie$SameSite
+TYPE public final class dev.roots.Roots
+  FIELD public static final java.lang.String dev.roots.Roots.PROTOCOL_VERSION
+  METHOD public static dev.roots.RunningApplication dev.roots.Roots.start(dev.roots.RootsConfig)
+  METHOD public static dev.roots.RunningApplication dev.roots.Roots.start(java.lang.Class<?>,java.lang.String...)
+  METHOD public static void dev.roots.Roots.run(dev.roots.RootsConfig)
+  METHOD public static void dev.roots.Roots.run(java.lang.Class<?>,java.lang.String...)
+END dev.roots.Roots
+TYPE public abstract interface dev.roots.RootsCache
+  FIELD public static final int dev.roots.RootsCache.DEFAULT_MAX_ENTRIES
+  METHOD public abstract <T> T dev.roots.RootsCache.get(java.lang.String,java.lang.Class<T>,dev.roots.CachePolicy,java.util.function.Supplier<? extends T>)
+  METHOD public abstract boolean dev.roots.RootsCache.invalidate(java.lang.String)
+  METHOD public abstract dev.roots.CacheSnapshot dev.roots.RootsCache.snapshot()
+  METHOD public abstract long dev.roots.RootsCache.invalidateTag(java.lang.String)
+  METHOD public abstract void dev.roots.RootsCache.clear()
+  METHOD public default <T> T dev.roots.RootsCache.get(java.lang.String,java.lang.Class<T>,java.time.Duration,java.util.function.Supplier<? extends T>)
+  METHOD public static dev.roots.RootsCache dev.roots.RootsCache.disabled()
+  METHOD public static dev.roots.RootsCache dev.roots.RootsCache.inMemory()
+  METHOD public static dev.roots.RootsCache dev.roots.RootsCache.inMemory(int)
+END dev.roots.RootsCache
+TYPE public final record dev.roots.RootsConfig
+  FIELD public static final int dev.roots.RootsConfig.DEFAULT_MAX_REQUEST_BYTES
+  FIELD public static final java.lang.String dev.roots.RootsConfig.DEFAULT_CONTENT_SECURITY_POLICY
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,boolean,dev.roots.InstanceFactory,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,boolean,dev.roots.InstanceFactory,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>,dev.roots.RootsCache)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>,dev.roots.RootsCache,java.lang.String,dev.roots.SessionRepository,java.util.List<dev.roots.RequestObserver>)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>,dev.roots.RootsCache,java.lang.String,dev.roots.SessionRepository,java.util.List<dev.roots.RequestObserver>,dev.roots.ProxyPolicy,dev.roots.RateLimiter)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>,dev.roots.RootsCache,java.lang.String,dev.roots.SessionRepository,java.util.List<dev.roots.RequestObserver>,dev.roots.ProxyPolicy,dev.roots.RateLimiter,dev.roots.RequestBodyPolicy)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>,dev.roots.RootsCache,java.lang.String,dev.roots.SessionRepository,java.util.List<dev.roots.RequestObserver>,dev.roots.ProxyPolicy,dev.roots.RateLimiter,dev.roots.RequestBodyPolicy,dev.roots.LiveViewOwnership)
+  CONSTRUCTOR public dev.roots.RootsConfig(java.lang.Class<?>,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,int,int,int,int,boolean,dev.roots.InstanceFactory,java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy>,java.util.List<dev.roots.Middleware>,java.util.List<dev.roots.ExceptionMapper>,dev.roots.RootsCache,java.lang.String,dev.roots.SessionRepository,java.util.List<dev.roots.RequestObserver>,dev.roots.ProxyPolicy,dev.roots.RateLimiter,dev.roots.RequestBodyPolicy,dev.roots.LiveViewOwnership,dev.roots.AuthenticationProvider)
+  METHOD public boolean dev.roots.RootsConfig.development()
+  METHOD public boolean dev.roots.RootsConfig.secureCookies()
+  METHOD public dev.roots.AuthenticationProvider dev.roots.RootsConfig.authenticationProvider()
+  METHOD public dev.roots.InstanceFactory dev.roots.RootsConfig.instanceFactory()
+  METHOD public dev.roots.LiveViewOwnership dev.roots.RootsConfig.liveViewOwnership()
+  METHOD public dev.roots.ProxyPolicy dev.roots.RootsConfig.proxyPolicy()
+  METHOD public dev.roots.RateLimiter dev.roots.RootsConfig.rateLimiter()
+  METHOD public dev.roots.RequestBodyPolicy dev.roots.RootsConfig.requestBodyPolicy()
+  METHOD public dev.roots.RootsCache dev.roots.RootsConfig.cache()
+  METHOD public dev.roots.SessionRepository dev.roots.RootsConfig.sessionRepository()
+  METHOD public final boolean dev.roots.RootsConfig.equals(java.lang.Object)
+  METHOD public final int dev.roots.RootsConfig.hashCode()
+  METHOD public final java.lang.String dev.roots.RootsConfig.toString()
+  METHOD public int dev.roots.RootsConfig.maxConcurrentRequests()
+  METHOD public int dev.roots.RootsConfig.maxLiveViews()
+  METHOD public int dev.roots.RootsConfig.maxRequestBytes()
+  METHOD public int dev.roots.RootsConfig.maxSessions()
+  METHOD public int dev.roots.RootsConfig.port()
+  METHOD public java.lang.Class<?> dev.roots.RootsConfig.applicationClass()
+  METHOD public java.lang.String dev.roots.RootsConfig.apiPackage()
+  METHOD public java.lang.String dev.roots.RootsConfig.contentSecurityPolicy()
+  METHOD public java.lang.String dev.roots.RootsConfig.host()
+  METHOD public java.lang.String dev.roots.RootsConfig.pagesPackage()
+  METHOD public java.time.Duration dev.roots.RootsConfig.sessionTimeout()
+  METHOD public java.time.Duration dev.roots.RootsConfig.viewTimeout()
+  METHOD public java.util.List<dev.roots.ExceptionMapper> dev.roots.RootsConfig.exceptionMappers()
+  METHOD public java.util.List<dev.roots.Middleware> dev.roots.RootsConfig.middleware()
+  METHOD public java.util.List<dev.roots.RequestObserver> dev.roots.RootsConfig.requestObservers()
+  METHOD public java.util.Map<java.lang.String, dev.roots.AuthorizationPolicy> dev.roots.RootsConfig.authorizationPolicies()
+  METHOD public static dev.roots.RootsConfig.Builder dev.roots.RootsConfig.forApplication(java.lang.Class<?>)
+END dev.roots.RootsConfig
+TYPE public static final class dev.roots.RootsConfig.Builder
+  METHOD public <E extends java.lang.Throwable> dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.mapException(java.lang.Class<E>,java.util.function.BiFunction<? super dev.roots.Request, ? super E, ? extends dev.roots.Response>)
+  METHOD public dev.roots.RootsConfig dev.roots.RootsConfig.Builder.build()
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.apiPackage(java.lang.String)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.arguments(java.lang.String...)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.authenticationProvider(dev.roots.AuthenticationProvider)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.authorize(java.lang.String,dev.roots.AuthorizationPolicy)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.cache(dev.roots.RootsCache)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.contentSecurityPolicy(java.lang.String)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.development(boolean)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.host(java.lang.String)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.instanceFactory(dev.roots.InstanceFactory)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.liveViewOwnership(dev.roots.LiveViewOwnership)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.mapExceptions(dev.roots.ExceptionMapper)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.maxConcurrentRequests(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.maxLiveViews(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.maxMultipartTextFieldBytes(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.maxRequestBytes(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.maxSessions(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.observeRequests(dev.roots.RequestObserver)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.pagesPackage(java.lang.String)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.port(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.proxyPolicy(dev.roots.ProxyPolicy)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.rateLimiter(dev.roots.RateLimiter)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.requestBodyMemoryThreshold(int)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.requestBodyPolicy(dev.roots.RequestBodyPolicy)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.requestBodyTemporaryDirectory(java.nio.file.Path)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.secureCookies(boolean)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.sessionRepository(dev.roots.SessionRepository)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.sessionTimeout(java.time.Duration)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.use(dev.roots.Middleware)
+  METHOD public dev.roots.RootsConfig.Builder dev.roots.RootsConfig.Builder.viewTimeout(java.time.Duration)
+END dev.roots.RootsConfig$Builder
+TYPE public final class dev.roots.RoutePaths
+  METHOD public static java.lang.String dev.roots.RoutePaths.fromPackage(java.lang.String,java.lang.String,java.lang.String)
+  METHOD public static java.lang.String dev.roots.RoutePaths.fromTemplate(java.lang.String)
+  METHOD public static java.lang.String dev.roots.RoutePaths.shape(java.lang.String)
+END dev.roots.RoutePaths
+TYPE public final class dev.roots.RunningApplication
+  CONSTRUCTOR public dev.roots.RunningApplication(dev.roots.internal.RootsServer)
+  METHOD public dev.roots.RootsCache dev.roots.RunningApplication.cache()
+  METHOD public dev.roots.RuntimeSnapshot dev.roots.RunningApplication.runtimeSnapshot()
+  METHOD public java.lang.String dev.roots.RunningApplication.nodeId()
+  METHOD public java.net.URI dev.roots.RunningApplication.uri()
+  METHOD public java.util.List<java.lang.String> dev.roots.RunningApplication.routes()
+  METHOD public void dev.roots.RunningApplication.await() throws java.lang.InterruptedException
+  METHOD public void dev.roots.RunningApplication.beginDrain()
+  METHOD public void dev.roots.RunningApplication.close()
+  METHOD public void dev.roots.RunningApplication.closeGracefully(java.time.Duration)
+END dev.roots.RunningApplication
+TYPE public final record dev.roots.RuntimeSnapshot
+  CONSTRUCTOR public dev.roots.RuntimeSnapshot(boolean,long,int,int)
+  CONSTRUCTOR public dev.roots.RuntimeSnapshot(boolean,long,int,int,boolean,long,int,int,int,int)
+  CONSTRUCTOR public dev.roots.RuntimeSnapshot(boolean,long,int,int,boolean,long,int,int,int,int,int)
+  METHOD public boolean dev.roots.RuntimeSnapshot.acceptingRequests()
+  METHOD public boolean dev.roots.RuntimeSnapshot.running()
+  METHOD public final boolean dev.roots.RuntimeSnapshot.equals(java.lang.Object)
+  METHOD public final int dev.roots.RuntimeSnapshot.hashCode()
+  METHOD public final java.lang.String dev.roots.RuntimeSnapshot.toString()
+  METHOD public int dev.roots.RuntimeSnapshot.activeRequests()
+  METHOD public int dev.roots.RuntimeSnapshot.liveViews()
+  METHOD public int dev.roots.RuntimeSnapshot.maxConcurrentRequests()
+  METHOD public int dev.roots.RuntimeSnapshot.maxLiveViews()
+  METHOD public int dev.roots.RuntimeSnapshot.maxSessions()
+  METHOD public int dev.roots.RuntimeSnapshot.peakActiveRequests()
+  METHOD public int dev.roots.RuntimeSnapshot.sessions()
+  METHOD public long dev.roots.RuntimeSnapshot.handledRequests()
+  METHOD public long dev.roots.RuntimeSnapshot.rejectedRequests()
+END dev.roots.RuntimeSnapshot
+TYPE public class dev.roots.Session
+  CONSTRUCTOR public dev.roots.Session(java.lang.String)
+  METHOD public <T> java.util.Optional<T> dev.roots.Session.get(java.lang.String,java.lang.Class<T>)
+  METHOD public java.lang.String dev.roots.Session.id()
+  METHOD public java.util.Map<java.lang.String, java.lang.Object> dev.roots.Session.snapshot()
+  METHOD public java.util.Optional<java.lang.Object> dev.roots.Session.get(java.lang.String)
+  METHOD public void dev.roots.Session.put(java.lang.String,java.lang.Object)
+  METHOD public void dev.roots.Session.remove(java.lang.String)
+END dev.roots.Session
+TYPE public abstract interface dev.roots.SessionRepository
+  METHOD public abstract int dev.roots.SessionRepository.size()
+  METHOD public abstract java.util.Optional<dev.roots.Session> dev.roots.SessionRepository.create(java.time.Instant,int)
+  METHOD public abstract java.util.Optional<dev.roots.Session> dev.roots.SessionRepository.findAndTouch(java.lang.String,java.time.Instant,java.time.Instant)
+  METHOD public abstract void dev.roots.SessionRepository.deleteExpired(java.time.Instant)
+  METHOD public default void dev.roots.SessionRepository.close()
+  METHOD public static dev.roots.SessionRepository dev.roots.SessionRepository.inMemory()
+END dev.roots.SessionRepository
+TYPE public class dev.roots.SessionRepositoryException
+  CONSTRUCTOR public dev.roots.SessionRepositoryException(java.lang.String)
+  CONSTRUCTOR public dev.roots.SessionRepositoryException(java.lang.String,java.lang.Throwable)
+END dev.roots.SessionRepositoryException
+TYPE public final class dev.roots.State<T>
+  METHOD public static <T> dev.roots.State<T> dev.roots.State.of(T)
+  METHOD public synchronized T dev.roots.State.get()
+  METHOD public synchronized T dev.roots.State.update(java.util.function.UnaryOperator<T>)
+  METHOD public synchronized void dev.roots.State.set(T)
+END dev.roots.State
+TYPE public abstract interface dev.roots.StaticPathProvider
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.List<java.util.Map<java.lang.String, java.lang.String>> dev.roots.StaticPathProvider.paths()
+END dev.roots.StaticPathProvider
+TYPE public static final class dev.roots.StaticPathProvider.None
+  CONSTRUCTOR public dev.roots.StaticPathProvider.None()
+  METHOD public java.util.List<java.util.Map<java.lang.String, java.lang.String>> dev.roots.StaticPathProvider.None.paths()
+END dev.roots.StaticPathProvider$None
+TYPE public final record dev.roots.TraceContext
+  CONSTRUCTOR public dev.roots.TraceContext(java.lang.String,java.lang.String,java.util.Optional<java.lang.String>,int)
+  METHOD public boolean dev.roots.TraceContext.randomTraceId()
+  METHOD public boolean dev.roots.TraceContext.sampled()
+  METHOD public dev.roots.TraceContext dev.roots.TraceContext.child()
+  METHOD public final boolean dev.roots.TraceContext.equals(java.lang.Object)
+  METHOD public final int dev.roots.TraceContext.hashCode()
+  METHOD public final java.lang.String dev.roots.TraceContext.toString()
+  METHOD public int dev.roots.TraceContext.traceFlags()
+  METHOD public java.lang.String dev.roots.TraceContext.spanId()
+  METHOD public java.lang.String dev.roots.TraceContext.traceId()
+  METHOD public java.lang.String dev.roots.TraceContext.traceparent()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.TraceContext.parentSpanId()
+  METHOD public static dev.roots.TraceContext dev.roots.TraceContext.create()
+  METHOD public static dev.roots.TraceContext dev.roots.TraceContext.create(boolean)
+  METHOD public static dev.roots.TraceContext dev.roots.TraceContext.fromTraceparent(java.lang.String)
+END dev.roots.TraceContext
+TYPE public final class dev.roots.UploadedFile
+  CONSTRUCTOR public dev.roots.UploadedFile(java.lang.String,java.lang.String,byte[])
+  CONSTRUCTOR public dev.roots.UploadedFile(java.lang.String,java.lang.String,dev.roots.BinaryContent)
+  METHOD public boolean dev.roots.UploadedFile.inMemory()
+  METHOD public byte[] dev.roots.UploadedFile.content()
+  METHOD public int dev.roots.UploadedFile.size()
+  METHOD public java.io.InputStream dev.roots.UploadedFile.openStream() throws java.io.IOException
+  METHOD public java.lang.String dev.roots.UploadedFile.contentText()
+  METHOD public java.lang.String dev.roots.UploadedFile.contentText(java.nio.charset.Charset)
+  METHOD public java.lang.String dev.roots.UploadedFile.contentType()
+  METHOD public java.lang.String dev.roots.UploadedFile.filename()
+  METHOD public java.nio.file.Path dev.roots.UploadedFile.transferTo(java.nio.file.Path) throws java.io.IOException
+END dev.roots.UploadedFile
+TYPE public final class dev.roots.ValidationException
+  CONSTRUCTOR public dev.roots.ValidationException(java.lang.String,java.util.Map<java.lang.String, java.util.List<java.lang.String>>)
+  CONSTRUCTOR public dev.roots.ValidationException(java.util.Map<java.lang.String, java.util.List<java.lang.String>>)
+  METHOD public java.util.Map<java.lang.String, java.util.List<java.lang.String>> dev.roots.ValidationException.fieldErrors()
+  METHOD public static dev.roots.ValidationException dev.roots.ValidationException.field(java.lang.String,java.lang.String)
+END dev.roots.ValidationException
+TYPE public final record dev.roots.WebFont
+  CONSTRUCTOR public dev.roots.WebFont(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean)
+  METHOD public boolean dev.roots.WebFont.preload()
+  METHOD public dev.roots.WebFont dev.roots.WebFont.display(java.lang.String)
+  METHOD public dev.roots.WebFont dev.roots.WebFont.preloaded()
+  METHOD public dev.roots.WebFont dev.roots.WebFont.style(java.lang.String)
+  METHOD public dev.roots.WebFont dev.roots.WebFont.weight(java.lang.String)
+  METHOD public final boolean dev.roots.WebFont.equals(java.lang.Object)
+  METHOD public final int dev.roots.WebFont.hashCode()
+  METHOD public final java.lang.String dev.roots.WebFont.toString()
+  METHOD public java.lang.String dev.roots.WebFont.display()
+  METHOD public java.lang.String dev.roots.WebFont.family()
+  METHOD public java.lang.String dev.roots.WebFont.source()
+  METHOD public java.lang.String dev.roots.WebFont.style()
+  METHOD public java.lang.String dev.roots.WebFont.weight()
+  METHOD public static dev.roots.WebFont dev.roots.WebFont.of(java.lang.String,java.lang.String)
+END dev.roots.WebFont
+TYPE public abstract @interface dev.roots.annotation.Authorize
+  ANNOTATION @java.lang.annotation.Inherited
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE,java.lang.annotation.ElementType.METHOD])
+  METHOD public abstract java.lang.String[] dev.roots.annotation.Authorize.value()
+END dev.roots.annotation.Authorize
+TYPE public abstract @interface dev.roots.annotation.PageFont
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.ANNOTATION_TYPE])
+  METHOD public abstract boolean dev.roots.annotation.PageFont.preload() DEFAULT false
+  METHOD public abstract java.lang.String dev.roots.annotation.PageFont.display() DEFAULT swap
+  METHOD public abstract java.lang.String dev.roots.annotation.PageFont.family()
+  METHOD public abstract java.lang.String dev.roots.annotation.PageFont.source()
+  METHOD public abstract java.lang.String dev.roots.annotation.PageFont.style() DEFAULT normal
+  METHOD public abstract java.lang.String dev.roots.annotation.PageFont.weight() DEFAULT 400
+END dev.roots.annotation.PageFont
+TYPE public abstract @interface dev.roots.annotation.PageMetadata
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+  METHOD public abstract dev.roots.annotation.PageFont[] dev.roots.annotation.PageMetadata.fonts() DEFAULT []
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.canonical() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.description() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphDescription() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphImage() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphImageAlt() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphSiteName() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphTitle() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphType() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.openGraphUrl() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.robots() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.themeColor() DEFAULT 
+  METHOD public abstract java.lang.String dev.roots.annotation.PageMetadata.title()
+  METHOD public abstract java.lang.String[] dev.roots.annotation.PageMetadata.stylesheets() DEFAULT []
+END dev.roots.annotation.PageMetadata
+TYPE public abstract @interface dev.roots.annotation.Prerender
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+  METHOD public abstract java.lang.Class<? extends dev.roots.StaticPathProvider> dev.roots.annotation.Prerender.paths() DEFAULT dev.roots.StaticPathProvider$None.class
+  METHOD public abstract long dev.roots.annotation.Prerender.revalidateSeconds() DEFAULT 0
+END dev.roots.annotation.Prerender
+TYPE public abstract @interface dev.roots.annotation.RootsApplication
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.SOURCE)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+END dev.roots.annotation.RootsApplication
+TYPE public abstract @interface dev.roots.annotation.Route
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+  METHOD public abstract java.lang.String dev.roots.annotation.Route.value()
+END dev.roots.annotation.Route
+TYPE public abstract @interface dev.roots.annotation.ServerAction
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.METHOD])
+  METHOD public abstract java.lang.String dev.roots.annotation.ServerAction.value() DEFAULT 
+END dev.roots.annotation.ServerAction
+TYPE public abstract @interface dev.roots.annotation.ViewComponent
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+  METHOD public abstract java.lang.String dev.roots.annotation.ViewComponent.value() DEFAULT 
+END dev.roots.annotation.ViewComponent
+TYPE public final class dev.roots.html.Element
+  METHOD public dev.roots.html.Element dev.roots.html.Element.aria(java.lang.String,java.lang.Object)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.attr(java.lang.String,java.lang.Object)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.child(java.lang.Object...)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.className(java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.data(java.lang.String,java.lang.Object)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.href(java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.id(java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.key(java.lang.Object)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.name(java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.on(java.lang.String,java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onBlur(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onBlur(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onChange(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onChange(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onClick(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onClick(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onDoubleClick(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onDoubleClick(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onFocus(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onFocus(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onInput(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onInput(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onKeyDown(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onKeyDown(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onKeyUp(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onKeyUp(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onPointerDown(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onPointerDown(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onPointerUp(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onPointerUp(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onSubmit(java.lang.Object,java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.onSubmit(java.lang.String,dev.roots.Action)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.optimistic(dev.roots.OptimisticEffect...)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.pendingScope()
+  METHOD public dev.roots.html.Element dev.roots.html.Element.placeholder(java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.ref(dev.roots.Ref)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.type(java.lang.String)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.value(java.lang.Object)
+  METHOD public dev.roots.html.Element dev.roots.html.Element.viewTransition()
+END dev.roots.html.Element
+TYPE public final class dev.roots.html.Html
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.a(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.article(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.aside(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.br()
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.button(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.code(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.dialog(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.div(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.footer(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.form(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.h1(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.h2(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.h3(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.header(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.hr()
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.input()
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.label(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.li(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.link(java.lang.String,java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.main(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.nav(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.ol(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.option(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.p(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.pre(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.section(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.select(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.small(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.span(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.strong(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.table(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.tag(java.lang.String,java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.tbody(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.td(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.textarea(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.th(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.thead(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.time(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.tr(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.ul(java.lang.Object...)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.validationMessage(java.lang.String)
+  METHOD public static dev.roots.html.Element dev.roots.html.Html.validationSummary()
+  METHOD public static dev.roots.html.Modal dev.roots.html.Html.modal(java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Object...)
+  METHOD public static dev.roots.html.Modal dev.roots.html.Html.modal(java.lang.String,java.lang.String,java.lang.String,dev.roots.Action,java.lang.Object...)
+  METHOD public static dev.roots.html.Node dev.roots.html.Html.boundary(dev.roots.html.Node,java.util.function.BiFunction<java.lang.Throwable, dev.roots.PageContext, dev.roots.html.Node>)
+  METHOD public static dev.roots.html.Node dev.roots.html.Html.fragment(java.lang.Object...)
+  METHOD public static dev.roots.html.Node dev.roots.html.Html.text(java.lang.Object)
+  METHOD public static dev.roots.html.Node dev.roots.html.Html.unsafeHtml(java.lang.String)
+  METHOD public static dev.roots.html.OptimizedImage dev.roots.html.Html.image(java.lang.String,java.lang.String,int,int)
+  METHOD public static dev.roots.html.Portal dev.roots.html.Html.portal(java.lang.String,java.lang.Object...)
+END dev.roots.html.Html
+TYPE public final class dev.roots.html.HtmlRenderer
+  METHOD public static dev.roots.html.RenderedTree dev.roots.html.HtmlRenderer.render(dev.roots.html.Node,dev.roots.PageContext)
+  METHOD public static java.lang.String dev.roots.html.HtmlRenderer.escapeAttribute(java.lang.String)
+  METHOD public static java.lang.String dev.roots.html.HtmlRenderer.escapeText(java.lang.String)
+END dev.roots.html.HtmlRenderer
+TYPE public final class dev.roots.html.Modal
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.attr(java.lang.String,java.lang.Object)
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.className(java.lang.String)
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.describedBy(java.lang.String)
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.dismissOnBackdrop(boolean)
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.id(java.lang.String)
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.initialFocus(dev.roots.Ref)
+  METHOD public dev.roots.html.Modal dev.roots.html.Modal.ref(dev.roots.Ref)
+END dev.roots.html.Modal
+TYPE public abstract interface dev.roots.html.Node
+END dev.roots.html.Node
+TYPE public final class dev.roots.html.OptimizedImage
+  METHOD public dev.roots.html.OptimizedImage dev.roots.html.OptimizedImage.attr(java.lang.String,java.lang.Object)
+  METHOD public dev.roots.html.OptimizedImage dev.roots.html.OptimizedImage.className(java.lang.String)
+  METHOD public dev.roots.html.OptimizedImage dev.roots.html.OptimizedImage.priority()
+  METHOD public dev.roots.html.OptimizedImage dev.roots.html.OptimizedImage.quality(int)
+  METHOD public dev.roots.html.OptimizedImage dev.roots.html.OptimizedImage.sizes(java.lang.String)
+  METHOD public dev.roots.html.OptimizedImage dev.roots.html.OptimizedImage.widths(int...)
+END dev.roots.html.OptimizedImage
+TYPE public final class dev.roots.html.Portal
+  CONSTRUCTOR public dev.roots.html.Portal(java.lang.String,java.lang.Object...)
+  METHOD public dev.roots.html.Node dev.roots.html.Portal.children()
+  METHOD public java.lang.String dev.roots.html.Portal.id()
+END dev.roots.html.Portal
+TYPE public final record dev.roots.html.RenderedTree
+  CONSTRUCTOR public dev.roots.html.RenderedTree(java.lang.String,java.util.Map<java.lang.String, dev.roots.Action>,java.util.List<dev.roots.Component>)
+  CONSTRUCTOR public dev.roots.html.RenderedTree(java.lang.String,java.util.Map<java.lang.String, dev.roots.Action>,java.util.List<dev.roots.Component>,java.util.Map<java.lang.String, java.lang.String>)
+  METHOD public final boolean dev.roots.html.RenderedTree.equals(java.lang.Object)
+  METHOD public final int dev.roots.html.RenderedTree.hashCode()
+  METHOD public final java.lang.String dev.roots.html.RenderedTree.toString()
+  METHOD public java.lang.String dev.roots.html.RenderedTree.html()
+  METHOD public java.util.List<dev.roots.Component> dev.roots.html.RenderedTree.components()
+  METHOD public java.util.Map<java.lang.String, dev.roots.Action> dev.roots.html.RenderedTree.actions()
+  METHOD public java.util.Map<java.lang.String, java.lang.String> dev.roots.html.RenderedTree.componentHtml()
+END dev.roots.html.RenderedTree
+TYPE public final class dev.roots.validation.BuiltInConstraintValidators
+END dev.roots.validation.BuiltInConstraintValidators
+TYPE public static final class dev.roots.validation.BuiltInConstraintValidators.EmailValidator
+  CONSTRUCTOR public dev.roots.validation.BuiltInConstraintValidators.EmailValidator()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.validation.BuiltInConstraintValidators.EmailValidator.validate(java.lang.Object,dev.roots.validation.Email)
+END dev.roots.validation.BuiltInConstraintValidators$EmailValidator
+TYPE public static final class dev.roots.validation.BuiltInConstraintValidators.MaxValidator
+  CONSTRUCTOR public dev.roots.validation.BuiltInConstraintValidators.MaxValidator()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.validation.BuiltInConstraintValidators.MaxValidator.validate(java.lang.Object,dev.roots.validation.Max)
+END dev.roots.validation.BuiltInConstraintValidators$MaxValidator
+TYPE public static final class dev.roots.validation.BuiltInConstraintValidators.MinValidator
+  CONSTRUCTOR public dev.roots.validation.BuiltInConstraintValidators.MinValidator()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.validation.BuiltInConstraintValidators.MinValidator.validate(java.lang.Object,dev.roots.validation.Min)
+END dev.roots.validation.BuiltInConstraintValidators$MinValidator
+TYPE public static final class dev.roots.validation.BuiltInConstraintValidators.NotBlankValidator
+  CONSTRUCTOR public dev.roots.validation.BuiltInConstraintValidators.NotBlankValidator()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.validation.BuiltInConstraintValidators.NotBlankValidator.validate(java.lang.Object,dev.roots.validation.NotBlank)
+END dev.roots.validation.BuiltInConstraintValidators$NotBlankValidator
+TYPE public static final class dev.roots.validation.BuiltInConstraintValidators.SizeValidator
+  CONSTRUCTOR public dev.roots.validation.BuiltInConstraintValidators.SizeValidator()
+  METHOD public java.util.Optional<java.lang.String> dev.roots.validation.BuiltInConstraintValidators.SizeValidator.validate(java.lang.Object,dev.roots.validation.Size)
+END dev.roots.validation.BuiltInConstraintValidators$SizeValidator
+TYPE public abstract interface dev.roots.validation.ConstraintValidator<A extends java.lang.annotation.Annotation>
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.Optional<java.lang.String> dev.roots.validation.ConstraintValidator.validate(java.lang.Object,A)
+END dev.roots.validation.ConstraintValidator
+TYPE public abstract @interface dev.roots.validation.Email
+  ANNOTATION @dev.roots.validation.FormConstraint(validatedBy=dev.roots.validation.BuiltInConstraintValidators$EmailValidator.class)
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.RECORD_COMPONENT])
+  METHOD public abstract java.lang.String dev.roots.validation.Email.message() DEFAULT Enter a valid email address.
+END dev.roots.validation.Email
+TYPE public final class dev.roots.validation.FormBinder
+  METHOD public static <T> T dev.roots.validation.FormBinder.bind(java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.lang.Class<T>)
+  METHOD public static <T> T dev.roots.validation.FormBinder.bind(java.util.Map<java.lang.String, java.util.List<java.lang.String>>,java.util.Map<java.lang.String, java.util.List<dev.roots.UploadedFile>>,java.lang.Class<T>)
+END dev.roots.validation.FormBinder
+TYPE public abstract @interface dev.roots.validation.FormConstraint
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.ANNOTATION_TYPE])
+  METHOD public abstract java.lang.Class<? extends dev.roots.validation.ConstraintValidator<?>> dev.roots.validation.FormConstraint.validatedBy()
+END dev.roots.validation.FormConstraint
+TYPE public abstract @interface dev.roots.validation.FormField
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.RECORD_COMPONENT])
+  METHOD public abstract boolean dev.roots.validation.FormField.trim() DEFAULT false
+  METHOD public abstract java.lang.String dev.roots.validation.FormField.value() DEFAULT 
+END dev.roots.validation.FormField
+TYPE public abstract @interface dev.roots.validation.FormModel
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+  METHOD public abstract java.lang.String dev.roots.validation.FormModel.message() DEFAULT Validation failed
+END dev.roots.validation.FormModel
+TYPE public abstract @interface dev.roots.validation.Max
+  ANNOTATION @dev.roots.validation.FormConstraint(validatedBy=dev.roots.validation.BuiltInConstraintValidators$MaxValidator.class)
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.RECORD_COMPONENT])
+  METHOD public abstract java.lang.String dev.roots.validation.Max.message() DEFAULT Enter a value less than or equal to {value}.
+  METHOD public abstract long dev.roots.validation.Max.value()
+END dev.roots.validation.Max
+TYPE public abstract @interface dev.roots.validation.Min
+  ANNOTATION @dev.roots.validation.FormConstraint(validatedBy=dev.roots.validation.BuiltInConstraintValidators$MinValidator.class)
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.RECORD_COMPONENT])
+  METHOD public abstract java.lang.String dev.roots.validation.Min.message() DEFAULT Enter a value greater than or equal to {value}.
+  METHOD public abstract long dev.roots.validation.Min.value()
+END dev.roots.validation.Min
+TYPE public abstract @interface dev.roots.validation.NotBlank
+  ANNOTATION @dev.roots.validation.FormConstraint(validatedBy=dev.roots.validation.BuiltInConstraintValidators$NotBlankValidator.class)
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.RECORD_COMPONENT])
+  METHOD public abstract java.lang.String dev.roots.validation.NotBlank.message() DEFAULT Enter a value.
+END dev.roots.validation.NotBlank
+TYPE public abstract @interface dev.roots.validation.Size
+  ANNOTATION @dev.roots.validation.FormConstraint(validatedBy=dev.roots.validation.BuiltInConstraintValidators$SizeValidator.class)
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.RECORD_COMPONENT])
+  METHOD public abstract int dev.roots.validation.Size.max() DEFAULT 2147483647
+  METHOD public abstract int dev.roots.validation.Size.min() DEFAULT 0
+  METHOD public abstract java.lang.String dev.roots.validation.Size.message() DEFAULT Use between {min} and {max} values.
+END dev.roots.validation.Size

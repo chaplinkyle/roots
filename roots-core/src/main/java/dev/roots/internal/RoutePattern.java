@@ -1,6 +1,9 @@
 package dev.roots.internal;
 
+import dev.roots.RoutePaths;
+
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -10,6 +13,7 @@ import java.util.Optional;
 
 final class RoutePattern {
     private final String display;
+    private final String shape;
     private final List<Segment> segments;
     private final int staticSegments;
 
@@ -21,48 +25,20 @@ final class RoutePattern {
             path.append('/').append(segment.display());
         }
         this.display = path.isEmpty() ? "/" : path.toString();
+        this.shape = RoutePaths.shape(display);
     }
 
     static RoutePattern fromPackage(String packageName, String basePackage, String prefix) {
-        if (!packageName.equals(basePackage) && !packageName.startsWith(basePackage + ".")) {
-            throw new IllegalArgumentException(packageName + " is not beneath " + basePackage);
-        }
-        var relative = packageName.equals(basePackage)
-                ? ""
-                : packageName.substring(basePackage.length() + 1);
-        var segments = new ArrayList<Segment>();
-        addTemplateSegments(prefix, segments);
-        if (!relative.isBlank()) {
-            for (var value : relative.split("\\.")) {
-                if (value.startsWith("group_")) {
-                    continue;
-                }
-                if (value.startsWith("$$")) {
-                    if (value.length() == 2) {
-                        throw new IllegalArgumentException("Catch-all route packages need a name: " + packageName);
-                    }
-                    segments.add(new CatchAllSegment(value.substring(2)));
-                } else if (value.startsWith("$")) {
-                    if (value.length() == 1) {
-                        throw new IllegalArgumentException("Dynamic route packages need a name: " + packageName);
-                    }
-                    segments.add(new ParameterSegment(value.substring(1)));
-                } else {
-                    segments.add(new StaticSegment(value.replace('_', '-')));
-                }
-            }
-        }
-        validateCatchAll(segments, packageName);
-        return new RoutePattern(segments);
+        return fromCanonical(RoutePaths.fromPackage(packageName, basePackage, prefix));
     }
 
     static RoutePattern fromTemplate(String template) {
-        if (template == null || !template.startsWith("/") || template.startsWith("//")) {
-            throw new IllegalArgumentException("Routes must start with one '/': " + template);
-        }
+        return fromCanonical(RoutePaths.fromTemplate(template));
+    }
+
+    private static RoutePattern fromCanonical(String template) {
         var segments = new ArrayList<Segment>();
         addTemplateSegments(template, segments);
-        validateCatchAll(segments, template);
         return new RoutePattern(segments);
     }
 
@@ -83,14 +59,6 @@ final class RoutePattern {
                 segments.add(new StaticSegment(value));
             } else {
                 throw new IllegalArgumentException("Invalid route segment '" + value + "' in " + template);
-            }
-        }
-    }
-
-    private static void validateCatchAll(List<Segment> segments, String source) {
-        for (var index = 0; index < segments.size() - 1; index++) {
-            if (segments.get(index) instanceof CatchAllSegment) {
-                throw new IllegalArgumentException("A catch-all segment must be last: " + source);
             }
         }
     }
@@ -146,6 +114,60 @@ final class RoutePattern {
 
     String display() {
         return display;
+    }
+
+    String shape() {
+        return shape;
+    }
+
+    List<String> parameterNames() {
+        return segments.stream()
+                .filter(segment -> !(segment instanceof StaticSegment))
+                .map(segment -> switch (segment) {
+                    case ParameterSegment parameter -> parameter.name();
+                    case CatchAllSegment catchAll -> catchAll.name();
+                    default -> throw new IllegalStateException("Unexpected static route segment");
+                })
+                .toList();
+    }
+
+    String expand(Map<String, String> parameters) {
+        if (!parameters.keySet().equals(java.util.Set.copyOf(parameterNames()))) {
+            throw new IllegalArgumentException("Static path parameters for " + display
+                    + " must be exactly " + parameterNames() + " but were " + parameters.keySet());
+        }
+        var path = new StringBuilder();
+        for (var segment : segments) {
+            path.append('/');
+            switch (segment) {
+                case StaticSegment fixed -> path.append(fixed.value());
+                case ParameterSegment parameter -> path.append(encodePathSegment(required(parameters, parameter.name())));
+                case CatchAllSegment catchAll -> {
+                    var value = required(parameters, catchAll.name());
+                    var parts = value.split("/", -1);
+                    if (parts.length == 0 || java.util.Arrays.stream(parts).anyMatch(String::isBlank)) {
+                        throw new IllegalArgumentException("Catch-all parameter " + catchAll.name()
+                                + " for " + display + " must contain nonblank path segments");
+                    }
+                    path.append(java.util.Arrays.stream(parts)
+                            .map(RoutePattern::encodePathSegment)
+                            .collect(java.util.stream.Collectors.joining("/")));
+                }
+            }
+        }
+        return path.isEmpty() ? "/" : path.toString();
+    }
+
+    private static String required(Map<String, String> parameters, String name) {
+        var value = parameters.get(name);
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("Static path parameter " + name + " must not be blank");
+        }
+        return value;
+    }
+
+    private static String encodePathSegment(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
     }
 
     private static String decodePathSegment(String value) {

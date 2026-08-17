@@ -11,6 +11,8 @@ import java.util.function.Function;
 /**
  * Suspense-like server component. Its loader runs on a virtual thread, renders
  * a fallback immediately, then asks the live view to patch when work completes.
+ *
+ * @param <T> loaded value type
  */
 @ViewComponent("async")
 public final class AsyncComponent<T> implements Component {
@@ -36,6 +38,12 @@ public final class AsyncComponent<T> implements Component {
         this.failure = Objects.requireNonNull(failure);
     }
 
+    /** Creates an asynchronous component.
+     * @param <T> loaded value type
+     * @param loader blocking or asynchronous value loader
+     * @param content successful content renderer
+     * @param fallback content rendered while loading
+     * @return asynchronous component */
     public static <T> AsyncComponent<T> of(
             Callable<? extends T> loader,
             Function<? super T, ? extends Node> content,
@@ -45,13 +53,21 @@ public final class AsyncComponent<T> implements Component {
                 (error, context) -> fallback);
     }
 
+    /** Returns a copy with a failure renderer.
+     * @param failure failure renderer
+     * @return configured asynchronous component */
     public AsyncComponent<T> onFailure(BiFunction<Throwable, PageContext, ? extends Node> failure) {
         return new AsyncComponent<>(loader, content, fallback, failure);
     }
 
     @Override
     public Node render(PageContext context) {
-        start(context);
+        if (!context.attachedToView()) {
+            return fallback;
+        }
+        if (start(context)) {
+            return fallback;
+        }
         if (!complete) {
             return fallback;
         }
@@ -66,9 +82,9 @@ public final class AsyncComponent<T> implements Component {
         }
     }
 
-    private synchronized void start(PageContext context) {
+    private synchronized boolean start(PageContext context) {
         if (started) {
-            return;
+            return false;
         }
         started = true;
         task = Thread.ofVirtual().name("roots-async-component").start(() -> {
@@ -85,5 +101,6 @@ public final class AsyncComponent<T> implements Component {
                 });
             }
         });
+        return true;
     }
 }

@@ -19,6 +19,12 @@
             <version>${rootsVersion}</version>
         </dependency>
         <dependency>
+            <groupId>dev.roots</groupId>
+            <artifactId>roots-dev</artifactId>
+            <version>${rootsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.13.4</version>
@@ -32,12 +38,55 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
-                <configuration><release>26</release><parameters>true</parameters></configuration>
+                <configuration>
+                    <release>26</release>
+                    <parameters>true</parameters>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>dev.roots</groupId>
+                            <artifactId>roots-processor</artifactId>
+                            <version>${rootsVersion}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.4</version>
+            </plugin>
+            <plugin>
+                <groupId>dev.roots</groupId>
+                <artifactId>roots-maven-plugin</artifactId>
+                <version>${rootsVersion}</version>
+                <executions>
+                    <execution>
+                        <id>roots-prerender</id>
+                        <phase>process-classes</phase>
+                        <goals><goal>prerender</goal></goals>
+                        <configuration>
+                            <applicationClass>${package}.Application</applicationClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>roots-dev</id>
+                        <goals><goal>java</goal></goals>
+                        <configuration>
+                            <mainClass>dev.roots.development.DevRunner</mainClass>
+                            <classpathScope>compile</classpathScope>
+                            <arguments>
+                                <argument>${package}.Application</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

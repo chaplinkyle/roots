@@ -1,0 +1,5 @@
+dev.roots.spring.boot.RootsAutoConfiguration
+dev.roots.spring.boot.RootsSpringSecurityAutoConfiguration
+dev.roots.spring.boot.RootsServletAutoConfiguration
+dev.roots.spring.boot.RootsHealthAutoConfiguration
+dev.roots.spring.boot.RootsMetricsAutoConfiguration

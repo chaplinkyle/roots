@@ -10,10 +10,14 @@ public final class Ref {
     private Ref() {
     }
 
+    /** Creates a unique element reference.
+     * @return reference */
     public static Ref create() {
         return new Ref();
     }
 
+    /** Returns the browser-safe reference identifier.
+     * @return identifier */
     public String id() {
         return id;
     }

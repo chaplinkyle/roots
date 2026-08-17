@@ -9,5 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface ViewComponent {
+    /** Returns the optional tooling name for the component.
+     * @return tooling name */
     String value() default "";
 }

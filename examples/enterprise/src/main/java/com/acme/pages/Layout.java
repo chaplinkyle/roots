@@ -1,5 +1,7 @@
 package com.acme.pages;
 
+import dev.roots.HeadMetadata;
+import dev.roots.OpenGraphMetadata;
 import dev.roots.PageContext;
 import dev.roots.html.Element;
 import dev.roots.html.Node;
@@ -10,12 +12,21 @@ import static dev.roots.html.Html.div;
 import static dev.roots.html.Html.footer;
 import static dev.roots.html.Html.header;
 import static dev.roots.html.Html.link;
+import static dev.roots.html.Html.main;
 import static dev.roots.html.Html.nav;
 import static dev.roots.html.Html.small;
 import static dev.roots.html.Html.span;
 import static dev.roots.html.Html.strong;
 
 public final class Layout implements dev.roots.Layout {
+    @Override
+    public HeadMetadata headMetadata(PageContext context) {
+        return new HeadMetadata()
+                .withRobots("index, follow")
+                .withThemeColor("#10241f")
+                .withOpenGraph(new OpenGraphMetadata().withSiteName("Roots Control"));
+    }
+
     @Override
     public Node render(PageContext context, Node children) {
         return div(
@@ -43,7 +54,7 @@ public final class Layout implements dev.roots.Layout {
                                         span("rendered on virtual thread")
                                 ).className("request-path")
                         ).className("sidebar"),
-                        div(children).className("content")
+                        main(children).className("content")
                 ).className("workspace"),
                 footer("Roots 0.1 · Java in. HTML out.").className("app-footer")
         ).className("app-frame");
@@ -55,6 +66,7 @@ public final class Layout implements dev.roots.Layout {
                 span(number).className("nav-number"),
                 span(label)
         ).className("nav-item" + (active ? " active" : ""))
+                .viewTransition()
                 .aria("current", active ? "page" : null);
     }
 }

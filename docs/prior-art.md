@@ -15,7 +15,7 @@ the originality of every general-purpose programming technique.
 |---|---|---|
 | [Vaadin Flow](https://vaadin.com/docs/latest/flow/what-is-flow) | Java-authored UI with server-side component objects synchronized to browser elements | Roots emits semantic HTML trees and HTML patches, has no component suite, and keeps a much smaller JDK-only core |
 | [Apache Wicket](https://wicket.apache.org/) | Stateful, component-oriented, server-side Java web applications without application JavaScript | Roots uses Java HTML construction instead of paired markup and adopts package routing and live-view conventions |
-| [Jakarta Faces](https://jakarta.ee/specifications/faces/) | Standardized server-side UI components, lifecycle, events, and Ajax updates | Roots is not a Jakarta specification or servlet framework and intentionally has a smaller lifecycle |
+| [Jakarta Faces](https://jakarta.ee/specifications/faces/) | Standardized server-side UI components, lifecycle, events, and Ajax updates | Roots is not a Jakarta specification; its optional Servlet adapter exposes a deliberately smaller runtime lifecycle |
 | [Phoenix LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) | Stateful server views that receive events, rerender, and push page updates | Roots applies the model to ordinary Java objects, virtual threads, annotations, and Maven conventions |
 | [Next.js App Router](https://nextjs.org/docs/app) | Convention-based pages, layouts, route handlers, metadata, loading, and error UI | Roots borrows the product ergonomics, not React, JavaScript, or the Next.js implementation |
 

@@ -1,8 +1,12 @@
 package com.acme.components;
 
 import dev.roots.Component;
+import dev.roots.ActionEvent;
 import dev.roots.PageContext;
+import dev.roots.OptimisticEffect;
+import dev.roots.Ref;
 import dev.roots.annotation.ServerAction;
+import dev.roots.annotation.Authorize;
 import dev.roots.annotation.ViewComponent;
 import dev.roots.html.Node;
 
@@ -16,6 +20,7 @@ import static dev.roots.html.Html.strong;
 public final class ApprovalCounter implements Component {
     private int approved = 18;
     private int remaining = 6;
+    private final Ref approveButton = Ref.create();
 
     @Override
     public Node render(PageContext context) {
@@ -31,16 +36,24 @@ public final class ApprovalCounter implements Component {
                 button(remaining == 0 ? "Queue complete" : "Approve next")
                         .type("button")
                         .className("button primary")
+                        .ref(approveButton)
                         .attr("disabled", remaining == 0)
+                        .optimistic(
+                                OptimisticEffect.text(approveButton, "Approving..."),
+                                OptimisticEffect.disable(approveButton)
+                        )
                         .onClick(this, "approve")
-        ).className("approval-component");
+        ).className("approval-component").pendingScope();
     }
 
+    @Authorize("initialized-view")
     @ServerAction("approve")
-    private void approveNext() {
+    private void approveNext(ActionEvent event) {
         if (remaining > 0) {
             approved++;
             remaining--;
+            event.cache().invalidateTag("operations-dashboard");
+            event.viewTransition();
         }
     }
 }

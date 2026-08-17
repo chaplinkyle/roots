@@ -1,6 +1,8 @@
 package com.acme.pages.customers.$customerId;
 
+import dev.roots.HeadMetadata;
 import dev.roots.Metadata;
+import dev.roots.OpenGraphMetadata;
 import dev.roots.PageContext;
 import dev.roots.html.Node;
 
@@ -20,6 +22,20 @@ public final class Page implements dev.roots.Page {
                 "A convention-routed customer record.",
                 "/app.css"
         );
+    }
+
+    @Override
+    public HeadMetadata headMetadata(PageContext context) {
+        var id = context.parameter("customerId");
+        return new HeadMetadata()
+                .withCanonical(context.path())
+                .withRobots("noindex, nofollow")
+                .withThemeColor("#10241f")
+                .withOpenGraph(new OpenGraphMetadata()
+                        .withTitle("Customer " + id)
+                        .withDescription("A convention-routed customer record.")
+                        .withType("website")
+                        .withUrl(context.path()));
     }
 
     @Override

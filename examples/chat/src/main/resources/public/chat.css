@@ -7,11 +7,11 @@
   --surface-muted: #e4ecef;
   --line: #c8d4da;
   --line-dark: #35495d;
-  --muted: #627385;
+  --muted: #4f6273;
   --signal: #14b8a6;
   --signal-soft: #d4f2ee;
-  --coral: #ff675c;
-  --coral-dark: #dc4c43;
+  --coral: #b83d36;
+  --coral-dark: #982f2a;
   --focus: #ffd166;
   font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
   background: var(--paper);
@@ -103,7 +103,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 .room-row { min-height: 3.2rem; gap: .72rem; padding: .75rem .8rem; background: var(--surface); border-left: 3px solid var(--signal); }
 .room-row span { color: var(--signal); font: 700 1rem/1 "Cascadia Code", Consolas, monospace; }
 .room-row strong { font-size: .84rem; }
-.room-caption { justify-content: space-between; padding: .65rem .8rem; color: #798896; font-size: .67rem; }
+.room-caption { justify-content: space-between; padding: .65rem .8rem; color: #586977; font-size: .67rem; }
 .room-caption span:first-child { font-family: "Cascadia Code", Consolas, monospace; }
 .signal-card { margin-top: auto; }
 .signal-row {
@@ -115,7 +115,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   border-bottom: 1px solid var(--line);
 }
 .signal-row:first-of-type { margin-top: .55rem; border-top: 1px solid var(--line); }
-.signal-row span { color: #71818f; font: 650 .58rem/1 "Cascadia Code", Consolas, monospace; letter-spacing: .08em; }
+.signal-row span { color: #566977; font: 650 .58rem/1 "Cascadia Code", Consolas, monospace; letter-spacing: .08em; }
 .signal-row strong { color: #34495a; font-size: .69rem; font-weight: 620; text-align: right; }
 .test-card { padding: 1rem; color: #d9e4eb; background: var(--ink-raised); border-left: 3px solid var(--coral); }
 .test-card strong { font: 650 .78rem/1.2 Bahnschrift, sans-serif; letter-spacing: .01em; }
@@ -133,7 +133,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
-.conversation-code { color: #568076; }
+.conversation-code { color: #3f6d64; }
 .conversation-intro h2 {
   max-width: 17ch;
   margin: .48rem 0 0;
@@ -155,7 +155,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 }
 .channel-header > div:first-child { display: flex; align-items: baseline; gap: .85rem; }
 .channel-title { font: 650 .9rem/1.2 Bahnschrift, sans-serif; }
-.channel-status { display: flex; align-items: center; gap: .48rem; color: #358678; font: 700 .6rem/1 "Cascadia Code", Consolas, monospace; letter-spacing: .1em; }
+.channel-status { display: flex; align-items: center; gap: .48rem; color: #2d776b; font: 700 .6rem/1 "Cascadia Code", Consolas, monospace; letter-spacing: .1em; }
 .live-pulse {
   width: .48rem;
   height: .48rem;
@@ -163,7 +163,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   background: var(--signal);
   animation: relay-pulse 1.8s ease-out infinite;
 }
-.message-count { margin-left: .45rem; color: #84929d; letter-spacing: 0; font-weight: 550; }
+.message-count { margin-left: .45rem; color: #5c6d79; letter-spacing: 0; font-weight: 550; }
 
 .message-ledger {
   --ledger-pad: clamp(1rem, 3vw, 2.5rem);
@@ -174,18 +174,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-color: var(--signal) var(--surface-muted);
-  background:
-    linear-gradient(90deg, rgba(11, 23, 38, .018) 1px, transparent 1px) 0 0 / 3rem 3rem,
-    var(--surface);
-}
-.message-ledger::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--ledger-pad) + 4.25rem);
-  width: 1px;
-  background: #b8dcd7;
+  background: var(--surface);
 }
 .message-entry {
   position: relative;
@@ -194,8 +183,8 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   min-height: 6.25rem;
   border-bottom: 1px solid #dbe3e7;
 }
-.signal-index { position: relative; padding: 1.45rem .8rem 1rem 0; text-align: right; }
-.message-sequence { color: #8a98a4; font: 600 .62rem/1 "Cascadia Code", Consolas, monospace; }
+.signal-index { position: relative; padding: 1.45rem .8rem 1rem 0; border-right: 1px solid #b8dcd7; text-align: right; }
+.message-sequence { color: #5b6c79; font: 600 .62rem/1 "Cascadia Code", Consolas, monospace; }
 .signal-node {
   position: absolute;
   top: 1.36rem;
@@ -211,7 +200,7 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
 .message-content { min-width: 0; padding: 1.25rem 0 1.3rem 1.65rem; }
 .message-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .message-meta strong { color: #14283a; font: 650 .85rem/1.2 Bahnschrift, sans-serif; }
-.message-meta time { color: #82909c; font: 550 .59rem/1 "Cascadia Code", Consolas, monospace; }
+.message-meta time { color: #5b6c79; font: 550 .59rem/1 "Cascadia Code", Consolas, monospace; }
 .message-body { max-width: 75ch; margin: .55rem 0 0; color: #465969; font-size: .86rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 .transcript-end { position: relative; height: 1px; }
 
@@ -286,7 +275,6 @@ button, input, textarea { -webkit-tap-highlight-color: transparent; }
   .channel-header > div:first-child { display: block; }
   .message-count { display: none; }
   .message-ledger { --ledger-pad: .8rem; }
-  .message-ledger::before { left: calc(var(--ledger-pad) + 3rem); }
   .message-entry { grid-template-columns: 3rem minmax(0, 1fr); }
   .signal-index { padding-right: .55rem; }
   .message-content { padding-left: 1.1rem; }

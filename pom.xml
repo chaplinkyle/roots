@@ -31,9 +31,18 @@
 
     <modules>
         <module>roots-core</module>
+        <module>roots-dev</module>
+        <module>roots-servlet</module>
+        <module>roots-jdbc</module>
+        <module>roots-processor</module>
+        <module>roots-maven-plugin</module>
+        <module>roots-spring</module>
+        <module>roots-spring-boot-starter</module>
         <module>roots-archetype</module>
         <module>examples/enterprise</module>
         <module>examples/chat</module>
+        <module>roots-load-tests</module>
+        <module>roots-browser-tests</module>
     </modules>
 
     <properties>
@@ -41,6 +50,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>5.13.4</junit.version>
+        <selenium.version>4.47.0</selenium.version>
+        <axe.selenium.version>4.12.0</axe.selenium.version>
+        <spring.version>7.0.8</spring.version>
+        <spring-boot.version>4.1.0</spring-boot.version>
+        <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
+        <tomcat.version>11.0.24</tomcat.version>
+        <h2.version>2.4.240</h2.version>
+        <roots.test.excludedGroups>soak</roots.test.excludedGroups>
     </properties>
 
     <dependencyManagement>
@@ -49,6 +66,20 @@
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
                 <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-bom</artifactId>
+                <version>${selenium.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -75,7 +106,31 @@
                         <useModulePath>false</useModulePath>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.12.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.15.2</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>roots-soak</id>
+            <properties>
+                <roots.test.excludedGroups></roots.test.excludedGroups>
+            </properties>
+        </profile>
+    </profiles>
 </project>

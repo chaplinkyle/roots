@@ -9,11 +9,18 @@ import dev.roots.html.Node;
  */
 @FunctionalInterface
 public interface Component extends Node {
+    /** Renders the current component state.
+     * @param context page and session context
+     * @return rendered node tree */
     Node render(PageContext context);
 
+    /** Runs after the component first enters a live view.
+     * @param context page and session context */
     default void onMount(PageContext context) {
     }
 
+    /** Runs when the component leaves a live view.
+     * @param context page and session context */
     default void onUnmount(PageContext context) {
     }
 }

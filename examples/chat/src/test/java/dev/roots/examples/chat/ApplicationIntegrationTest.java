@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -15,6 +14,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -51,11 +51,22 @@ final class ApplicationIntegrationTest {
         assertTrue(page.body().contains("Coordinate without leaving Java."));
         assertTrue(page.body().contains("Maya Chen"));
         assertTrue(page.body().contains("data-roots-on-submit"));
+        assertTrue(page.body().contains("class=\"message-ledger\" role=\"log\" tabindex=\"0\""));
 
         var stylesheet = get("/chat.css");
         assertEquals(200, stylesheet.statusCode());
         assertTrue(stylesheet.headers().firstValue("content-type").orElseThrow().startsWith("text/css"));
         assertTrue(stylesheet.body().contains(".message-ledger"));
+    }
+
+    @Test
+    void packagesTheCompileTimeRouteManifest() throws Exception {
+        var resource = Objects.requireNonNull(Application.class.getClassLoader().getResource(
+                "META-INF/roots/routes/dev.roots.examples.chat.Application.routes"));
+        try (var stream = resource.openStream()) {
+            var manifest = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+            assertTrue(manifest.contains("PAGE\t/\tdev.roots.examples.chat.pages.Page"));
+        }
     }
 
     @Test
@@ -78,7 +89,8 @@ final class ApplicationIntegrationTest {
         var receiver = view();
         var sender = view();
         var streamRequest = HttpRequest.newBuilder(application.uri().resolve(
-                        "/_roots/stream?view=" + encode(receiver.viewId()) + "&csrf=" + encode(receiver.csrf())))
+                        "/_roots/stream?view=" + encode(receiver.viewId()) + "&csrf=" + encode(receiver.csrf())
+                                + "&protocol=" + encode(Roots.PROTOCOL_VERSION)))
                 .header("Cookie", receiver.cookie())
                 .timeout(Duration.ofSeconds(8))
                 .GET()
@@ -86,24 +98,26 @@ final class ApplicationIntegrationTest {
         var stream = CLIENT.send(streamRequest, HttpResponse.BodyHandlers.ofInputStream());
         assertEquals(200, stream.statusCode());
 
-        try (var body = stream.body()) {
-            var patch = readNextPatch(body);
+        try (var body = stream.body();
+             var reader = new BufferedReader(new InputStreamReader(body, StandardCharsets.UTF_8))) {
+            var initial = readNextPatch(reader).get(5, TimeUnit.SECONDS);
+            assertTrue(initial.contains("\"revision\":1"), initial);
             var message = "Cross-view dispatch " + System.nanoTime();
 
             var posted = post(sender, "Relay Test", message);
             assertEquals(200, posted.statusCode());
 
-            var event = patch.get(5, TimeUnit.SECONDS);
+            var event = readNextPatch(reader).get(5, TimeUnit.SECONDS);
             assertTrue(event.contains(message), event);
             assertTrue(event.contains("event: patch"), event);
             assertTrue(event.contains("\"revision\":2"), event);
         }
     }
 
-    private static CompletableFuture<String> readNextPatch(InputStream input) {
+    private static CompletableFuture<String> readNextPatch(BufferedReader reader) {
         var result = new CompletableFuture<String>();
         Thread.startVirtualThread(() -> {
-            try (var reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            try {
                 var event = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
@@ -147,6 +161,7 @@ final class ApplicationIntegrationTest {
     private static HttpResponse<String> post(BrowserView view, String author, String message) throws Exception {
         var form = "_view=" + encode(view.viewId())
                 + "&_csrf=" + encode(view.csrf())
+                + "&_protocol=" + encode(Roots.PROTOCOL_VERSION)
                 + "&_action=" + encode(view.sendAction())
                 + "&_event=submit"
                 + "&author=" + encode(author)
