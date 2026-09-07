@@ -28,7 +28,8 @@ import java.nio.file.Files;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,7 +44,7 @@ final class RootsServletIntegrationTest {
     private static final HttpClient CLIENT = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(3))
             .build();
-    private static final CopyOnWriteArrayList<RequestObservation> OBSERVATIONS = new CopyOnWriteArrayList<>();
+    private static final LinkedBlockingQueue<RequestObservation> OBSERVATIONS = new LinkedBlockingQueue<>();
     private static Tomcat tomcat;
     private static RootsServlet servlet;
     private static RootsServlet shutdownServlet;
@@ -204,9 +205,8 @@ final class RootsServletIntegrationTest {
         assertEquals(Integer.toString(com.chaplin.roots.servlet.fixture.api.stream.Route.length()),
                 streamed.headers().firstValue("Content-Length").orElseThrow());
         assertEquals(1, com.chaplin.roots.servlet.fixture.api.stream.Route.writes());
-        var observation = OBSERVATIONS.stream()
-                .filter(candidate -> candidate.path().equals("/api/stream") && candidate.responseBytes() > 0)
-                .findFirst().orElseThrow();
+        var observation = awaitObservation(streamed);
+        assertEquals("/api/stream", observation.path());
         assertEquals(com.chaplin.roots.servlet.fixture.api.stream.Route.length(), observation.responseBytes());
 
         var head = CLIENT.send(HttpRequest.newBuilder(base.resolve("api/stream"))
@@ -274,9 +274,7 @@ final class RootsServletIntegrationTest {
         assertEquals(200, response.statusCode(), response.body());
         assertEquals(traceId, traceparent.split("-", -1)[1]);
         assertFalse(spanId.equals("00f067aa0ba902b7"));
-        var observation = OBSERVATIONS.stream()
-                .filter(candidate -> candidate.traceContext().spanId().equals(spanId))
-                .findFirst().orElseThrow();
+        var observation = awaitObservation(response);
         assertEquals("/api/echo", observation.path());
         assertEquals("/api/echo", observation.transportPath());
         assertEquals(200, observation.status());
@@ -450,6 +448,21 @@ final class RootsServletIntegrationTest {
                 .GET().build(), HttpResponse.BodyHandlers.ofString());
         assertEquals(503, unavailable.statusCode());
         stream.body().close();
+    }
+
+    private static RequestObservation awaitObservation(HttpResponse<?> response) throws InterruptedException {
+        var spanId = response.headers().firstValue("traceparent").orElseThrow().split("-", -1)[2];
+        // Receiving the response body does not synchronize with the server's completion observer.
+        var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+        while (true) {
+            var candidate = OBSERVATIONS.poll(Math.max(0, deadline - System.nanoTime()), TimeUnit.NANOSECONDS);
+            if (candidate == null) {
+                throw new AssertionError("No completed request observation for span " + spanId);
+            }
+            if (candidate.traceContext().spanId().equals(spanId)) {
+                return candidate;
+            }
+        }
     }
 
     private static HttpResponse<String> get(String path) throws Exception {
