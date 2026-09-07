@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -54,6 +55,8 @@ class SpringServerIntegrationTest {
                 assertEquals(1, com.chaplin.roots.spring.testapp.api.failure.Route.destroyed());
                 assertEquals(0, Page.destroyed());
                 assertEquals(0, Layout.destroyed());
+                // close() has no grace period; wait for lifecycle cleanup before asserting destruction.
+                application.closeGracefully(Duration.ofSeconds(5));
             }
             assertEquals(1, Page.destroyed());
             assertEquals(1, Layout.destroyed());

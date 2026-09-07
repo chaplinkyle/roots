@@ -100,6 +100,18 @@ class RootsObservabilityAutoConfigurationTest {
                     assertEquals(1, gauge(registry, "roots.views.active"));
                     assertEquals(1, gauge(registry, "roots.sessions.active"));
                     assertEquals("jdk", registry.get("roots.views.active").gauge().getId().getTag("transport"));
+                    // The client can receive the body before the completion observer records its timer.
+                    var deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
+                    while (true) {
+                        var completed = registry.find("roots.http.server.requests")
+                                .tags("transport", "jdk", "method", "GET", "status", "200", "outcome", "success")
+                                .timer();
+                        if (completed != null && completed.count() >= 2) {
+                            break;
+                        }
+                        assertTrue(System.nanoTime() < deadline, "Request metrics did not record both responses");
+                        Thread.sleep(10);
+                    }
                     var requests = registry.get("roots.http.server.requests")
                             .tags("transport", "jdk", "method", "GET", "status", "200", "outcome", "success")
                             .timer();
