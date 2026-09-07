@@ -1,0 +1,67 @@
+# Replace all REPLACE_* values in a local copy before deployment.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: roots-automation
+  annotations:
+    run.googleapis.com/ingress: all
+    # Public transport; the application still requires Bearer auth or a signed webhook.
+    run.googleapis.com/invoker-iam-disabled: 'true'
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/cpu-throttling: 'true'
+        run.googleapis.com/startup-cpu-boost: 'true'
+        run.googleapis.com/sessionAffinity: 'false'
+        autoscaling.knative.dev/minScale: '1'
+        autoscaling.knative.dev/maxScale: '4'
+        run.googleapis.com/network-interfaces: '[{"network":"REPLACE_NETWORK","subnetwork":"REPLACE_SUBNET"}]'
+        run.googleapis.com/vpc-access-egress: private-ranges-only
+    spec:
+      serviceAccountName: REPLACE_SERVICE_ACCOUNT@REPLACE_PROJECT.iam.gserviceaccount.com
+      containerConcurrency: 32
+      timeoutSeconds: 30
+      containers:
+        - name: roots
+          image: REPLACE_REGION-docker.pkg.dev/REPLACE_PROJECT/REPLACE_REPOSITORY/roots-automation@sha256:REPLACE_DIGEST
+          ports: [{name: http1, containerPort: 8080}]
+          resources:
+            limits: {cpu: '1', memory: 1Gi}
+          env:
+            - {name: ROOTS_HOST, value: 0.0.0.0}
+            - {name: ROOTS_PORT, value: '8080'}
+            - {name: ROOTS_DEVELOPMENT, value: 'false'}
+            - {name: ROOTS_SECURE_COOKIES, value: 'true'}
+            # Cloud Run grants ten seconds after SIGTERM; keep the Roots drain inside it.
+            - {name: ROOTS_SHUTDOWN_TIMEOUT, value: PT8S}
+            - {name: ROOTS_MAX_REQUEST_BYTES, value: '65536'}
+            - {name: ROOTS_MAX_CONCURRENT_REQUESTS, value: '128'}
+            - {name: ROOTS_MAX_LIVE_VIEWS, value: '1'}
+            - name: AUTOMATION_JDBC_URL
+              valueFrom:
+                secretKeyRef: {name: roots-jdbc-url, key: 'REPLACE_SECRET_VERSION'}
+            - name: AUTOMATION_JDBC_USER
+              valueFrom:
+                secretKeyRef: {name: roots-jdbc-user, key: 'REPLACE_SECRET_VERSION'}
+            - name: AUTOMATION_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef: {name: roots-jdbc-password, key: 'REPLACE_SECRET_VERSION'}
+            - name: AUTOMATION_TOKEN
+              valueFrom:
+                secretKeyRef: {name: roots-token, key: 'REPLACE_SECRET_VERSION'}
+            - name: AUTOMATION_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef: {name: roots-webhook, key: 'REPLACE_SECRET_VERSION'}
+          startupProbe:
+            httpGet: {path: /_roots/health, port: 8080}
+            timeoutSeconds: 3
+            periodSeconds: 3
+            failureThreshold: 20
+          livenessProbe:
+            tcpSocket: {port: 8080}
+            timeoutSeconds: 3
+            periodSeconds: 15
+            failureThreshold: 3
+  traffic: [{latestRevision: true, percent: 100}]

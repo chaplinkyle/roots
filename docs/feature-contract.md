@@ -1,8 +1,8 @@
-# React and Next.js feature contract
+# Implemented feature contracts
 
-Roots aims for equivalent application capabilities, not API mimicry. Java already has classes, records, exceptions, threads, annotations, and structured control flow, so reproducing hook syntax would be worse Java.
+This inventory defines individual capabilities in the current source. Comparisons to familiar frontend concepts explain terminology; they do not promise API equivalence, browser-local execution, or complete parity with another framework. Read the [project definition](definition.md) for scope and ownership boundaries.
 
-## React-class component semantics
+## Component semantics
 
 | Capability | Roots equivalent | Status |
 |---|---|---|
@@ -11,6 +11,8 @@ Roots aims for equivalent application capabilities, not API mimicry. Java alread
 | Children/composition | any `Node` accepted as a child | Implemented |
 | Local state | retained fields and `State<T>` | Implemented |
 | Events | lambdas or `@ServerAction` + typed `BrowserEvent` | Implemented for click/double-click, submit, change/input, key down/up, focus/blur, and pointer down/up |
+| Input scheduling | `Element.debounceInput(Duration)` | Opt-in quiet-period coalescing, flush-before-action ordering, navigation cancellation, and a bounded 128-action queue with observable saturation |
+| Form edit preservation | event-time snapshots and control edit versions | Newer typing, unrelated drafts, selections, and uploads survive action/SSE patches; successful actions acknowledge only their captured edits |
 | Conditional rendering | Java `if`, `switch`, ternary | Implemented |
 | Lists | streams, collections, `Iterable` children | Implemented |
 | Keys | `Element.key(...)` | Implemented |
@@ -23,6 +25,7 @@ Roots aims for equivalent application capabilities, not API mimicry. Java alread
 | Concurrent stale-result protection | origin-bound action queue + revisions + view-bound payloads + latest-wins navigation | Implemented across success, validation, failure, redirect, SSE, and reconnect outcomes, including pre-transport rejection of queued old-view actions, disposal of unused navigation views, and observable rejection of late work |
 | Virtual DOM reconciliation | keyed DOM morphing | Implemented as HTML reconciliation with exact narrowest component patches, no-DOM updates, base-revision validation, and conservative full-root fallback |
 | Portals and modals | `Portal`, `Modal`, `Html.portal`, and `Html.modal` | Implemented with stable body hosts, native top-layer dialogs, mandatory visible labeling, explicit/fallback initial focus, topmost Tab/Shift+Tab containment, server-authoritative Escape and configurable backdrop dismissal, pending state, focus return after removal, reconciliation, cleanup, and Chrome/Edge/Firefox plus axe coverage |
+| Browser widgets | `Element.widget(key, moduleUrl)` | Same-origin ES modules own host descendants; keyed preservation, async latest-props updates, 30-second deadlines, abort/destroy cleanup, fallback/error events, dirty-editor recovery guard, and native form bridge; [contract and runnable example](browser-widgets.md) |
 | Optimistic state / transitions | typed reversible effects + pending scopes + action/link view transitions | Implemented with hide/text/value/disable rollback, nearest scoped pending boundaries, ordered `ActionEvent.viewTransition()` patches, opt-in `Element.viewTransition()` navigation, and unsupported/reduced-motion fallback |
 | Form validation | record binding + constraint annotations + validation message/summary elements | Implemented with cached typed text/upload conversion, extensible `@FormConstraint` validators, bounded aggregated errors, accessible browser binding, safe text rendering, edit cleanup, and a distinct browser event |
 | Browser effects | bounded typed capability API | Implemented for focus, blur, editable-text selection, scroll, clipboard, polite/assertive ARIA announcements, and view transitions; arbitrary script execution is intentionally unsupported |
@@ -30,7 +33,7 @@ Roots aims for equivalent application capabilities, not API mimicry. Java alread
 
 There is no hydration step: the server remains authoritative and the runtime attaches delegated events once. There is no rules-of-hooks concept because state and lifecycle belong to ordinary Java object identity.
 
-## Next.js-class framework semantics
+## Routing, transport, and application integration
 
 | Capability | Roots equivalent | Status |
 |---|---|---|

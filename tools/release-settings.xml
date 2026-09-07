@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0">
+    <profiles><profile><id>roots-staged</id>
+        <repositories><repository><id>roots-staged</id><url>${roots.repository}</url>
+            <releases><enabled>true</enabled><checksumPolicy>fail</checksumPolicy></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository></repositories>
+        <pluginRepositories><pluginRepository><id>roots-staged</id><url>${roots.repository}</url>
+            <releases><enabled>true</enabled><checksumPolicy>fail</checksumPolicy></releases>
+            <snapshots><enabled>false</enabled></snapshots>
+        </pluginRepository></pluginRepositories>
+    </profile></profiles>
+    <activeProfiles><activeProfile>roots-staged</activeProfile></activeProfiles>
+</settings>

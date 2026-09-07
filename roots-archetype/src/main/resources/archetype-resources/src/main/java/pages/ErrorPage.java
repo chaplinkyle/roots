@@ -1,20 +1,20 @@
 package ${package}.pages;
 
-import dev.roots.PageContext;
-import dev.roots.annotation.PageMetadata;
-import dev.roots.html.Node;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.annotation.PageMetadata;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.h1;
-import static dev.roots.html.Html.link;
-import static dev.roots.html.Html.main;
-import static dev.roots.html.Html.p;
+import static com.chaplin.roots.html.Html.h1;
+import static com.chaplin.roots.html.Html.link;
+import static com.chaplin.roots.html.Html.main;
+import static com.chaplin.roots.html.Html.p;
 
 @PageMetadata(
         title = "Application error",
         description = "The request could not be completed.",
         stylesheets = "/app.css"
 )
-public final class ErrorPage implements dev.roots.Page {
+public final class ErrorPage implements com.chaplin.roots.Page {
     @Override
     public Node render(PageContext context) {
         return main(

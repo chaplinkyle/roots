@@ -1,13 +1,13 @@
 package ${package}.pages;
 
 import ${package}.components.Counter;
-import dev.roots.PageContext;
-import dev.roots.annotation.PageMetadata;
-import dev.roots.html.Node;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.annotation.PageMetadata;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.h1;
-import static dev.roots.html.Html.p;
-import static dev.roots.html.Html.section;
+import static com.chaplin.roots.html.Html.h1;
+import static com.chaplin.roots.html.Html.p;
+import static com.chaplin.roots.html.Html.section;
 
 @PageMetadata(
         title = "${artifactId} · Roots",
@@ -15,7 +15,7 @@ import static dev.roots.html.Html.section;
         stylesheets = "/app.css",
         openGraphType = "website"
 )
-public final class Page implements dev.roots.Page {
+public final class Page implements com.chaplin.roots.Page {
     private final Counter counter = new Counter();
 
     @Override

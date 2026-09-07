@@ -1,15 +1,15 @@
 package ${package}.components;
 
-import dev.roots.Component;
-import dev.roots.PageContext;
-import dev.roots.State;
-import dev.roots.annotation.ServerAction;
-import dev.roots.annotation.ViewComponent;
-import dev.roots.html.Node;
+import com.chaplin.roots.Component;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.State;
+import com.chaplin.roots.annotation.ServerAction;
+import com.chaplin.roots.annotation.ViewComponent;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.button;
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.strong;
+import static com.chaplin.roots.html.Html.button;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.strong;
 
 @ViewComponent("counter")
 public final class Counter implements Component {

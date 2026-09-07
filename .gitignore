@@ -4,7 +4,12 @@ target/
 # Local tools and Roots runtime state
 .tooling/
 .roots/
+artifacts/
 *.log
+__pycache__/
+*.jfr
+*.heapdump
+*.hprof
 
 # Editors
 .idea/
@@ -19,3 +24,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+*.key
+*.p12
+*.pfx

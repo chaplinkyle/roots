@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentId": {"value": "/subscriptions/SUBSCRIPTION/resourceGroups/PLATFORM/providers/Microsoft.App/managedEnvironments/ENVIRONMENT"},
+    "identityId": {"value": "/subscriptions/SUBSCRIPTION/resourceGroups/PLATFORM/providers/Microsoft.ManagedIdentity/userAssignedIdentities/roots-runtime"},
+    "registryServer": {"value": "REGISTRY.azurecr.io"},
+    "image": {"value": "REGISTRY.azurecr.io/roots-automation@sha256:REPLACE_WITH_64_HEX_DIGEST"},
+    "secretBindings": {"value": [
+      {"name":"jdbc-url","environment":"AUTOMATION_JDBC_URL","keyVaultUrl":"https://VAULT.vault.azure.net/secrets/roots-jdbc-url/VERSION"},
+      {"name":"jdbc-user","environment":"AUTOMATION_JDBC_USER","keyVaultUrl":"https://VAULT.vault.azure.net/secrets/roots-jdbc-user/VERSION"},
+      {"name":"jdbc-password","environment":"AUTOMATION_JDBC_PASSWORD","keyVaultUrl":"https://VAULT.vault.azure.net/secrets/roots-jdbc-password/VERSION"},
+      {"name":"automation-token","environment":"AUTOMATION_TOKEN","keyVaultUrl":"https://VAULT.vault.azure.net/secrets/roots-token/VERSION"},
+      {"name":"webhook-secret","environment":"AUTOMATION_WEBHOOK_SECRET","keyVaultUrl":"https://VAULT.vault.azure.net/secrets/roots-webhook/VERSION"}
+    ]}
+  }
+}

@@ -1,7 +1,7 @@
 package ${package};
 
-import dev.roots.Roots;
-import dev.roots.annotation.RootsApplication;
+import com.chaplin.roots.Roots;
+import com.chaplin.roots.annotation.RootsApplication;
 
 @RootsApplication
 public final class Application {

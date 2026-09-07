@@ -28,7 +28,24 @@ Rendering recursively evaluates Java `Node` and `Component` objects into escaped
 
 Browser actions are serialized per tab. The server invokes the Java handler while holding the live-view mutation lock and rebuilds the tree. Element-root component occurrences receive deterministic renderer-owned boundaries. Roots compares the previous and next complete HTML and emits the narrowest component region only when replacing that one old region with the new region exactly explains the entire document change. Otherwise it emits the complete root fragment. Fragment-root components, ambiguous structural changes, any render containing portals, and queued SSE updates conservatively use the complete root. An unchanged tree carries no DOM fragment.
 
-Each component patch includes the revision from which it was computed. The browser applies it only when that base matches its current revision and the expected boundary exists with one valid replacement element; a mismatch reloads the document. The browser runtime parses the fragment and morphs the existing DOM. Stable `data-roots-key` values preserve identity during insertions and reordering. Focus and form properties are restored after reconciliation.
+Each component patch includes the revision from which it was computed. The browser applies it only when that base matches its current revision and the expected boundary exists with one valid replacement element; a mismatch requests recovery, retaining unacknowledged controls and pausing actions until the user can copy their edits. An idle, unedited document reloads automatically. The browser runtime parses the fragment and morphs the existing DOM. Stable `data-roots-key` values preserve identity during insertions and reordering. Focus and selection are restored after reconciliation. Form controls retain local edits until a successful action acknowledges that exact captured edit; a later edit or a control outside the action's form survives unrelated patches and SSE. A successful action can normalize or clear its acknowledged controls. Removing a control or replacing its keyed identity deliberately removes its local state.
+
+Browser JavaScript and CSS are ordinary resources under
+`roots-core/src/main/resources/com/chaplin/roots/internal`, loaded once from the framework
+classpath and included in executable JARs. They need no Node.js build pipeline.
+Annotated action method metadata is cached with `ClassValue`, retaining neither
+component instances nor obsolete application classloaders. Patch selection skips
+unchanged component regions and compares suffixes without allocating copies.
+
+Unexpected handler failures and failures rendering a completed action mark the
+server view uncertain. Further action invocations on that view are rejected;
+responses carry `X-Roots-Action-Outcome: uncertain` even when a configured mapper
+returns a validation-like status. The browser pauses mutations and live patches,
+retains unsaved edits, and asks the user to check persistent business status before
+retrying in a fresh view. Network failures and HTTP 5xx use the same browser guard.
+Handler validation exceptions remain correctable and must precede business writes.
+Roots cannot roll back arbitrary application state or infer an external transaction's
+outcome. See the [durable JDBC transaction contract](jdbc.md#durable-operation-receipts).
 
 Delegated actions support a fixed browser-event capability set rather than an
 unbounded attribute name that might never be observed. The driver snapshots
@@ -121,7 +138,10 @@ when their binding is rendered. A live action evaluates its page/layout policies
 and then its method policies while holding the view mutation lock, before calling
 application code. Its logical route parameters and original page query are restored
 on the protocol request. SSE evaluates page/layout policies at connection time and
-again before heartbeats or patches, so revoked access closes the stream.
+again before heartbeats or patches; a policy denial closes the stream. An existing
+stream retains the authentication snapshot from its handshake. Policies that must
+observe external account/session revocation need to consult current authoritative
+state; rechecking a role in that immutable snapshot does not refresh provider claims.
 
 Patches from background work travel over Server-Sent Events. `AsyncComponent` starts work on a virtual thread, renders its fallback immediately, and calls `PageContext.update` on completion. The revision check prevents a slower response from overwriting newer state.
 
@@ -174,6 +194,8 @@ The built-in browser runtime owns:
 - action transport;
 - HTML parsing and keyed reconciliation;
 - exact component-boundary patching with revision and shape validation;
+- keyed browser-widget hosts with module mount/update/destroy, abort signals,
+  bounded asynchronous updates, and native form bridges (see [widgets](browser-widgets.md));
 - latest-wins history navigation with unused-view disposal;
 - same-resource/cross-route fragment handling and back/forward scroll restoration;
 - originating-view validation for action, redirect, reconnect, and SSE payloads;
@@ -214,7 +236,10 @@ open/error/reload/patch callbacks from a closed or replaced stream cannot alter
 the active root's connection state or reload a newer document. Development
 streams and asynchronous inspector reads apply the same current-owner check.
 
-Application code does not import browser APIs or author JavaScript. This is the same kind of runtime boundary used by LiveView-style systems. Compiling arbitrary Java application code to WebAssembly is not a goal of the first architecture because it would reintroduce a second state model and a large client runtime.
+Ordinary application pages remain Java. Optional [widget modules](browser-widgets.md)
+use browser APIs inside an explicit DOM ownership boundary for charts, editors,
+and existing libraries. Compiling arbitrary Java application code to WebAssembly
+is not a goal of this architecture.
 
 The browser runtime is a Roots-owned vanilla JavaScript implementation embedded in
 `ClientRuntime.java`. It has no third-party client dependency.
@@ -329,6 +354,12 @@ enter a zero-timeout Servlet async context and execute on a Java virtual thread,
 so the container thread returns after dispatch. Servlet destruction lowers
 readiness, waits up to its configured drain timeout, closes remaining exchanges,
 completes async contexts, expires views, and closes the session repository.
+An async listener completes errored/disconnected contexts and interrupts the
+associated stream worker instead of allowing a container error dispatch to write
+an HTML error page into an SSE response. Cleanup tolerates a facade the container
+has already recycled. In Boot Servlet mode, a high-phase lifecycle bean drains
+Roots before Boot's web-server graceful-shutdown wait, so live streams do not
+consume that entire wait. Application services and pools are destroyed afterward.
 
 The adapter strips the web application context and servlet mapping through the
 Servlet path contract before route matching. A Roots app can therefore run below
@@ -390,6 +421,22 @@ beans and contributes a bounded-tag Micrometer timer when a registry exists;
 application code can bridge the same event into another telemetry SDK.
 
 ## Current scaling model
+
+API routes can opt into `@Stateless`: the runtime retains authentication,
+authorization, middleware, limits, and observations, while bypassing all browser
+session resolution. Session access then fails explicitly. Applications may contain
+only API routes, including when compiled into an anchor-specific manifest.
+
+Browser action queues belong to individual document roots. Response deadlines
+cover headers and body delivery; an unknown transport outcome blocks further
+mutations on that root and reports recovery events. A newer root has an independent
+queue. No retry or presentation rollback is treated as a business transaction
+guarantee. Durable operation receipts and drafts remain separate application state.
+The [customer workflow reference](../examples/workflow/README.md) persists private
+drafts, uses permanent completion identifiers, and commits the customer, completion
+marker, and audit entry together. A saved draft survives loss of its live view;
+unsent typing remains only in the browser. View expiry and incompatible patches
+pause a dirty document rather than automatically discarding that typing.
 
 Live views are process-local. `SessionRepository` is a public atomic lifecycle
 SPI with a bounded in-memory default; an external implementation can return a

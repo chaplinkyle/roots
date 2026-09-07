@@ -1,0 +1,2 @@
+ROOTS_ROUTE_MANIFEST	99	com.chaplin.roots.malformedmanifestapp.Application	com.chaplin.roots.malformedmanifestapp.pages	com.chaplin.roots.malformedmanifestapp.api
+PAGE	/	com.chaplin.roots.malformedmanifestapp.pages.Page	

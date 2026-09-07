@@ -162,8 +162,10 @@ exporter through normal Boot facilities.
 
 Current limitations:
 
-- Tomcat 11 is the certified Servlet container; broader container certification
-  remains release work.
+- Tomcat 11 is the tested Servlet container; broader container verification
+  remains release work. A [packaged WAR deployment example](../deploy/servlet/README.md)
+  provides the on-premises/container walkthrough. Local verification is not
+  production certification.
 
 Both JDK and Servlet transports expose direct numeric peer details. Forwarded
 headers remain disabled until `roots.trusted-proxies` lists the actual proxy
@@ -204,6 +206,11 @@ Authorization parsing; the application remains responsible for cryptographic
 verification, issuer/audience checks, expiry, revocation, and authority mapping.
 
 ## Other libraries
+
+Browser-side libraries use the [widget integration contract](browser-widgets.md):
+same-origin ES modules, keyed hosts, abortable mount/update/destroy, native form
+bridges, and explicit dirty-state recovery. The enterprise `/latency` example
+ships a working accessible chart without an npm or bundler requirement.
 
 Logging, JSON, validation, mail, messaging, cloud SDKs, and observability libraries
 can be used in application services today. `RequestObserver` is the transport-neutral

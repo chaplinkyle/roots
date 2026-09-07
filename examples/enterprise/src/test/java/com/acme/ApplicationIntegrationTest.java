@@ -1,6 +1,6 @@
 package com.acme;
 
-import dev.roots.Roots;
+import com.chaplin.roots.Roots;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ final class ApplicationIntegrationTest {
     private static final Pattern CREATE = Pattern.compile("data-roots-on-submit=\"([^\"]+:create)\"");
     private static final Pattern SEARCH = Pattern.compile("data-roots-on-input=\"([^\"]+:search)\"");
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
-    private static dev.roots.RunningApplication application;
+    private static com.chaplin.roots.RunningApplication application;
 
     @BeforeAll
     static void start() {

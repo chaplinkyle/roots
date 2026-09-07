@@ -1,0 +1,39 @@
+[data-roots-announcer] {
+  position: fixed !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+[id="roots-action-recovery"] {
+  position: fixed;
+  inset: auto 1rem 1rem;
+  z-index: 2147483647;
+  max-width: 48rem;
+  padding: 1rem;
+  margin: auto;
+  color: #17212b;
+  background: #fff;
+  border: 2px solid #8c4700;
+  border-radius: .5rem;
+  box-shadow: 0 .25rem 1.5rem #0003;
+  font: 1rem/1.5 system-ui, sans-serif;
+}
+[id="roots-action-recovery"] p { margin: 0 0 .75rem; }
+[id="roots-action-recovery"] button {
+  padding: .5rem 1rem;
+  color: #fff;
+  background: #583000;
+  border: 2px solid #583000;
+  border-radius: .25rem;
+  font: inherit;
+  cursor: pointer;
+}
+[id="roots-action-recovery"] button:focus-visible {
+  outline: 3px solid #17212b;
+  outline-offset: 3px;
+}

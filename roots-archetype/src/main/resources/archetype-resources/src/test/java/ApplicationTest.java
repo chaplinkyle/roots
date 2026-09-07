@@ -1,7 +1,7 @@
 package ${package};
 
-import dev.roots.Roots;
-import dev.roots.RootsConfig;
+import com.chaplin.roots.Roots;
+import com.chaplin.roots.RootsConfig;
 import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpClient;

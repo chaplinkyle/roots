@@ -4,13 +4,17 @@ Until artifacts are published, run `mvn install` in the Roots repository. This
 installs `roots-core`, `roots-dev`, `roots-processor`, `roots-maven-plugin`, and
 `roots-archetype` in the local Maven repository.
 
+Alternatively, generate from a [versioned candidate bundle](releases.md#generate-an-application-from-the-bundle)
+without installing a source snapshot. Both the archetype version and `rootsVersion`
+must select the version present in that repository.
+
 ## PowerShell
 
 Quote every `-D` coordinate; PowerShell can otherwise truncate dotted Maven values when invoking a `.cmd` shim.
 
 ```powershell
 mvn archetype:generate `
-  '-DarchetypeGroupId=dev.roots' `
+  '-DarchetypeGroupId=com.chaplin.roots' `
   '-DarchetypeArtifactId=roots-archetype' `
   '-DarchetypeVersion=0.1.0-SNAPSHOT' `
   '-DgroupId=com.example' `
@@ -26,7 +30,7 @@ mvn archetype:generate `
 
 ```bash
 mvn archetype:generate \
-  -DarchetypeGroupId=dev.roots \
+  -DarchetypeGroupId=com.chaplin.roots \
   -DarchetypeArtifactId=roots-archetype \
   -DarchetypeVersion=0.1.0-SNAPSHOT \
   -DgroupId=com.example \

@@ -1,20 +1,20 @@
 package com.acme.components;
 
-import dev.roots.Component;
-import dev.roots.ActionEvent;
-import dev.roots.PageContext;
-import dev.roots.OptimisticEffect;
-import dev.roots.Ref;
-import dev.roots.annotation.ServerAction;
-import dev.roots.annotation.Authorize;
-import dev.roots.annotation.ViewComponent;
-import dev.roots.html.Node;
+import com.chaplin.roots.Component;
+import com.chaplin.roots.ActionEvent;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.OptimisticEffect;
+import com.chaplin.roots.Ref;
+import com.chaplin.roots.annotation.ServerAction;
+import com.chaplin.roots.annotation.Authorize;
+import com.chaplin.roots.annotation.ViewComponent;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.button;
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.p;
-import static dev.roots.html.Html.span;
-import static dev.roots.html.Html.strong;
+import static com.chaplin.roots.html.Html.button;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.p;
+import static com.chaplin.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.strong;
 
 @ViewComponent("approval-counter")
 public final class ApprovalCounter implements Component {

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.roots</groupId>
+    <groupId>com.chaplin.roots</groupId>
     <artifactId>roots-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -21,6 +21,14 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <id>chaplinkyle</id>
+            <name>Roots maintainers</name>
+            <url>https://github.com/chaplinkyle/roots</url>
+        </developer>
+    </developers>
 
     <scm>
         <connection>scm:git:https://github.com/chaplinkyle/roots.git</connection>
@@ -41,14 +49,20 @@
         <module>roots-archetype</module>
         <module>examples/enterprise</module>
         <module>examples/chat</module>
+        <module>examples/automation</module>
+        <module>examples/workflow</module>
+        <module>examples/kanban</module>
+        <module>examples/servlet</module>
         <module>roots-load-tests</module>
         <module>roots-browser-tests</module>
     </modules>
 
     <properties>
-        <maven.compiler.release>26</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.outputTimestamp>2026-01-01T00:00:00Z</project.build.outputTimestamp>
+        <roots.build.source>worktree</roots.build.source>
         <junit.version>5.13.4</junit.version>
         <selenium.version>4.47.0</selenium.version>
         <axe.selenium.version>4.12.0</axe.selenium.version>
@@ -57,7 +71,7 @@
         <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
         <tomcat.version>11.0.24</tomcat.version>
         <h2.version>2.4.240</h2.version>
-        <roots.test.excludedGroups>soak</roots.test.excludedGroups>
+        <roots.test.excludedGroups>soak,benchmark</roots.test.excludedGroups>
     </properties>
 
     <dependencyManagement>
@@ -91,6 +105,19 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.4.1</version>
+                    <configuration>
+                        <archive><manifestEntries>
+                            <Implementation-Title>${project.name}</Implementation-Title>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Implementation-Vendor>Roots contributors</Implementation-Vendor>
+                            <Build-Source-Id>${roots.build.source}</Build-Source-Id>
+                        </manifestEntries></archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.14.1</version>
                     <configuration>
@@ -110,6 +137,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.12.0</version>
+                    <configuration><notimestamp>true</notimestamp></configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -129,7 +157,13 @@
         <profile>
             <id>roots-soak</id>
             <properties>
-                <roots.test.excludedGroups></roots.test.excludedGroups>
+                <roots.test.excludedGroups>benchmark</roots.test.excludedGroups>
+            </properties>
+        </profile>
+        <profile>
+            <id>roots-benchmark</id>
+            <properties>
+                <roots.test.excludedGroups>soak</roots.test.excludedGroups>
             </properties>
         </profile>
     </profiles>

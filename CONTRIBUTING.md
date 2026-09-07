@@ -7,21 +7,27 @@ with tests are easier to review than broad rewrites.
 
 Requirements:
 
-- JDK 26;
+- JDK 25 LTS or newer (CI verifies JDK 25 and 26);
 - Git;
-- Chrome or Chromium for the Java-driven real-browser contract test;
+- Chrome/Chromium, Microsoft Edge, and Firefox for the real-browser contracts;
+- Python 3.10+ for repository and release checks;
+- Docker for PostgreSQL and container verification;
 - no global Maven installation is required.
 
 Run the full reactor:
 
 ```bash
 ./mvnw clean install
+python3 tools/check_repository.py
+python3 -m unittest discover -s tools -p 'test_*.py'
 ```
 
 On Windows:
 
 ```powershell
 .\mvnw.cmd clean install
+python tools/check_repository.py
+python -m unittest discover -s tools -p 'test_*.py'
 ```
 
 `roots-core` and `roots-spring-boot-starter` publish JaCoCo HTML reports below

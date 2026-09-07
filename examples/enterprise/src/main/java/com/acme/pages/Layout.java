@@ -1,24 +1,24 @@
 package com.acme.pages;
 
-import dev.roots.HeadMetadata;
-import dev.roots.OpenGraphMetadata;
-import dev.roots.PageContext;
-import dev.roots.html.Element;
-import dev.roots.html.Node;
+import com.chaplin.roots.HeadMetadata;
+import com.chaplin.roots.OpenGraphMetadata;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.html.Element;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.a;
-import static dev.roots.html.Html.aside;
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.footer;
-import static dev.roots.html.Html.header;
-import static dev.roots.html.Html.link;
-import static dev.roots.html.Html.main;
-import static dev.roots.html.Html.nav;
-import static dev.roots.html.Html.small;
-import static dev.roots.html.Html.span;
-import static dev.roots.html.Html.strong;
+import static com.chaplin.roots.html.Html.a;
+import static com.chaplin.roots.html.Html.aside;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.footer;
+import static com.chaplin.roots.html.Html.header;
+import static com.chaplin.roots.html.Html.link;
+import static com.chaplin.roots.html.Html.main;
+import static com.chaplin.roots.html.Html.nav;
+import static com.chaplin.roots.html.Html.small;
+import static com.chaplin.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.strong;
 
-public final class Layout implements dev.roots.Layout {
+public final class Layout implements com.chaplin.roots.Layout {
     @Override
     public HeadMetadata headMetadata(PageContext context) {
         return new HeadMetadata()
@@ -46,7 +46,8 @@ public final class Layout implements dev.roots.Layout {
                                 nav(
                                         navItem(context, "/", "Overview", "01"),
                                         navItem(context, "/customers", "Customers", "02"),
-                                        navItem(context, "/activity", "Activity", "03")
+                                        navItem(context, "/activity", "Activity", "03"),
+                                        navItem(context, "/latency", "Latency", "04")
                                 ).aria("label", "Primary"),
                                 div(
                                         small("REQUEST PATH"),

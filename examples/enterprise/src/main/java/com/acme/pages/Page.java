@@ -3,20 +3,20 @@ package com.acme.pages;
 import com.acme.components.ApprovalCounter;
 import com.acme.components.Metric;
 import com.acme.components.SupportOverlay;
-import dev.roots.PageContext;
-import dev.roots.annotation.PageMetadata;
-import dev.roots.html.Node;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.annotation.PageMetadata;
+import com.chaplin.roots.html.Node;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.h1;
-import static dev.roots.html.Html.h2;
-import static dev.roots.html.Html.p;
-import static dev.roots.html.Html.section;
-import static dev.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.h1;
+import static com.chaplin.roots.html.Html.h2;
+import static com.chaplin.roots.html.Html.p;
+import static com.chaplin.roots.html.Html.section;
+import static com.chaplin.roots.html.Html.span;
 
 @PageMetadata(
         title = "Operations · Roots Control",
@@ -26,7 +26,7 @@ import static dev.roots.html.Html.span;
         openGraphImage = "/roots-control-preview.png",
         openGraphImageAlt = "Roots Control operations workspace"
 )
-public final class Page implements dev.roots.Page {
+public final class Page implements com.chaplin.roots.Page {
     private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("HH:mm:ss 'CT'")
             .withZone(ZoneId.of("America/Chicago"));
 

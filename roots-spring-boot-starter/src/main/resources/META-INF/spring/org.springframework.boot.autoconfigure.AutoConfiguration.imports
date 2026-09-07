@@ -1,5 +1,5 @@
-dev.roots.spring.boot.RootsAutoConfiguration
-dev.roots.spring.boot.RootsSpringSecurityAutoConfiguration
-dev.roots.spring.boot.RootsServletAutoConfiguration
-dev.roots.spring.boot.RootsHealthAutoConfiguration
-dev.roots.spring.boot.RootsMetricsAutoConfiguration
+com.chaplin.roots.spring.boot.RootsAutoConfiguration
+com.chaplin.roots.spring.boot.RootsSpringSecurityAutoConfiguration
+com.chaplin.roots.spring.boot.RootsServletAutoConfiguration
+com.chaplin.roots.spring.boot.RootsHealthAutoConfiguration
+com.chaplin.roots.spring.boot.RootsMetricsAutoConfiguration

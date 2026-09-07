@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: roots-headless
+spec:
+  clusterIP: None
+  selector: {app: roots-application}
+  ports:
+    - {name: http, port: 8080, targetPort: http}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: roots
+spec:
+  serviceName: roots-headless
+  replicas: 2
+  podManagementPolicy: Parallel
+  # Operators replace one owner at a time; ordinary object graphs cannot migrate.
+  updateStrategy: {type: OnDelete}
+  selector:
+    matchLabels: {app: roots-application}
+  template:
+    metadata:
+      labels: {app: roots-application}
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels: {app: roots-application}
+      containers:
+        - name: roots
+          image: roots-application
+          imagePullPolicy: IfNotPresent
+          ports: [{name: http, containerPort: 8080}]
+          envFrom: [{configMapRef: {name: roots-config}}]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 250m, memory: 512Mi}
+            limits: {cpu: "1", memory: 768Mi}
+          startupProbe:
+            httpGet: {path: /_roots/health, port: http}
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet: {path: /_roots/health, port: http}
+            periodSeconds: 2
+            timeoutSeconds: 2
+          livenessProbe:
+            tcpSocket: {port: http}
+            periodSeconds: 15
+            timeoutSeconds: 2
+          volumeMounts:
+            - {name: temporary, mountPath: /tmp}
+      volumes:
+        - name: temporary
+          emptyDir: {medium: Memory, sizeLimit: 64Mi}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: roots
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: {app: roots-application}

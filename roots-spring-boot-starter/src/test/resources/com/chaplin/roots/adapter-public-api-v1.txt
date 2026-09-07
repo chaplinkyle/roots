@@ -1,0 +1,123 @@
+TYPE public final class com.chaplin.roots.servlet.RootsServlet
+  CONSTRUCTOR public com.chaplin.roots.servlet.RootsServlet()
+  CONSTRUCTOR public com.chaplin.roots.servlet.RootsServlet(com.chaplin.roots.RootsConfig)
+  CONSTRUCTOR public com.chaplin.roots.servlet.RootsServlet(com.chaplin.roots.RootsConfig,java.time.Duration)
+  CONSTRUCTOR public com.chaplin.roots.servlet.RootsServlet(com.chaplin.roots.RootsConfig,java.time.Duration,com.chaplin.roots.servlet.ServletIdentityResolver)
+  METHOD protected void com.chaplin.roots.servlet.RootsServlet.service(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse) throws jakarta.servlet.ServletException,java.io.IOException
+  METHOD public com.chaplin.roots.RootsCache com.chaplin.roots.servlet.RootsServlet.cache()
+  METHOD public com.chaplin.roots.RuntimeSnapshot com.chaplin.roots.servlet.RootsServlet.runtimeSnapshot()
+  METHOD public java.lang.String com.chaplin.roots.servlet.RootsServlet.nodeId()
+  METHOD public java.util.List<java.lang.String> com.chaplin.roots.servlet.RootsServlet.routes()
+  METHOD public void com.chaplin.roots.servlet.RootsServlet.destroy()
+  METHOD public void com.chaplin.roots.servlet.RootsServlet.init(jakarta.servlet.ServletConfig) throws jakarta.servlet.ServletException
+END com.chaplin.roots.servlet.RootsServlet
+TYPE public abstract interface com.chaplin.roots.servlet.ServletIdentityResolver
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract java.util.Optional<com.chaplin.roots.AuthenticatedIdentity> com.chaplin.roots.servlet.ServletIdentityResolver.resolve(jakarta.servlet.http.HttpServletRequest)
+  METHOD public static com.chaplin.roots.servlet.ServletIdentityResolver com.chaplin.roots.servlet.ServletIdentityResolver.containerPrincipal()
+END com.chaplin.roots.servlet.ServletIdentityResolver
+TYPE public final class com.chaplin.roots.spring.SpringInstanceFactory
+  CONSTRUCTOR public com.chaplin.roots.spring.SpringInstanceFactory(org.springframework.beans.factory.config.AutowireCapableBeanFactory)
+  CONSTRUCTOR public com.chaplin.roots.spring.SpringInstanceFactory(org.springframework.context.ApplicationContext)
+  METHOD public java.lang.Object com.chaplin.roots.spring.SpringInstanceFactory.create(java.lang.Class<?>)
+  METHOD public void com.chaplin.roots.spring.SpringInstanceFactory.destroy(java.lang.Object)
+END com.chaplin.roots.spring.SpringInstanceFactory
+TYPE public abstract @interface com.chaplin.roots.spring.boot.EnableRoots
+  ANNOTATION @java.lang.annotation.Documented
+  ANNOTATION @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
+  ANNOTATION @java.lang.annotation.Target(value=[java.lang.annotation.ElementType.TYPE])
+  ANNOTATION @org.springframework.context.annotation.Import(value=[com.chaplin.roots.spring.boot.RootsApplicationRegistrar.class])
+  METHOD public abstract java.lang.Class<?> com.chaplin.roots.spring.boot.EnableRoots.value()
+END com.chaplin.roots.spring.boot.EnableRoots
+TYPE public final class com.chaplin.roots.spring.boot.RootsApplicationLifecycle
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsApplicationLifecycle(com.chaplin.roots.RootsConfig,java.time.Duration)
+  METHOD public boolean com.chaplin.roots.spring.boot.RootsApplicationLifecycle.isRunning()
+  METHOD public com.chaplin.roots.RunningApplication com.chaplin.roots.spring.boot.RootsApplicationLifecycle.application()
+  METHOD public com.chaplin.roots.RuntimeSnapshot com.chaplin.roots.spring.boot.RootsApplicationLifecycle.runtimeSnapshot()
+  METHOD public int com.chaplin.roots.spring.boot.RootsApplicationLifecycle.getPhase()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsApplicationLifecycle.nodeId()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsApplicationLifecycle.transport()
+  METHOD public java.net.URI com.chaplin.roots.spring.boot.RootsApplicationLifecycle.uri()
+  METHOD public synchronized void com.chaplin.roots.spring.boot.RootsApplicationLifecycle.start()
+  METHOD public synchronized void com.chaplin.roots.spring.boot.RootsApplicationLifecycle.stop()
+  METHOD public void com.chaplin.roots.spring.boot.RootsApplicationLifecycle.stop(java.lang.Runnable)
+END com.chaplin.roots.spring.boot.RootsApplicationLifecycle
+TYPE public class com.chaplin.roots.spring.boot.RootsAutoConfiguration
+  ANNOTATION @org.springframework.boot.autoconfigure.AutoConfiguration(after=[],afterName=[],before=[],beforeName=[],value=)
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnBean(annotation=[],name=[],parameterizedContainer=[],search=org.springframework.boot.autoconfigure.condition.SearchStrategy.ALL,type=[],value=[com.chaplin.roots.spring.boot.RootsApplicationDescriptor.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnClass(name=[],value=[com.chaplin.roots.Roots.class,org.springframework.context.ApplicationContext.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(havingValue=true,matchIfMissing=true,name=[enabled],prefix=roots,value=[])
+  ANNOTATION @org.springframework.boot.context.properties.EnableConfigurationProperties(value=[com.chaplin.roots.spring.boot.RootsProperties.class])
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsAutoConfiguration()
+END com.chaplin.roots.spring.boot.RootsAutoConfiguration
+TYPE public abstract interface com.chaplin.roots.spring.boot.RootsConfigCustomizer
+  ANNOTATION @java.lang.FunctionalInterface
+  METHOD public abstract void com.chaplin.roots.spring.boot.RootsConfigCustomizer.customize(com.chaplin.roots.RootsConfig.Builder)
+END com.chaplin.roots.spring.boot.RootsConfigCustomizer
+TYPE public class com.chaplin.roots.spring.boot.RootsHealthAutoConfiguration
+  ANNOTATION @org.springframework.boot.autoconfigure.AutoConfiguration(after=[com.chaplin.roots.spring.boot.RootsAutoConfiguration.class,com.chaplin.roots.spring.boot.RootsServletAutoConfiguration.class],afterName=[],before=[],beforeName=[],value=)
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnBean(annotation=[],name=[],parameterizedContainer=[],search=org.springframework.boot.autoconfigure.condition.SearchStrategy.ALL,type=[],value=[com.chaplin.roots.spring.boot.RootsRuntime.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnClass(name=[],value=[org.springframework.boot.health.contributor.HealthIndicator.class])
+  ANNOTATION @org.springframework.boot.health.autoconfigure.contributor.ConditionalOnEnabledHealthIndicator(value=roots)
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsHealthAutoConfiguration()
+END com.chaplin.roots.spring.boot.RootsHealthAutoConfiguration
+TYPE public class com.chaplin.roots.spring.boot.RootsMetricsAutoConfiguration
+  ANNOTATION @org.springframework.boot.autoconfigure.AutoConfiguration(after=[com.chaplin.roots.spring.boot.RootsAutoConfiguration.class,com.chaplin.roots.spring.boot.RootsServletAutoConfiguration.class],afterName=[org.springframework.boot.micrometer.metrics.autoconfigure.MetricsAutoConfiguration,org.springframework.boot.micrometer.metrics.autoconfigure.export.simple.SimpleMetricsExportAutoConfiguration],before=[],beforeName=[],value=)
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnBean(annotation=[],name=[],parameterizedContainer=[],search=org.springframework.boot.autoconfigure.condition.SearchStrategy.ALL,type=[],value=[com.chaplin.roots.spring.boot.RootsRuntime.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnClass(name=[],value=[io.micrometer.core.instrument.binder.MeterBinder.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(havingValue=true,matchIfMissing=true,name=[roots],prefix=management.metrics.enable,value=[])
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsMetricsAutoConfiguration()
+END com.chaplin.roots.spring.boot.RootsMetricsAutoConfiguration
+TYPE public final record com.chaplin.roots.spring.boot.RootsProperties
+  ANNOTATION @org.springframework.boot.context.properties.ConfigurationProperties(ignoreInvalidFields=false,ignoreUnknownFields=true,prefix=,value=roots)
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsProperties(boolean,com.chaplin.roots.spring.boot.RootsTransport,java.lang.String,java.lang.String,java.lang.String,int,boolean,java.time.Duration,java.time.Duration,java.time.Duration,int,int,int,java.lang.String,int,int,int,boolean,java.lang.String,java.lang.String,java.util.List<java.lang.String>,int,java.time.Duration,int)
+  METHOD public boolean com.chaplin.roots.spring.boot.RootsProperties.development()
+  METHOD public boolean com.chaplin.roots.spring.boot.RootsProperties.enabled()
+  METHOD public boolean com.chaplin.roots.spring.boot.RootsProperties.secureCookies()
+  METHOD public com.chaplin.roots.spring.boot.RootsTransport com.chaplin.roots.spring.boot.RootsProperties.transport()
+  METHOD public final boolean com.chaplin.roots.spring.boot.RootsProperties.equals(java.lang.Object)
+  METHOD public final int com.chaplin.roots.spring.boot.RootsProperties.hashCode()
+  METHOD public final java.lang.String com.chaplin.roots.spring.boot.RootsProperties.toString()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.maxConcurrentRequests()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.maxLiveViews()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.maxMultipartTextFieldBytes()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.maxRateLimitClients()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.maxRequestBytes()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.maxSessions()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.port()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.rateLimitRequests()
+  METHOD public int com.chaplin.roots.spring.boot.RootsProperties.requestBodyMemoryThreshold()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsProperties.apiPackage()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsProperties.contentSecurityPolicy()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsProperties.host()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsProperties.pagesPackage()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsProperties.requestBodyTemporaryDirectory()
+  METHOD public java.lang.String com.chaplin.roots.spring.boot.RootsProperties.servletPath()
+  METHOD public java.time.Duration com.chaplin.roots.spring.boot.RootsProperties.rateLimitWindow()
+  METHOD public java.time.Duration com.chaplin.roots.spring.boot.RootsProperties.sessionTimeout()
+  METHOD public java.time.Duration com.chaplin.roots.spring.boot.RootsProperties.shutdownTimeout()
+  METHOD public java.time.Duration com.chaplin.roots.spring.boot.RootsProperties.viewTimeout()
+  METHOD public java.util.List<java.lang.String> com.chaplin.roots.spring.boot.RootsProperties.trustedProxies()
+END com.chaplin.roots.spring.boot.RootsProperties
+TYPE public class com.chaplin.roots.spring.boot.RootsServletAutoConfiguration
+  ANNOTATION @org.springframework.boot.autoconfigure.AutoConfiguration(after=[com.chaplin.roots.spring.boot.RootsAutoConfiguration.class,com.chaplin.roots.spring.boot.RootsSpringSecurityAutoConfiguration.class],afterName=[],before=[],beforeName=[],value=)
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnBean(annotation=[],name=[],parameterizedContainer=[],search=org.springframework.boot.autoconfigure.condition.SearchStrategy.ALL,type=[],value=[com.chaplin.roots.spring.boot.RootsApplicationDescriptor.class,com.chaplin.roots.RootsConfig.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnClass(name=[],value=[com.chaplin.roots.servlet.RootsServlet.class,org.springframework.boot.web.servlet.ServletRegistrationBean.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnProperties(value=[@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(havingValue=true,matchIfMissing=true,name=[enabled],prefix=roots,value=[]),@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(havingValue=servlet,matchIfMissing=false,name=[transport],prefix=roots,value=[])])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication(type=org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication$Type.SERVLET)
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsServletAutoConfiguration()
+END com.chaplin.roots.spring.boot.RootsServletAutoConfiguration
+TYPE public class com.chaplin.roots.spring.boot.RootsSpringSecurityAutoConfiguration
+  ANNOTATION @org.springframework.boot.autoconfigure.AutoConfiguration(after=[com.chaplin.roots.spring.boot.RootsAutoConfiguration.class],afterName=[],before=[],beforeName=[],value=)
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnBean(annotation=[],name=[],parameterizedContainer=[],search=org.springframework.boot.autoconfigure.condition.SearchStrategy.ALL,type=[],value=[com.chaplin.roots.spring.boot.RootsApplicationDescriptor.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnClass(name=[],value=[org.springframework.security.core.Authentication.class,jakarta.servlet.http.HttpServletRequest.class,com.chaplin.roots.servlet.ServletIdentityResolver.class])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnProperties(value=[@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(havingValue=true,matchIfMissing=true,name=[enabled],prefix=roots,value=[]),@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(havingValue=servlet,matchIfMissing=false,name=[transport],prefix=roots,value=[])])
+  ANNOTATION @org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication(type=org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication$Type.SERVLET)
+  CONSTRUCTOR public com.chaplin.roots.spring.boot.RootsSpringSecurityAutoConfiguration()
+END com.chaplin.roots.spring.boot.RootsSpringSecurityAutoConfiguration
+TYPE public final enum com.chaplin.roots.spring.boot.RootsTransport
+  FIELD public static final com.chaplin.roots.spring.boot.RootsTransport com.chaplin.roots.spring.boot.RootsTransport.JDK
+  FIELD public static final com.chaplin.roots.spring.boot.RootsTransport com.chaplin.roots.spring.boot.RootsTransport.SERVLET
+  METHOD public static com.chaplin.roots.spring.boot.RootsTransport com.chaplin.roots.spring.boot.RootsTransport.valueOf(java.lang.String)
+  METHOD public static com.chaplin.roots.spring.boot.RootsTransport[] com.chaplin.roots.spring.boot.RootsTransport.values()
+END com.chaplin.roots.spring.boot.RootsTransport

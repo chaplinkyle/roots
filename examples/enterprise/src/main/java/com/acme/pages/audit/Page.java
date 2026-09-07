@@ -1,16 +1,16 @@
 package com.acme.pages.audit;
 
-import dev.roots.PageContext;
-import dev.roots.annotation.PageMetadata;
-import dev.roots.annotation.Route;
-import dev.roots.html.Node;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.annotation.PageMetadata;
+import com.chaplin.roots.annotation.Route;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.h1;
-import static dev.roots.html.Html.p;
-import static dev.roots.html.Html.section;
-import static dev.roots.html.Html.span;
-import static dev.roots.html.Html.strong;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.h1;
+import static com.chaplin.roots.html.Html.p;
+import static com.chaplin.roots.html.Html.section;
+import static com.chaplin.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.strong;
 
 @Route("/activity")
 @PageMetadata(
@@ -18,7 +18,7 @@ import static dev.roots.html.Html.strong;
         description = "Recent JVM application events.",
         stylesheets = "/app.css"
 )
-public final class Page implements dev.roots.Page {
+public final class Page implements com.chaplin.roots.Page {
     @Override
     public Node render(PageContext context) {
         return div(

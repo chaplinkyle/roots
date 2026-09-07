@@ -4,6 +4,11 @@ Roots ships the browser driver and server implementation together, but an open t
 can outlive a deployment. The live protocol is therefore explicit and fail-closed.
 Its current value is `Roots.PROTOCOL_VERSION == "1"`.
 
+The optional [widget boundary](browser-widgets.md) adds `data-roots-widget` and
+`data-widget-*` HTML attributes; it does not add endpoints or change protocol 1.
+The matching packaged browser driver owns module lifecycle. Deploy browser assets
+and server together. Native form bridges use the existing action/CSRF contract.
+
 ## Version advertisement
 
 A live HTML document carries `data-roots-protocol="1"` on `#roots`. Every
@@ -28,6 +33,44 @@ disposal receive `_view` and `_csrf` fields. Action-only fields are `_action`,
 application form values; uploaded application fields follow the same rule.
 
 ## Successful action response
+
+The driver captures form values and edit versions when an event occurs, before
+queueing work. An incoming action patch acknowledges only those captured versions;
+newer local edits and unrelated drafts are preserved. SSE does not acknowledge
+unsubmitted edits. This is a browser-side contract and adds no credentials or
+fields to the version-1 wire payload.
+
+`Element.debounceInput(Duration)` emits `data-roots-input-debounce` in milliseconds
+(1–60000). Only opted-in `input` actions coalesce; other actions flush the final
+pending inputs first. Navigation cancels unsent delayed inputs. The driver bounds
+active, queued, and delayed actions to 128 combined per live view. Additional events produce
+`roots:backpressure` with `{view, action, limit}` and `roots:error` with a
+`RootsQueueFullError`. Their local edits remain visible for an explicit retry;
+Roots does not silently discard business mutations or retry ambiguous failures.
+Applications should show their normal error feedback for these events.
+
+Action queues are owned by individual roots. A new view can submit actions even
+while the old view's response is unresolved. The browser waits up to 30 seconds
+for headers and JSON body, overridden by `Element.actionTimeout(Duration)` through
+`data-roots-action-timeout` (100–300000 ms). This is a client response deadline,
+not a server transaction cancellation or rollback signal.
+
+Network/body failures, deadline expiry, HTTP 5xx, or an
+`X-Roots-Action-Outcome: uncertain` response pause that view's remaining mutations,
+preserve local edits, close its SSE stream, and show an explicit recovery notice.
+Queued patches cannot overwrite the paused view. They publish
+`roots:action-uncertain` with `{view, action, reason, error}` (`timeout`, `transport`,
+or `server`); withheld attempts publish `roots:action-blocked` with `{view, action}`.
+No uncertain action is automatically retried. A new document/view has a separate
+queue, but applications must check durable business status before repeating a
+mutation. The server also rejects later actions on a view after an unexpected
+handler failure or a failure rendering the handler's result. These responses
+carry the uncertainty header even when an exception mapper returns a 4xx status;
+the header takes precedence over validation or ordinary 409 reload handling.
+The mapper receives the original exception. Other 4xx responses retain their
+validation/error behavior. Handler validation must precede business mutations;
+neither a mapped error nor an HTTP status proves transaction rollback.
+See [automation and recovery](automation.md).
 
 A normal action response is JSON with this required shape:
 
@@ -124,6 +167,17 @@ ordinary Java component graph is not serialized or failed over.
 
 ## Version mismatch
 
+Automatic recovery never silently discards unacknowledged form edits. An expiry
+or incompatible patch with dirty controls, delayed inputs, or queued actions
+marks the current root `data-roots-action-state="expired"`, pauses mutations and
+streams, retains the document, and shows a copy-before-reload notice. The browser
+emits `roots:view-recovery` with `{view, reason}`; reasons are `expiry`, `protocol`,
+`revision`, `patch`, and `development`. A subsequent fresh root operates normally.
+This is an in-document safeguard, not browser-storage persistence. Applications
+must provide durable draft/operation identifiers for recovery after a process,
+browser, or device is lost. The [customer workflow](../examples/workflow/README.md)
+shows that boundary. An idle, unedited document still reloads automatically.
+
 An absent or unsupported action/inspector version returns HTTP `409`,
 `Cache-Control: no-store`, `X-Roots-Protocol`, and a reload instruction:
 
@@ -132,14 +186,16 @@ An absent or unsupported action/inspector version returns HTTP `409`,
 ```
 
 An absent or unsupported stream version receives one `reload` SSE event containing
-the server version and then closes. The version-1 driver reloads on either signal.
+the server version and then closes. The driver requests recovery on either signal.
+It reloads an idle, unedited document automatically; pending work or unacknowledged
+controls instead pause the view and display an explicit recovery notice.
 Disposal rejects a mismatch without disposing the referenced live view.
 Client navigation also compares the fetched document's protocol with the active
 document before replacing the root. A difference performs a full navigation so
 the matching browser driver is loaded with the new document.
 
 Every current-version patch and action redirect is bound to the live view that
-produced it. A missing/non-string `view` is malformed and causes a reload. A
+produced it. A missing/non-string `view` is malformed and requests view recovery. A
 well-formed payload for a view that is no longer active is ignored and emits the
 observable `roots:stale` browser event with `{kind: "patch", view}` detail.
 The driver also captures the originating root when an action is enqueued. Any

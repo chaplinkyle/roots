@@ -1,0 +1,5 @@
+ROOTS_ROUTE_MANIFEST	3	com.chaplin.roots.manifestapp.Application	com.chaplin.roots.manifestapp.pages	com.chaplin.roots.manifestapp.api
+PAGE	/	com.chaplin.roots.manifestapp.pages.Page	com.chaplin.roots.manifestapp.pages.Layout
+API	/api/ping	com.chaplin.roots.manifestapp.api.ping.Route	
+NOT_FOUND	/	com.chaplin.roots.manifestapp.pages.NotFound	com.chaplin.roots.manifestapp.pages.Layout
+ERROR_PAGE	/	com.chaplin.roots.manifestapp.pages.ErrorPage	

@@ -1,6 +1,6 @@
 # ${artifactId}
 
-Generated with Roots. Requires JDK 26 and Maven.
+Generated with Roots. Requires JDK 25 LTS or newer and Maven.
 
 Development mode recompiles Java/resources, restarts on the same port, and
 reloads connected browsers. Compilation failures keep the last good app running:

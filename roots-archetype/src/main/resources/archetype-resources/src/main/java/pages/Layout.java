@@ -1,18 +1,18 @@
 package ${package}.pages;
 
-import dev.roots.HeadMetadata;
-import dev.roots.OpenGraphMetadata;
-import dev.roots.PageContext;
-import dev.roots.html.Node;
+import com.chaplin.roots.HeadMetadata;
+import com.chaplin.roots.OpenGraphMetadata;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.header;
-import static dev.roots.html.Html.link;
-import static dev.roots.html.Html.main;
-import static dev.roots.html.Html.nav;
-import static dev.roots.html.Html.strong;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.header;
+import static com.chaplin.roots.html.Html.link;
+import static com.chaplin.roots.html.Html.main;
+import static com.chaplin.roots.html.Html.nav;
+import static com.chaplin.roots.html.Html.strong;
 
-public final class Layout implements dev.roots.Layout {
+public final class Layout implements com.chaplin.roots.Layout {
     @Override
     public HeadMetadata headMetadata(PageContext context) {
         return new HeadMetadata()

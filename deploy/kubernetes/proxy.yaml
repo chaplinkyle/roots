@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: roots-proxy
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: roots-proxy}
+  template:
+    metadata:
+      labels: {app: roots-proxy}
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 99
+        runAsGroup: 99
+        fsGroup: 99
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: proxy
+          image: haproxy
+          ports:
+            - {name: https, containerPort: 8443}
+            - {name: health, containerPort: 8081}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 100m, memory: 64Mi}
+            limits: {cpu: "1", memory: 128Mi}
+          readinessProbe:
+            httpGet: {path: /health, port: health}
+            periodSeconds: 2
+          livenessProbe:
+            httpGet: {path: /health, port: health}
+            periodSeconds: 15
+          volumeMounts:
+            - {name: config, mountPath: /usr/local/etc/haproxy, readOnly: true}
+            - {name: tls, mountPath: /etc/roots/tls, readOnly: true}
+      volumes:
+        - name: config
+          configMap: {name: roots-proxy-config}
+        - name: tls
+          secret: {secretName: roots-tls, defaultMode: 0440}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: roots-web
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  selector: {app: roots-proxy}
+  ports:
+    - {name: https, port: 443, targetPort: https}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: roots-proxy
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels: {app: roots-proxy}

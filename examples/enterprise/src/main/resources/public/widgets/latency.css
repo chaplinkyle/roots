@@ -1,0 +1,10 @@
+.latency-page { max-width: 70rem; }
+.latency-page h1 { margin-bottom: .5rem; }
+.latency-page p { max-width: 70ch; }
+#latency-chart { margin: 2rem 0; padding: 1.5rem; background: #fff; border: 1px solid #dce3ef; }
+#latency-chart label { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+#latency-chart input { width: min(20rem, 100%); accent-color: #3155cc; }
+#latency-chart svg { display: block; width: 100%; height: auto; margin-top: 1rem; }
+#latency-chart path { fill: none; stroke: #3155cc; stroke-width: 3; vector-effect: non-scaling-stroke; }
+.latency-caption { color: #58647b; }
+.latency-page :focus-visible { outline: 3px solid #3155cc; outline-offset: 3px; }

@@ -1,0 +1,34 @@
+[Unit]
+Description=Roots Java application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=roots
+Group=roots
+WorkingDirectory=/opt/roots
+EnvironmentFile=/etc/roots/roots.env
+ExecStart=/usr/bin/java -XX:MaxRAMPercentage=65 -XX:+ExitOnOutOfMemoryError -Djava.io.tmpdir=/var/lib/roots/tmp -jar /opt/roots/current/application.jar
+KillSignal=SIGTERM
+TimeoutStopSec=45s
+Restart=on-failure
+RestartSec=5s
+MemoryMax=1G
+TasksMax=512
+UMask=0077
+StateDirectory=roots
+RuntimeDirectory=roots
+ExecStartPre=/usr/bin/mkdir -p /var/lib/roots/tmp
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+RestrictSUIDSGID=true
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/roots
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

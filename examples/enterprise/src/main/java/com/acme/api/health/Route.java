@@ -1,8 +1,8 @@
 package com.acme.api.health;
 
-import dev.roots.ApiRoute;
-import dev.roots.Request;
-import dev.roots.Response;
+import com.chaplin.roots.ApiRoute;
+import com.chaplin.roots.Request;
+import com.chaplin.roots.Response;
 
 import java.time.Instant;
 

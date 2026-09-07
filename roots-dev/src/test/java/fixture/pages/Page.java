@@ -1,11 +1,11 @@
 package fixture.pages;
 
-import dev.roots.PageContext;
-import dev.roots.html.Node;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.h1;
+import static com.chaplin.roots.html.Html.h1;
 
-public final class Page implements dev.roots.Page {
+public final class Page implements com.chaplin.roots.Page {
     @Override
     public Node render(PageContext context) {
         return h1("Development fixture");

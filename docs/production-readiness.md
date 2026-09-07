@@ -12,7 +12,8 @@ platform.
 | Database-backed CRUD and workflow applications | Reasonable with application-owned persistence and transactions |
 | Internet-facing systems with sensitive data | Requires external auth, TLS, hardening, and a formal security review |
 | Multi-node or zero-downtime deployments | Not ready without sticky sessions and careful draining |
-| Multi-region, serverless, or stateless edge workloads | Not compatible with the current live-state model |
+| Stateless Java APIs on managed containers | Candidate fit with application-owned auth, durable receipts, and a shared database |
+| Live UI across regions or ephemeral serverless instances | Requires explicit owner routing and recovery; no component failover |
 | Offline-first or interaction-heavy client applications | Poor fit |
 
 ## What scales well
@@ -45,6 +46,31 @@ platform.
 - A validated global CSP is enforced at the final boundary for every HTML response.
 
 ## Current limits
+
+Browser actions use per-view queues and bounded response deadlines. An uncertain
+action outcome pauses additional mutations, retains local edits, and shows a
+recovery notice without retrying. Native `@Stateless` API routes avoid browser
+session storage; `ProblemDetail`, webhook verification, and process-local
+`IdempotencyStore` support machine integration. The optional `JdbcIdempotencyStore`
+commits business SQL and a replayable response atomically on one connection.
+Applications must integrate it into their transaction boundary; it does not
+automatically provide persistent drafts or component recovery after node loss.
+The [customer workflow reference](../examples/workflow/README.md) demonstrates
+application-owned private drafts, permanent completion receipts, SQL transactions,
+Spring Security sign-in, keyset pagination, and optimistic concurrency. Committed
+drafts survive restart; unsent typing and live component graphs do not.
+See [automation contracts](automation.md) and [deployment templates](../deploy/README.md).
+
+[Versioned candidate tooling](releases.md) captures and verifies source, builds a
+checksummed Maven repository bundle, compares repeat-build artifact bytes, and
+tests generation of a new consumer project. Bundles remain unpublished until a
+separate reviewed registry process. The cloud templates provide AWS, Azure, and
+GCP deployment inputs, while the packaged WAR example exercises real Tomcat
+deployment. Local schema/build checks do not establish cloud execution or
+production certification. The supported [browser-widget lifecycle](browser-widgets.md)
+provides keyed DOM ownership, bounded asynchronous work, and explicit editor
+recovery rules. Representative [database/SSE workload measurements](load-testing.md)
+are reproducible locally; application-specific capacity certification remains necessary.
 
 Each open page owns a server-side live view containing its page, layouts,
 components, action table, metadata, context, and patch queue. Memory therefore
@@ -109,8 +135,10 @@ outside a boundary, fragments, ambiguity, portals, and queued SSE updates. This
 reduces transfer and reconciliation work, but server rendering cost still scales
 with the Java tree; very large pages or high-frequency events require measurement.
 
-The JDK HTTP server remains useful for dependency-free applications even though
-Java 26 deprecates that API for removal. Roots now also supplies a Jakarta Servlet
+The JDK HTTP server remains useful for dependency-free applications. Its
+[`HttpServer` API](https://docs.oracle.com/en/java/javase/26/docs/api/jdk.httpserver/com/sun/net/httpserver/HttpServer.html)
+is not deprecated; the inherited `Object.finalize()` deprecation does not apply
+to the server API itself. Roots also supplies a Jakarta Servlet
 6.1 adapter with context-path routing, container I/O, async SSE, shared readiness,
 and graceful lifecycle behavior. That removes the runtime's hard dependency on
 the JDK listener, but broader container certification remains release work. Roots
@@ -204,7 +232,8 @@ committed compiled-signature baselines, and every build rejects unreviewed drift
 in types, members, generics, visibility, nested types, or annotation contracts.
 Browser protocol version 1 is
 embedded in live documents, requests, response headers, JSON patches, and SSE
-connections. Incompatible actions and streams cause a fresh-document reload,
+connections. Incompatible actions and streams request fresh-document recovery; dirty controls
+and pending actions pause for explicit recovery instead of immediate reload,
 which prevents an old tab from applying a new server's unknown wire shape during
 a rolling deployment. This is a compatibility guard, not yet a final 1.0 API
 freeze; real mixed-version deployment certification remains.

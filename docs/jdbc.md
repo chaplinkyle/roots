@@ -1,12 +1,12 @@
 # JDBC shared state
 
 The optional `roots-jdbc` artifact provides shared sessions, session values,
-tagged application caching, and node-affinity leases without adding Spring, an
+tagged application caching, node-affinity leases, and durable operation receipts without adding Spring, an
 ORM, a driver, or a connection pool to the runtime:
 
 ```xml
 <dependency>
-  <groupId>dev.roots</groupId>
+  <groupId>com.chaplin.roots</groupId>
   <artifactId>roots-jdbc</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 </dependency>
@@ -162,3 +162,97 @@ deployment-specific compatibility, failover, pool, and latency testing.
 This table contains routing leases, not page or component state. A load balancer
 must still route the browser to `X-Roots-Owner`, and loss of that JVM requires a
 fresh document. Roots does not serialize arbitrary Java object graphs.
+
+## Durable operation receipts
+
+`JdbcIdempotencyStore` coordinates a business transaction and its replayable HTTP
+response. Use `schemaStatements()` or `schemaStatements(tableName)` in your normal
+migration process. `createSchema(dataSource)` creates the default schema once for
+tests; it does not track schema versions or handle concurrent startup migrations.
+The schema contains a hashed scope/key primary key, request fingerprint, expiry,
+status, bounded encoded headers, and a Base64 response body. No Java serialization
+or plaintext idempotency key is stored.
+
+```java
+var receipts = new JdbcIdempotencyStore(dataSource);
+var response = receipts.execute(scope, key, IdempotencyStore.fingerprint(request),
+        Duration.ofHours(24), connection -> {
+            // Authentication, authorization and input validation precede this call.
+            try (var update = connection.prepareStatement(
+                    "UPDATE orders SET status = ? WHERE tenant_id = ? AND id = ? AND status = ?")) {
+                update.setQueryTimeout(5);
+                update.setString(1, "approved");
+                update.setString(2, tenantId);
+                update.setString(3, orderId);
+                update.setString(4, "pending");
+                if (update.executeUpdate() != 1) {
+                    return Response.text(409, "Order is no longer pending");
+                }
+            }
+            return Response.text(200, "Approved");
+        });
+```
+
+The application owns the `orders` schema and validates the identifiers. Scope
+must unambiguously include tenant, authenticated principal, and operation. Authorize
+every attempt before calling the store, including replays. Use the supplied
+connection for **all** business SQL; a separately committed service or an ORM
+transaction does not participate automatically. The callback must not close,
+commit, roll back, or otherwise manage the connection. Returning commits both
+the business change and receipt; throwing rolls back both. A returned error status
+also commits: the example's 409 is safe because its conditional update changed no rows.
+
+Same-key calls serialize using row locks and primary-key uniqueness at
+`READ_COMMITTED`. The adapter retries only claim collisions before the callback
+starts; it never reruns a callback that has started within one `execute` call.
+Same key with changed request content returns 422. An incomplete committed receipt
+returns 409 and requires reconciliation; this can indicate application transaction
+misuse or damaged data. A receipt decoding error does not rerun the callback.
+
+If commit succeeds but the response or acknowledgement is lost, retrying with the
+same scope/key/fingerprint replays the committed result. If the transaction rolled
+back, the retry can execute. This guarantee covers SQL using that connection and
+the configured database's durability guarantees. External effects require an outbox
+in the transaction and idempotent delivery; they cannot be rolled back by this store.
+
+Defaults are a 128 KiB response body limit and ten-second receipt statement timeout.
+The constructor permits body limits up to 786,432 bytes and statement timeouts up
+to 300 seconds. Only final buffered responses without `Set-Cookie` are supported;
+headers have separate bounded counts and encoded size. Every node sharing a receipt
+table must use compatible limits. Configure pool acquisition, driver/network, and
+callback statement timeouts separately; the receipt timeout is not an end-to-end
+operation deadline.
+
+Retention is measured after callback completion, from one second to seven days.
+Run bounded maintenance periodically:
+
+```java
+int removed = receipts.deleteExpired(Instant.now(), 1_000);
+```
+
+The expiry index supports cleanup. The store does not enforce a global row quota;
+budget database capacity for arrival rate, retention, and response sizes. After
+expiry, a key can execute again, so permanent business uniqueness constraints remain
+necessary for operations that must never duplicate. Keep node clocks synchronized.
+
+Tests cover concurrent independent store instances, unrelated-key progress, rollback,
+response rejection/corruption, expiry, bounded cleanup, file-backed database reopen,
+lost commit acknowledgements, and connection cleanup failures. Real PostgreSQL 16.14
+verification additionally covers 64 contending calls, a terminated backend session,
+and a same-key lock timeout without invoking the contender's business callback.
+Those results certify these exercised cases, not every PostgreSQL topology or other
+vendor. The other JDBC adapters' compatibility-mode tests are not real vendor tests.
+
+To repeat PostgreSQL verification, provision a disposable database named exactly
+`roots_receipts_test` and set `ROOTS_TEST_POSTGRES_URL`, `ROOTS_TEST_POSTGRES_USER`,
+and `ROOTS_TEST_POSTGRES_PASSWORD` in the process environment. The test user must be
+able to create a schema and terminate its own sessions. The suite creates and removes
+its own uniquely named schema and refuses any other database name.
+
+```sh
+./mvnw -pl roots-jdbc -am -Proots-postgres verify
+```
+
+The PostgreSQL driver is a test-only profile dependency. Application drivers and
+connection pools remain application-owned. The default suite skips the three real
+PostgreSQL tests when this profile is not enabled.

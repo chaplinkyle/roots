@@ -1,0 +1,16 @@
+[
+  {"ParameterKey":"VpcId","ParameterValue":"vpc-REPLACE"},
+  {"ParameterKey":"PublicSubnets","ParameterValue":"subnet-PUBLIC-A,subnet-PUBLIC-B"},
+  {"ParameterKey":"PrivateSubnets","ParameterValue":"subnet-PRIVATE-A,subnet-PRIVATE-B"},
+  {"ParameterKey":"DatabaseSecurityGroupId","ParameterValue":"sg-POSTGRES"},
+  {"ParameterKey":"Image","ParameterValue":"ACCOUNT.dkr.ecr.REGION.amazonaws.com/roots-automation@sha256:REPLACE_WITH_64_HEX_DIGEST"},
+  {"ParameterKey":"CertificateArn","ParameterValue":"arn:aws:acm:REGION:ACCOUNT:certificate/REPLACE"},
+  {"ParameterKey":"ExecutionRoleArn","ParameterValue":"arn:aws:iam::ACCOUNT:role/roots-execution"},
+  {"ParameterKey":"TaskRoleArn","ParameterValue":"arn:aws:iam::ACCOUNT:role/roots-application"},
+  {"ParameterKey":"JdbcUrlSecretArn","ParameterValue":"arn:aws:secretsmanager:REGION:ACCOUNT:secret:roots-jdbc-url-REPLACE"},
+  {"ParameterKey":"JdbcUserSecretArn","ParameterValue":"arn:aws:secretsmanager:REGION:ACCOUNT:secret:roots-jdbc-user-REPLACE"},
+  {"ParameterKey":"JdbcPasswordSecretArn","ParameterValue":"arn:aws:secretsmanager:REGION:ACCOUNT:secret:roots-jdbc-password-REPLACE"},
+  {"ParameterKey":"TokenSecretArn","ParameterValue":"arn:aws:secretsmanager:REGION:ACCOUNT:secret:roots-token-REPLACE"},
+  {"ParameterKey":"WebhookSecretArn","ParameterValue":"arn:aws:secretsmanager:REGION:ACCOUNT:secret:roots-webhook-REPLACE"},
+  {"ParameterKey":"DesiredCount","ParameterValue":"2"}
+]

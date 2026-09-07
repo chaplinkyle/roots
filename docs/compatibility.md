@@ -4,25 +4,48 @@ Roots is currently a `0.x` framework. The project therefore distinguishes the
 contracts it can mechanically protect today from the stronger promise that begins
 at 1.0.
 
+The minimum runtime and compilation target is Java 25 LTS. CI verifies Java 25
+and Java 26. Generated applications target 25 as well. No Java preview flags are
+required; Java 26 can still be selected as the deployment JVM.
+
+## Canonical namespace
+
+Java packages and Maven group IDs use `com.chaplin.roots`. For example, import
+`com.chaplin.roots.Roots` and depend on
+`com.chaplin.roots:roots-core:0.1.0-SNAPSHOT`. Adapter artifact names are unchanged.
+
+This is a breaking pre-release namespace change from the earlier `dev.roots`
+snapshot. Update imports, fully qualified configuration class names, dependency
+and plugin group IDs, and annotation-processor coordinates. Rebuild applications
+and their generated route manifests with `clean`; compiled classes using the old
+namespace are not binary compatible. The examples, archetype, service registration,
+Spring auto-configuration, and API signature baselines use the canonical namespace.
+No stable release or compatibility aliases for the old namespace are provided.
+
+`Element.widget(key, moduleUrl)` is included in the core API signature baseline.
+Its [module lifecycle](browser-widgets.md) is an explicit application contract;
+other private browser-driver functions remain implementation details. Third-party
+widget packages retain their own version and browser/CSP requirements.
+
 ## Supported API surface
 
 The application-facing Java API is the public and protected surface in:
 
-- `dev.roots`;
-- `dev.roots.annotation`;
-- `dev.roots.html`;
-- `dev.roots.validation`;
-- `dev.roots.servlet`;
-- `dev.roots.jdbc`;
-- `dev.roots.spring`;
-- `dev.roots.spring.boot`.
+- `com.chaplin.roots`;
+- `com.chaplin.roots.annotation`;
+- `com.chaplin.roots.html`;
+- `com.chaplin.roots.validation`;
+- `com.chaplin.roots.servlet`;
+- `com.chaplin.roots.jdbc`;
+- `com.chaplin.roots.spring`;
+- `com.chaplin.roots.spring.boot`.
 
-Anything in `dev.roots.internal` is an implementation detail even when Java
+Anything in `com.chaplin.roots.internal` is an implementation detail even when Java
 visibility must be `public` so another Roots module can call it. Applications
 must not compile against that package.
 
 The complete reviewed core API is committed as
-`roots-core/src/test/resources/dev/roots/public-api-v1.txt`. Every `verify` run
+`roots-core/src/test/resources/com/chaplin/roots/public-api-v1.txt`. Every `verify` run
 reflects over the compiled classes and compares type kinds, generic signatures,
 public/protected fields, constructors and methods, nested types, sealed permits,
 runtime annotations, and annotation defaults with that baseline. Removal,
@@ -30,19 +53,19 @@ addition, visibility drift, changed generic types, and changed annotation
 contracts therefore fail the build until a maintainer reviews the change.
 
 The Servlet, Spring, and Spring Boot surfaces have a second reviewed baseline at
-`roots-spring-boot-starter/src/test/resources/dev/roots/adapter-public-api-v1.txt`.
+`roots-spring-boot-starter/src/test/resources/com/chaplin/roots/adapter-public-api-v1.txt`.
 It is enforced by the starter's tests and intentionally includes public
 auto-configuration annotations and property-record shape as well as ordinary
 members. Package-private adapter plumbing is not a supported application API.
 
-The deliberately small `dev.roots.jdbc` surface is checked independently for its
+The deliberately small `com.chaplin.roots.jdbc` surface is checked independently for its
 exact constructors, constant, and methods by the `roots-jdbc` test suite.
 
 To inspect a proposed baseline after `test-compile`:
 
 ```powershell
 java -cp "roots-core\target\test-classes;roots-core\target\classes" `
-  dev.roots.compatibility.PublicApiSnapshot
+  com.chaplin.roots.compatibility.PublicApiSnapshot
 ```
 
 To inspect the adapter baseline, first install the current reactor artifacts and
@@ -52,7 +75,7 @@ then run its test-classpath generator:
 .\mvnw.cmd -q -pl roots-spring-boot-starter -am -DskipTests install
 .\mvnw.cmd -q -pl roots-spring-boot-starter `
   org.codehaus.mojo:exec-maven-plugin:3.5.0:java `
-  -Dexec.mainClass=dev.roots.spring.boot.compatibility.AdapterPublicApiSnapshot `
+  -Dexec.mainClass=com.chaplin.roots.spring.boot.compatibility.AdapterPublicApiSnapshot `
   -Dexec.classpathScope=test
 ```
 
@@ -61,6 +84,13 @@ change must state whether it is source compatible, binary compatible, behavioral
 or breaking and provide a migration note when application code must change.
 
 ## Version rules
+
+The enterprise runtime update adds the source- and binary-compatible
+`Element.debounceInput(Duration)` method. Browser behavior now preserves dirty
+controls until their exact captured edits are acknowledged. Applications that
+previously relied on unrelated rerenders clearing unfinished forms should reset
+their own submitted form deliberately. The action queue is bounded at 128 and
+reports saturation through documented browser events. The wire remains version 1.
 
 Before 1.0, minor versions may make reviewed breaking changes when completing a
 coherent design. Patch versions must remain source and binary compatible with the
@@ -116,6 +146,23 @@ manifests with a clean compile to use them; there is no browser-protocol version
 change.
 
 ## Migration notes
+
+API-only applications are accepted by the processor, manifest reader, and scanner.
+`@Stateless` bypasses Roots session storage while retaining authentication,
+authorization, middleware, and limits. Adapt session-dependent middleware before
+opting in. `ProblemDetail`, `WebhookVerifier`, and `IdempotencyStore` are additive
+opt-in APIs; see [automation contracts](automation.md).
+
+`Element.actionTimeout(Duration)` is additive. Browser actions default to a
+30-second response deadline and hold uncertain transport outcomes without retries.
+Navigation creates an independent queue. Wire payloads/protocol version 1 remain
+unchanged. Longer synchronous actions need an explicit deadline or background work.
+
+Marker-class `Roots.run/start` helpers now apply recognized environment variables
+before command-line arguments. Explicit builders opt in with `environment()`.
+`Roots.run(config, Duration)` adds bounded shutdown; the existing overload uses
+30 seconds or `ROOTS_SHUTDOWN_TIMEOUT`. `RunningApplication.close()` remains
+immediate. See [deployment configuration](../deploy/README.md).
 
 No stable release has shipped yet. The current baseline records the API assembled
 for `0.1.0-SNAPSHOT`. One pre-baseline design change worth noting is that `Request`

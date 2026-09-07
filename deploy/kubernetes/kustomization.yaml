@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: roots
+resources:
+  - namespace.yaml
+  - application.yaml
+  - proxy.yaml
+  - network-policy.yaml
+configMapGenerator:
+  - name: roots-config
+    envs: [roots.env]
+  - name: roots-proxy-config
+    files: [haproxy.cfg]
+images:
+  - name: roots-application
+    newName: roots-enterprise
+    newTag: local
+  - name: haproxy
+    newName: haproxy
+    newTag: 3.2-alpine

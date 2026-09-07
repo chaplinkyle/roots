@@ -1,13 +1,13 @@
 package com.acme.components;
 
-import dev.roots.Component;
-import dev.roots.PageContext;
-import dev.roots.annotation.ViewComponent;
-import dev.roots.html.Node;
+import com.chaplin.roots.Component;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.annotation.ViewComponent;
+import com.chaplin.roots.html.Node;
 
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.small;
-import static dev.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.small;
+import static com.chaplin.roots.html.Html.span;
 
 @ViewComponent("metric")
 public record Metric(String label, String value, String change, Tone tone) implements Component {

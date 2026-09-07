@@ -1,11 +1,11 @@
 package com.acme;
 
-import dev.roots.Roots;
-import dev.roots.RootsConfig;
-import dev.roots.RootsCache;
-import dev.roots.AuthorizationPolicy;
-import dev.roots.Response;
-import dev.roots.annotation.RootsApplication;
+import com.chaplin.roots.Roots;
+import com.chaplin.roots.RootsConfig;
+import com.chaplin.roots.RootsCache;
+import com.chaplin.roots.AuthorizationPolicy;
+import com.chaplin.roots.Response;
+import com.chaplin.roots.annotation.RootsApplication;
 
 @RootsApplication
 public final class Application {
@@ -18,6 +18,7 @@ public final class Application {
 
     static RootsConfig config(String... arguments) {
         return RootsConfig.forApplication(Application.class)
+                .environment()
                 .cache(RootsCache.inMemory(2_000))
                 .authorize("initialized-view", request -> request.session().get("visits").isPresent()
                         ? AuthorizationPolicy.allow()

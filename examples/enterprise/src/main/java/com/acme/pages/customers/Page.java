@@ -2,42 +2,42 @@ package com.acme.pages.customers;
 
 import com.acme.components.CustomerTable;
 import com.acme.components.CustomerTable.Customer;
-import dev.roots.ActionEvent;
-import dev.roots.PageContext;
-import dev.roots.UploadedFile;
-import dev.roots.annotation.PageMetadata;
-import dev.roots.annotation.ServerAction;
-import dev.roots.html.Node;
-import dev.roots.validation.FormField;
-import dev.roots.validation.FormModel;
-import dev.roots.validation.NotBlank;
-import dev.roots.validation.Size;
+import com.chaplin.roots.ActionEvent;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.UploadedFile;
+import com.chaplin.roots.annotation.PageMetadata;
+import com.chaplin.roots.annotation.ServerAction;
+import com.chaplin.roots.html.Node;
+import com.chaplin.roots.validation.FormField;
+import com.chaplin.roots.validation.FormModel;
+import com.chaplin.roots.validation.NotBlank;
+import com.chaplin.roots.validation.Size;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static dev.roots.html.Html.button;
-import static dev.roots.html.Html.div;
-import static dev.roots.html.Html.form;
-import static dev.roots.html.Html.h1;
-import static dev.roots.html.Html.input;
-import static dev.roots.html.Html.label;
-import static dev.roots.html.Html.option;
-import static dev.roots.html.Html.p;
-import static dev.roots.html.Html.section;
-import static dev.roots.html.Html.select;
-import static dev.roots.html.Html.span;
-import static dev.roots.html.Html.validationMessage;
-import static dev.roots.html.Html.validationSummary;
+import static com.chaplin.roots.html.Html.button;
+import static com.chaplin.roots.html.Html.div;
+import static com.chaplin.roots.html.Html.form;
+import static com.chaplin.roots.html.Html.h1;
+import static com.chaplin.roots.html.Html.input;
+import static com.chaplin.roots.html.Html.label;
+import static com.chaplin.roots.html.Html.option;
+import static com.chaplin.roots.html.Html.p;
+import static com.chaplin.roots.html.Html.section;
+import static com.chaplin.roots.html.Html.select;
+import static com.chaplin.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.validationMessage;
+import static com.chaplin.roots.html.Html.validationSummary;
 
 @PageMetadata(
         title = "Customers · Roots Control",
         description = "Manage enterprise customer accounts with live Java components.",
         stylesheets = "/app.css"
 )
-public final class Page implements dev.roots.Page {
+public final class Page implements com.chaplin.roots.Page {
     private final List<Customer> customers = new ArrayList<>(List.of(
             new Customer(1042, "Northstar Freight", "Mina Patel", "Enterprise", "Active"),
             new Customer(1078, "Kestrel Health", "Jon Bell", "Enterprise", "Review"),

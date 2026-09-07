@@ -1,0 +1,222 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Roots stateless automation on private Fargate tasks behind a TLS ALB; existing network, roles and database.
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PublicSubnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: At least two ALB subnets in different availability zones.
+  PrivateSubnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Task subnets with database access and NAT or required service endpoints.
+  DatabaseSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Existing PostgreSQL security group; this stack adds one ingress rule from the task group.
+  Image:
+    Type: String
+    AllowedPattern: '.+@sha256:[a-f0-9]{64}'
+    Description: Reviewed roots-automation image digest.
+  CertificateArn:
+    Type: String
+    Description: Existing ACM certificate for your application hostname in this region.
+  ExecutionRoleArn:
+    Type: String
+    Description: Existing ECS execution role with image pull, logs, and access only to the supplied secrets.
+  TaskRoleArn:
+    Type: String
+    Description: Existing application role with no unnecessary AWS permissions.
+  JdbcUrlSecretArn:
+    Type: String
+  JdbcUserSecretArn:
+    Type: String
+  JdbcPasswordSecretArn:
+    Type: String
+  TokenSecretArn:
+    Type: String
+  WebhookSecretArn:
+    Type: String
+  DesiredCount:
+    Type: Number
+    Default: 2
+    MinValue: 1
+    MaxValue: 20
+Resources:
+  Cluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+  Logs:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      RetentionInDays: 30
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public TLS entrypoint and HTTP redirect
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+  TaskSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Application accepts only this ALB; restrict egress for your database/endpoints
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          SourceSecurityGroupId: !Ref AlbSecurityGroup
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Type: application
+      Scheme: internet-facing
+      Subnets: !Ref PublicSubnets
+      SecurityGroups: [!Ref AlbSecurityGroup]
+      LoadBalancerAttributes:
+        - Key: idle_timeout.timeout_seconds
+          Value: '120'
+        - Key: routing.http.drop_invalid_header_fields.enabled
+          Value: 'true'
+  DatabaseIngress:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref DatabaseSecurityGroupId
+      IpProtocol: tcp
+      FromPort: 5432
+      ToPort: 5432
+      SourceSecurityGroupId: !Ref TaskSecurityGroup
+      Description: Roots automation PostgreSQL access
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckPath: /_roots/health
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      Matcher: {HttpCode: '200'}
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '45'
+        - Key: stickiness.enabled
+          Value: 'false'
+  HttpsListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      SslPolicy: ELBSecurityPolicy-TLS13-1-2-2021-06
+      Certificates: [{CertificateArn: !Ref CertificateArn}]
+      DefaultActions: [{Type: forward, TargetGroupArn: !Ref TargetGroup}]
+  HttpListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig: {Protocol: HTTPS, Port: '443', StatusCode: HTTP_301}
+  Task:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      RequiresCompatibilities: [FARGATE]
+      NetworkMode: awsvpc
+      Cpu: '1024'
+      Memory: '2048'
+      ExecutionRoleArn: !Ref ExecutionRoleArn
+      TaskRoleArn: !Ref TaskRoleArn
+      RuntimePlatform: {CpuArchitecture: X86_64, OperatingSystemFamily: LINUX}
+      Volumes: [{Name: temporary}]
+      ContainerDefinitions:
+        - Name: roots
+          Image: !Ref Image
+          Essential: true
+          User: '10001:10001'
+          ReadonlyRootFilesystem: true
+          StopTimeout: 45
+          PortMappings: [{ContainerPort: 8080, Protocol: tcp}]
+          MountPoints: [{SourceVolume: temporary, ContainerPath: /tmp, ReadOnly: false}]
+          Environment:
+            - {Name: ROOTS_HOST, Value: 0.0.0.0}
+            - {Name: ROOTS_PORT, Value: '8080'}
+            - {Name: ROOTS_DEVELOPMENT, Value: 'false'}
+            - {Name: ROOTS_SECURE_COOKIES, Value: 'true'}
+            - {Name: ROOTS_SHUTDOWN_TIMEOUT, Value: PT30S}
+            - {Name: ROOTS_MAX_REQUEST_BYTES, Value: '65536'}
+            - {Name: ROOTS_MAX_CONCURRENT_REQUESTS, Value: '128'}
+            - {Name: ROOTS_MAX_LIVE_VIEWS, Value: '1'}
+          Secrets:
+            - {Name: AUTOMATION_JDBC_URL, ValueFrom: !Ref JdbcUrlSecretArn}
+            - {Name: AUTOMATION_JDBC_USER, ValueFrom: !Ref JdbcUserSecretArn}
+            - {Name: AUTOMATION_JDBC_PASSWORD, ValueFrom: !Ref JdbcPasswordSecretArn}
+            - {Name: AUTOMATION_TOKEN, ValueFrom: !Ref TokenSecretArn}
+            - {Name: AUTOMATION_WEBHOOK_SECRET, ValueFrom: !Ref WebhookSecretArn}
+          HealthCheck:
+            Command: [CMD, java, '-XX:MaxRAMPercentage=10', -cp, /opt/roots/health, Healthcheck]
+            Interval: 15
+            Timeout: 5
+            Retries: 3
+            StartPeriod: 30
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref Logs
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: roots
+  Service:
+    Type: AWS::ECS::Service
+    DependsOn: [HttpsListener, DatabaseIngress]
+    Properties:
+      Cluster: !Ref Cluster
+      TaskDefinition: !Ref Task
+      LaunchType: FARGATE
+      PlatformVersion: '1.4.0'
+      DesiredCount: !Ref DesiredCount
+      HealthCheckGracePeriodSeconds: 60
+      DeploymentConfiguration:
+        MinimumHealthyPercent: 100
+        MaximumPercent: 200
+        DeploymentCircuitBreaker: {Enable: true, Rollback: true}
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          Subnets: !Ref PrivateSubnets
+          SecurityGroups: [!Ref TaskSecurityGroup]
+      LoadBalancers:
+        - ContainerName: roots
+          ContainerPort: 8080
+          TargetGroupArn: !Ref TargetGroup
+Outputs:
+  LoadBalancerDns:
+    Value: !GetAtt LoadBalancer.DNSName
+  ClusterArn:
+    Value: !GetAtt Cluster.Arn
+  ServiceName:
+    Value: !GetAtt Service.Name
+  TaskDefinitionArn:
+    Value: !Ref Task
+  TaskSecurityGroupId:
+    Value: !Ref TaskSecurityGroup

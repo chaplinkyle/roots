@@ -8,18 +8,18 @@
     <version>${version}</version>
 
     <properties>
-        <maven.compiler.release>26</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>dev.roots</groupId>
+            <groupId>com.chaplin.roots</groupId>
             <artifactId>roots-core</artifactId>
             <version>${rootsVersion}</version>
         </dependency>
         <dependency>
-            <groupId>dev.roots</groupId>
+            <groupId>com.chaplin.roots</groupId>
             <artifactId>roots-dev</artifactId>
             <version>${rootsVersion}</version>
             <scope>provided</scope>
@@ -39,11 +39,11 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.1</version>
                 <configuration>
-                    <release>26</release>
+                    <release>25</release>
                     <parameters>true</parameters>
                     <annotationProcessorPaths>
                         <path>
-                            <groupId>dev.roots</groupId>
+                            <groupId>com.chaplin.roots</groupId>
                             <artifactId>roots-processor</artifactId>
                             <version>${rootsVersion}</version>
                         </path>
@@ -56,7 +56,7 @@
                 <version>3.5.4</version>
             </plugin>
             <plugin>
-                <groupId>dev.roots</groupId>
+                <groupId>com.chaplin.roots</groupId>
                 <artifactId>roots-maven-plugin</artifactId>
                 <version>${rootsVersion}</version>
                 <executions>
@@ -79,7 +79,7 @@
                         <id>roots-dev</id>
                         <goals><goal>java</goal></goals>
                         <configuration>
-                            <mainClass>dev.roots.development.DevRunner</mainClass>
+                            <mainClass>com.chaplin.roots.development.DevRunner</mainClass>
                             <classpathScope>compile</classpathScope>
                             <arguments>
                                 <argument>${package}.Application</argument>

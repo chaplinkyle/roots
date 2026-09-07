@@ -1,20 +1,20 @@
 package com.acme.components;
 
-import dev.roots.Component;
-import dev.roots.PageContext;
-import dev.roots.annotation.ViewComponent;
-import dev.roots.html.Node;
+import com.chaplin.roots.Component;
+import com.chaplin.roots.PageContext;
+import com.chaplin.roots.annotation.ViewComponent;
+import com.chaplin.roots.html.Node;
 
 import java.util.List;
 
-import static dev.roots.html.Html.link;
-import static dev.roots.html.Html.span;
-import static dev.roots.html.Html.table;
-import static dev.roots.html.Html.tbody;
-import static dev.roots.html.Html.td;
-import static dev.roots.html.Html.th;
-import static dev.roots.html.Html.thead;
-import static dev.roots.html.Html.tr;
+import static com.chaplin.roots.html.Html.link;
+import static com.chaplin.roots.html.Html.span;
+import static com.chaplin.roots.html.Html.table;
+import static com.chaplin.roots.html.Html.tbody;
+import static com.chaplin.roots.html.Html.td;
+import static com.chaplin.roots.html.Html.th;
+import static com.chaplin.roots.html.Html.thead;
+import static com.chaplin.roots.html.Html.tr;
 
 @ViewComponent("customer-table")
 public record CustomerTable(List<Customer> customers) implements Component {

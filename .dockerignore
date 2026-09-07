@@ -1,0 +1,7 @@
+**
+!**/
+!deploy/container/**
+!deploy/servlet/**
+!deploy/kanban/**
+!**/target/*-app.jar
+!examples/servlet/target/*.war

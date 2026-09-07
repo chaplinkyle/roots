@@ -1,0 +1,54 @@
+name: roots-pilot
+
+x-roots: &roots
+  image: ${ROOTS_IMAGE:-roots-enterprise:local}
+  build:
+    context: ../..
+    dockerfile: deploy/container/Dockerfile
+  environment:
+    ROOTS_SECURE_COOKIES: "false" # Local HTTP only; enable in the TLS deployment.
+    ROOTS_TRUSTED_PROXIES: ${ROOTS_NETWORK_SUBNET:-172.30.88.0/24}
+    ROOTS_MAX_LIVE_VIEWS: "500"
+    ROOTS_MAX_CONCURRENT_REQUESTS: "1000"
+    ROOTS_MAX_SESSIONS: "2000"
+    ROOTS_SHUTDOWN_TIMEOUT: PT30S
+  read_only: true
+  tmpfs:
+    - /tmp:size=67108864,mode=1777
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  mem_limit: 768m
+  cpus: 1.0
+  pids_limit: 256
+  stop_grace_period: 45s
+  restart: unless-stopped
+  networks: [backend]
+
+services:
+  roots-a:
+    <<: *roots
+  roots-b:
+    <<: *roots
+  proxy:
+    image: ${HAPROXY_IMAGE:-haproxy:3.2-alpine}
+    ports:
+      - "127.0.0.1:${ROOTS_HTTP_PORT:-8080}:8080"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      roots-a: {condition: service_healthy}
+      roots-b: {condition: service_healthy}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    pids_limit: 64
+    stop_grace_period: 45s
+    restart: unless-stopped
+    networks: [backend]
+
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: ${ROOTS_NETWORK_SUBNET:-172.30.88.0/24}

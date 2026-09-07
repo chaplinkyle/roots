@@ -14,7 +14,7 @@ public final class Application { ... }
 
 ```xml
 <dependency>
-  <groupId>dev.roots</groupId>
+  <groupId>com.chaplin.roots</groupId>
   <artifactId>roots-processor</artifactId>
   <version>${roots.version}</version>
   <scope>provided</scope>
@@ -28,7 +28,7 @@ public final class Application { ... }
   <configuration>
     <annotationProcessorPaths>
       <path>
-        <groupId>dev.roots</groupId>
+        <groupId>com.chaplin.roots</groupId>
         <artifactId>roots-processor</artifactId>
         <version>${roots.version}</version>
       </path>
@@ -71,7 +71,7 @@ is the application-wide unmatched-page convention:
 package com.acme.pages;
 
 @PageMetadata(title = "Page not found")
-public final class NotFound implements dev.roots.Page {
+public final class NotFound implements com.chaplin.roots.Page {
     public Node render(PageContext context) {
         return main(
             h1("Page not found"),
@@ -121,7 +121,7 @@ Use `@Route` when a URL cannot or should not follow the package:
 
 ```java
 @Route("/activity")
-public final class Page implements dev.roots.Page { ... }
+public final class Page implements com.chaplin.roots.Page { ... }
 ```
 
 Explicit templates accept `{parameter}` and a final `{*catchAll}`.
@@ -408,7 +408,7 @@ Dynamic routes must name a `StaticPathProvider`:
 
 ```java
 @Prerender(paths = ProductPaths.class, revalidateSeconds = 300)
-public final class Page implements dev.roots.Page {
+public final class Page implements com.chaplin.roots.Page {
     // ...
 }
 
@@ -434,7 +434,7 @@ The Maven goal is configured explicitly:
 
 ```xml
 <plugin>
-  <groupId>dev.roots</groupId>
+  <groupId>com.chaplin.roots</groupId>
   <artifactId>roots-maven-plugin</artifactId>
   <version>${roots.version}</version>
   <executions>

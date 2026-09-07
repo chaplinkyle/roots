@@ -41,8 +41,29 @@ client metadata. Applications must validate allowed types/content, scan when
 appropriate, generate storage keys, and never join an uploaded filename directly
 to a filesystem path.
 
-It does not provide an identity store or authentication provider, built-in policy
-decisions, rate limiting, secure-cookie proxy detection, dependency scanning
-policy, or a hardened production server adapter. Deployments must supply those
-controls and should follow
+Roots provides an authentication-provider SPI and strict Bearer parsing, named
+authorization policies, a bounded node-local rate limiter, explicit proxy trust,
+and a Jakarta Servlet adapter. Credential verification and identity storage,
+cross-node rate limiting, TLS termination, dependency scanning, and production
+container hardening remain deployment responsibilities. Secure cookies must be
+enabled explicitly when TLS terminates at a proxy. Deployments should follow
 [Production readiness](docs/production-readiness.md).
+
+`@Stateless` bypasses browser-session storage, not authentication or authorization.
+Use verified machine identity or signed webhook verification and authorize every
+operation, including idempotent replays. `WebhookVerifier` checks signatures and
+timestamps; applications must atomically deduplicate verified deliveries with
+their business writes. The in-memory idempotency store cannot survive process
+loss or coordinate multiple nodes. Browser response deadlines cannot roll back
+server mutations; uncertain outcomes are held without automatic retries.
+
+SSE URLs contain view credentials. Proxy access logs must omit or redact query
+strings, cookies, and authorization headers. The deployment proxy templates use
+an explicit metadata-only log format. No application secret belongs in an image,
+tracked environment file, problem detail, or diagnostic response.
+
+Browser widgets load same-origin ES modules under the page CSP. Modules execute
+with page privileges; the DOM ownership boundary is not a sandbox. Keep module
+URLs application-controlled and audit third-party imports. Widget props and
+hidden form fields are untrusted input at the server: validate and authorize
+their mutations like all other actions. See [widget integration](docs/browser-widgets.md).
