@@ -170,7 +170,7 @@ final class RootServerIntegrationTest {
 
     @AfterEach
     void stop() throws Exception {
-        application.close();
+        application.closeGracefully(Duration.ofSeconds(5));
         try (var entries = Files.list(requestBodyDirectory)) {
             assertEquals(0, entries.count(), "request-scoped temporary bodies must be deleted");
         }
