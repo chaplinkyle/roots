@@ -55,7 +55,7 @@ def main():
                 with urllib.request.urlopen(base + '/_roots/health', timeout=2) as response:
                     if response.status == 200:
                         break
-            except (urllib.error.URLError, http.client.HTTPException, TimeoutError):
+            except (urllib.error.URLError, http.client.HTTPException, OSError):
                 time.sleep(.2)
         else:
             logs = docker('logs', container)

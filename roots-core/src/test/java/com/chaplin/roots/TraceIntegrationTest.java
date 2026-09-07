@@ -11,6 +11,8 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
@@ -28,11 +30,15 @@ final class TraceIntegrationTest {
     @Test
     void propagatesTraceContextThroughPagesActionsResponsesAndObservations() throws Exception {
         var observations = new CopyOnWriteArrayList<RequestObservation>();
+        var observed = new CountDownLatch(3);
         var middlewareTrace = new AtomicReference<TraceContext>();
         var config = RootsConfig.forApplication(com.chaplin.roots.traceapp.Application.class)
                 .port(0)
                 .development(false)
-                .observeRequests(observations::add)
+                .observeRequests(observation -> {
+                    observations.add(observation);
+                    observed.countDown();
+                })
                 .use((request, chain) -> {
                     middlewareTrace.set(request.traceContext());
                     return chain.next();
@@ -78,6 +84,8 @@ final class TraceIntegrationTest {
             assertEquals(200, invalid.statusCode());
             assertNotEquals(TRACE, field(invalid.headers().firstValue("traceparent").orElseThrow(), 1));
 
+            // Completion observations run after response delivery; wait for that actual signal.
+            assertTrue(observed.await(5, TimeUnit.SECONDS), "All completed requests must be observed");
             assertEquals(3, observations.size());
             var actionObservation = observations.stream()
                     .filter(observation -> observation.traceContext().spanId().equals(actionSpan))
