@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.Socket;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -561,8 +562,20 @@ final class RootServerIntegrationTest {
         assertEquals("POST", disposeGet.headers().firstValue("Allow").orElseThrow());
 
         var largeBody = "x".repeat(1_048_577);
+        // Test early rejection without racing an unread upload against the JDK transport's close.
+        try (var socket = new Socket(application.uri().getHost(), application.uri().getPort())) {
+            socket.setSoTimeout(5_000);
+            socket.getOutputStream().write(("POST /api/items/42 HTTP/1.1\r\n"
+                    + "Host: localhost\r\nContent-Length: " + largeBody.length()
+                    + "\r\nConnection: close\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+            socket.getOutputStream().flush();
+            var reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII));
+            var statusLine = reader.readLine();
+            assertTrue(statusLine != null && statusLine.startsWith("HTTP/1.1 413 "), String.valueOf(statusLine));
+        }
+        // Unknown length exercises the byte limit while actually consuming the streamed body.
         var tooLarge = send(HttpRequest.newBuilder(uri("/api/items/42"))
-                .POST(HttpRequest.BodyPublishers.ofString(largeBody))
+                .POST(HttpRequest.BodyPublishers.fromPublisher(HttpRequest.BodyPublishers.ofString(largeBody)))
                 .build());
         assertEquals(413, tooLarge.statusCode());
     }
