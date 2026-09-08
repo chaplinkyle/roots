@@ -24,6 +24,9 @@ final class EdgeRootsBrowserTest extends RootsBrowserTest {
                 "--headless=new",
                 "--no-sandbox",
                 "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--no-first-run",
+                "--no-default-browser-check",
                 "--window-size=1280,900"
         );
         return new RemoteWebDriver(service.getUrl(), options);

@@ -46,7 +46,8 @@ class WorkflowBrowserTest {
             // Use the same W3C WebDriver service lifecycle as the main browser suite.
             browser = new RemoteWebDriver(browserService.getUrl(), switch (engine) {
                 case "chrome" -> new ChromeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,900");
-                case "edge" -> new EdgeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,900");
+                case "edge" -> new EdgeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage",
+                        "--disable-gpu", "--no-first-run", "--no-default-browser-check", "--window-size=1280,900");
                 default -> new FirefoxOptions().addArguments("-headless", "--width=1280", "--height=900");
             });
             var driver = browser;
