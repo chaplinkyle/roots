@@ -109,7 +109,7 @@ final class RootsServletIntegrationTest {
         context.addServletMappingDecoded("/synchronous/*", "synchronous");
 
         shutdownServlet = new RootsServlet(
-                RootsConfig.forApplication(Application.class).build(), Duration.ofMillis(100));
+                RootsConfig.forApplication(Application.class).build(), Duration.ofSeconds(3));
         var shutdown = Tomcat.addServlet(context, "shutdown", shutdownServlet);
         shutdown.setAsyncSupported(true);
         context.addServletMappingDecoded("/shutdown/*", "shutdown");

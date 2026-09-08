@@ -40,6 +40,8 @@ class WorkflowBrowserTest {
                 default -> new FirefoxDriver(new FirefoxOptions().addArguments("-headless", "--width=1280", "--height=900"));
             };
             var driver = browser;
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+            driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(15));
             var wait = new WebDriverWait(driver, Duration.ofSeconds(15));
             login(driver, base);
             click(driver, "New customer");
@@ -156,16 +158,24 @@ class WorkflowBrowserTest {
             assertEquals("Northstar Freight Group", repository.customer(VIEWER, customerId).fields().company());
             assertEquals(1, repository.customers(VIEWER, "", "").items().size());
         } catch (Exception | AssertionError failure) {
+            failure.printStackTrace(System.err);
             if (browser != null) {
-                screenshot(browser, engine + "-failure");
-                System.err.println("Workflow browser failure: " + browser.getCurrentUrl() + "\n"
-                        + browser.findElement(By.tagName("body")).getText() + "\n"
-                        + ((JavascriptExecutor) browser).executeScript("return window.__workflowResponses"));
+                try {
+                    screenshot(browser, engine + "-failure");
+                    System.err.println("Workflow browser failure: " + browser.getCurrentUrl() + "\n"
+                            + browser.findElement(By.tagName("body")).getText() + "\n"
+                            + ((JavascriptExecutor) browser).executeScript("return window.__workflowResponses"));
+                } catch (Exception diagnosticFailure) {
+                    failure.addSuppressed(diagnosticFailure);
+                }
             }
             throw failure;
         } finally {
-            if (browser != null) browser.quit();
-            if (context != null) context.close();
+            try {
+                if (browser != null) browser.quit();
+            } finally {
+                if (context != null) context.close();
+            }
         }
     }
     private static void login(WebDriver driver, String base) {
