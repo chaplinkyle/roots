@@ -8,12 +8,14 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.edge.EdgeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.GeckoDriverService;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.service.DriverService;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.context.ConfigurableApplicationContext;
 import java.nio.file.Files;
@@ -31,14 +33,22 @@ class WorkflowBrowserTest {
         try (var ignored = pool(url, true)) { }
         ConfigurableApplicationContext context = null;
         WebDriver browser = null;
+        DriverService browserService = null;
         try {
             context = WorkflowSecurityTest.start(url);
             String base = WorkflowSecurityTest.base(context);
-            browser = switch (engine) {
-                case "chrome" -> new ChromeDriver(new ChromeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,900"));
-                case "edge" -> new EdgeDriver(new EdgeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,900"));
-                default -> new FirefoxDriver(new FirefoxOptions().addArguments("-headless", "--width=1280", "--height=900"));
+            browserService = switch (engine) {
+                case "chrome" -> new ChromeDriverService.Builder().usingAnyFreePort().build();
+                case "edge" -> new EdgeDriverService.Builder().usingAnyFreePort().build();
+                default -> new GeckoDriverService.Builder().usingAnyFreePort().build();
             };
+            browserService.start();
+            // Use the same W3C WebDriver service lifecycle as the main browser suite.
+            browser = new RemoteWebDriver(browserService.getUrl(), switch (engine) {
+                case "chrome" -> new ChromeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,900");
+                case "edge" -> new EdgeOptions().addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage", "--window-size=1280,900");
+                default -> new FirefoxOptions().addArguments("-headless", "--width=1280", "--height=900");
+            });
             var driver = browser;
             driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
             driver.manage().timeouts().scriptTimeout(Duration.ofSeconds(15));
@@ -174,7 +184,11 @@ class WorkflowBrowserTest {
             try {
                 if (browser != null) browser.quit();
             } finally {
-                if (context != null) context.close();
+                try {
+                    if (browserService != null) browserService.stop();
+                } finally {
+                    if (context != null) context.close();
+                }
             }
         }
     }
