@@ -739,6 +739,7 @@ final class RootServerIntegrationTest {
     @Test
     void closeReleasesAwaitersAndClearsObservableRuntimeState() throws Exception {
         assertEquals(200, get("/").statusCode());
+        await(Duration.ofSeconds(2), () -> application.runtimeSnapshot().handledRequests() >= 1);
         var before = application.runtimeSnapshot();
         assertTrue(before.running());
         assertTrue(before.handledRequests() >= 1);
@@ -761,6 +762,8 @@ final class RootServerIntegrationTest {
         assertFalse(after.running());
         assertEquals(0, after.liveViews());
         assertEquals(0, after.sessions());
+        await(Duration.ofSeconds(2), () -> com.chaplin.roots.testapp.pages.Page.UNMOUNTS.get() == 1
+                && com.chaplin.roots.testapp.pages.Layout.UNMOUNTS.get() == 1);
     }
 
     @Test
@@ -1044,6 +1047,7 @@ final class RootServerIntegrationTest {
             );
             assertEquals(200, admittedAgain.statusCode());
             assertEquals(1, limited.runtimeSnapshot().liveViews());
+            limited.closeGracefully(Duration.ofSeconds(5));
         }
     }
 
@@ -1085,6 +1089,7 @@ final class RootServerIntegrationTest {
                     HttpResponse.BodyHandlers.ofString()
             );
             assertEquals(200, recovered.statusCode());
+            await(Duration.ofSeconds(2), () -> limited.runtimeSnapshot().activeRequests() == 0);
             assertEquals(0, limited.runtimeSnapshot().activeRequests());
         } finally {
             com.chaplin.roots.testapp.api.blocking.Route.release();
@@ -1208,6 +1213,9 @@ final class RootServerIntegrationTest {
                                     + "&_protocol=" + encode(Roots.PROTOCOL_VERSION))).build(),
                     HttpResponse.BodyHandlers.ofString()).statusCode());
             assertTrue(nodeAOwnership.find(view.viewId(), Instant.now()).isEmpty());
+            // Lease release runs with view cleanup; close() alone has a zero-length grace period.
+            nodeB.closeGracefully(Duration.ofSeconds(5));
+            nodeA.closeGracefully(Duration.ofSeconds(5));
         }
         assertTrue(leases.isEmpty(), leases.toString());
     }
@@ -1323,7 +1331,9 @@ final class RootServerIntegrationTest {
             assertEquals(200, initial.statusCode());
             assertEquals(1, expiring.runtimeSnapshot().liveViews());
 
-            await(Duration.ofSeconds(2), () -> expiring.runtimeSnapshot().liveViews() == 0);
+            await(Duration.ofSeconds(2), () -> expiring.runtimeSnapshot().liveViews() == 0
+                    && com.chaplin.roots.testapp.pages.Page.UNMOUNTS.get() == 1
+                    && com.chaplin.roots.testapp.pages.Layout.UNMOUNTS.get() == 1);
 
             assertEquals(1, com.chaplin.roots.testapp.pages.Page.UNMOUNTS.get());
             assertEquals(1, com.chaplin.roots.testapp.pages.Layout.UNMOUNTS.get());
@@ -1353,6 +1363,9 @@ final class RootServerIntegrationTest {
             assertEquals(409, expiredAction.statusCode());
             assertTrue(expiredAction.headers().firstValue("Set-Cookie").isEmpty());
             assertEquals(0, expiring.runtimeSnapshot().sessions());
+            expiring.closeGracefully(Duration.ofSeconds(5));
+            await(Duration.ofSeconds(2), () -> com.chaplin.roots.testapp.pages.Page.UNMOUNTS.get() == 1
+                    && com.chaplin.roots.testapp.pages.Layout.UNMOUNTS.get() == 1);
         }
     }
 
